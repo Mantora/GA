@@ -212,7 +212,7 @@ void Player::handleInput_setup(int KB_code)
 					this->SelectionGrid->clearLockedArea( this->ship_four );
 
 				this->ship_four = tmp;
-				this->SelectionGrid->setShip( 0, this->ship_four );
+				this->SelectionGrid->setShip( 3, this->ship_four );
 				this->doFeedback_OK();
 			}
 			else
@@ -241,7 +241,7 @@ void Player::handleInput_setup(int KB_code)
 					this->SelectionGrid->clearLockedArea( this->ship_five );
 
 				this->ship_five = tmp;
-				this->SelectionGrid->setShip( 0, this->ship_five );
+				this->SelectionGrid->setShip( 4, this->ship_five );
 				this->doFeedback_OK();
 			}
 			else
@@ -263,23 +263,28 @@ void Player::handleInput_setup(int KB_code)
 			switch( this->currentSelectedShip )
 			{
 				case 0:
-					this->rotateShip( this->ship_two1 );
+					if( this->SelectionGrid->rotateShip( this->ship_two1 ) ) this->doFeedback_OK();
+					else this->doFeedback_ERROR();
 				break;
 
 				case 1:
-					this->rotateShip( this->ship_two2 );
+					if( this->SelectionGrid->rotateShip( this->ship_two2 ) ) this->doFeedback_OK();
+					else this->doFeedback_ERROR();
 				break;
 
 				case 2:
-					this->rotateShip( this->ship_three );
+					if( this->SelectionGrid->rotateShip( this->ship_three ) ) this->doFeedback_OK();
+					else this->doFeedback_ERROR();
 				break;
 
 				case 3:
-					this->rotateShip( this->ship_four );
+					if( this->SelectionGrid->rotateShip( this->ship_four ) ) this->doFeedback_OK();
+					else this->doFeedback_ERROR();
 				break;
 
 				case 4: 
-					this->rotateShip( this->ship_five );
+					if( this->SelectionGrid->rotateShip( this->ship_five ) ) this->doFeedback_OK();
+					else this->doFeedback_ERROR();
 				break;
 
 				default: 
@@ -294,20 +299,6 @@ void Player::handleInput_setup(int KB_code)
 	}
 }
 
-void Player::rotateShip( Ship* shipToRotate )
-{
-	if( shipToRotate->canRotate_right( GRID_MAX_X, GRID_MAX_Y) )
-	{
-		//prüfen, ob ein anderes Schiff im bereich ist
-		
-		this->SelectionGrid->clearLockedArea( shipToRotate );
-		shipToRotate->rotate_right();
-		this->SelectionGrid->makeLockedArea( shipToRotate );
-		this->doFeedback_OK();
-	}
-	else
-		this->doFeedback_ERROR();
-}
 
 //Setup functions
 void Player::showShips4Setup()

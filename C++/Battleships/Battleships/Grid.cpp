@@ -357,6 +357,187 @@ bool Grid::checkOneField( Koordinaten* posToCheck )
 	}
 }
 
+//drehung
+bool Grid::rotateShip( Ship* shipToRotate )
+{
+	if( this->canRotate_right( shipToRotate ) )
+	{
+//		prüfen, ob ein anderes Schiff im bereich ist
+		
+		this->clearLockedArea( shipToRotate );
+		shipToRotate->rotate_right();
+		this->makeLockedArea( shipToRotate );
+		return true;
+	}
+	else
+		return false;
+}
+
+//Diese funktion prüft, ob der PLATZ für dieses Schiff reicht 
+bool Grid::canRotate_right( Ship* shipToRotate )
+{
+	int neededSize = shipToRotate->partsCount() - 1 ; // -1 wegen Kopf
+	Koordinaten* ursprung = shipToRotate->getKoordinatenFromHead();
+	//Koordinaten vom nächsten Teil holen um anhand dieses die neue Rotation zu bestimmen
+	Koordinaten* posToRotate = shipToRotate->getKoordinatenFromPart(1);
+
+	//was für eine Drehung soll ausgeführt werden
+	if( posToRotate->x > ursprung->x )
+	{
+		//HSSS
+
+		//H
+		//S
+		//S
+		//S
+
+		//reicht der Platz ?
+		if( ursprung->y + neededSize > GRID_MAX_Y - 1)
+			return false;
+
+		//ist ein anderes Schiff im Weg
+		
+		//vor der kontrolle die eigenen gesperrten Bereich löschen
+		this->clearLockedArea( shipToRotate );
+
+		int currentPart = 1;
+		//für alle Parts
+		while( shipToRotate->hasNextPart( currentPart ) )
+		{
+			//Koordinaten vergleichen
+			Koordinaten* thisPart = shipToRotate->getKoordinatenFromPart( currentPart );
+
+			int currentX = ursprung->x;
+			int currentY = ursprung->y + currentPart;
+
+			//ob ein Schiffsteil oder gesperrter Bereich
+			if( this->data[ currentX ][ currentY ] == 2 || this->data[ currentX ][ currentY ] == 3 )
+			{
+				//nach der Kontrolle Bereiche um das zu drehende Schiff sperren
+				this->makeLockedArea( shipToRotate );
+				return false;
+			}
+
+			currentPart++;
+		}
+	}
+	else if( posToRotate->y > ursprung->y )
+	{
+		//H
+		//S
+		//S
+		//S
+
+		//SSSH
+		if( ursprung->x - neededSize < 0 )
+			return false;
+
+		//ist ein anderes Schiff im Weg
+				
+		//vor der kontrolle die eigenen gesperrten Bereich löschen
+		this->clearLockedArea( shipToRotate );
+
+		int currentPart = 1;
+		//für alle Parts
+		while( shipToRotate->hasNextPart( currentPart ) )
+		{
+			//Koordinaten vergleichen
+			Koordinaten* thisPart = shipToRotate->getKoordinatenFromPart( currentPart );
+
+			int currentX = ursprung->x - currentPart;
+			int currentY = ursprung->y;
+
+			//ob ein Schiffsteil oder gesperrter Bereich
+			if( this->data[ currentX ][ currentY ] == 2 || this->data[ currentX ][ currentY ] == 3 )
+			{
+				//nach der Kontrolle Bereiche um das zu drehende Schiff sperren
+				this->makeLockedArea( shipToRotate );
+				return false;
+			}
+
+			currentPart++;
+		}
+	}
+	else if( posToRotate->x < ursprung->x )
+	{
+		//SSSH
+
+		//S
+		//S
+		//S
+		//H
+		if( ursprung->y - neededSize < 0 )
+			return false;
+
+		//ist ein anderes Schiff im Weg
+				
+		//vor der kontrolle die eigenen gesperrten Bereich löschen
+		this->clearLockedArea( shipToRotate );
+
+		int currentPart = 1;
+		//für alle Parts
+		while( shipToRotate->hasNextPart( currentPart ) )
+		{
+			//Koordinaten vergleichen
+			Koordinaten* thisPart = shipToRotate->getKoordinatenFromPart( currentPart );
+
+			int currentX = ursprung->x;
+			int currentY = ursprung->y - currentPart;
+
+			//ob ein Schiffsteil oder gesperrter Bereich
+			if( this->data[ currentX ][ currentY ] == 2 || this->data[ currentX ][ currentY ] == 3 )
+			{
+				//nach der Kontrolle Bereiche um das zu drehende Schiff sperren
+				this->makeLockedArea( shipToRotate );
+				return false;
+			}
+
+			currentPart++;
+		}
+	}
+	else
+	{
+		//S
+		//S
+		//S
+		//H
+
+		//HSSS
+		if( ursprung->x + neededSize - 1 > GRID_MAX_X )
+			return false;
+
+		//ist ein anderes Schiff im Weg
+				
+		//vor der kontrolle die eigenen gesperrten Bereich löschen
+		this->clearLockedArea( shipToRotate );
+
+		int currentPart = 1;
+		//für alle Parts
+		while( shipToRotate->hasNextPart( currentPart ) )
+		{
+			//Koordinaten vergleichen
+			Koordinaten* thisPart = shipToRotate->getKoordinatenFromPart( currentPart );
+
+			int currentX = ursprung->x + currentPart;
+			int currentY = ursprung->y;
+
+			//ob ein Schiffsteil oder gesperrter Bereich
+			if( this->data[ currentX ][ currentY ] == 2 || this->data[ currentX ][ currentY ] == 3 )
+			{
+				//nach der Kontrolle Bereiche um das zu drehende Schiff sperren
+				this->makeLockedArea( shipToRotate );
+				return false;
+			}
+
+			currentPart++;
+		}
+	}
+	//nach der Kontrolle Bereiche um das zu drehende Schiff sperren
+	this->makeLockedArea( shipToRotate );
+	return true;
+}
+
+
 //Game funktionen
 bool Grid::fireToGrid( Grid* targetGrid )
 {

@@ -50,6 +50,13 @@ int Ship::partsCount()
 	return this->size;
 }
 
+//SET
+void Ship::setPart(int partIndex, Koordinaten* newPos)
+{
+	this->parts[partIndex]->setKoordinaten( newPos );
+
+}
+
 //Drehung
 void Ship::rotate_right()
 {
@@ -185,64 +192,6 @@ void Ship::rotate_left()
 	}
 }
 
-//Diese funktion prüft, ob der PLATZ für dieses Schiff reicht 
-bool Ship::canRotate_right(int GRID_MAX_X, int GRID_MAX_Y)
-{
-	int neededSize = this->size - 1 ; // -1 wegen Kopf
-	Koordinaten* ursprung = this->getKoordinatenFromHead();
-	//Koordinaten vom nächsten Teil holen um anhand dieses die neue Rotation zu bestimmen
-	Koordinaten* posToRotate = parts[1]->getKoordinaten();
-
-	//was für eine Drehung soll ausgeführt werden
-	if( posToRotate->x > ursprung->x )
-	{
-		//HSSS
-
-		//H
-		//S
-		//S
-		//S
-
-		//reicht der Platz ?
-		if( ursprung->y + neededSize > GRID_MAX_Y - 1)
-			return false;
-	}
-	else if( posToRotate->y > ursprung->y )
-	{
-		//H
-		//S
-		//S
-		//S
-
-		//SSSH
-		if( ursprung->x - neededSize < 0 )
-			return false;
-	}
-	else if( posToRotate->x < ursprung->x )
-	{
-		//SSSH
-
-		//S
-		//S
-		//S
-		//H
-		if( ursprung->y - neededSize - 1 < 0 )
-			return false;
-	}
-	else
-	{
-		//S
-		//S
-		//S
-		//H
-
-		//HSSS
-		if( ursprung->x + neededSize - 1 > GRID_MAX_X )
-			return false;
-	}
-
-	return true;
-}
 
 //Hit
 void Ship::hitPartWithPos( Koordinaten* pos )

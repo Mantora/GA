@@ -28,10 +28,12 @@ public:
 	//GET
 	int partsCount();
 
+	//SET
+	void setPart(int partIndex, Koordinaten* newPos);
+
 	//Drehung
 	void rotate_right();
 	void rotate_left();
-	bool canRotate_right(int GRID_MAX_X, int GRID_MAX_Y);
 
 	//Hit
 	void hitPartWithPos( Koordinaten* pos );

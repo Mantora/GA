@@ -49,6 +49,10 @@ public:
 	void copy( Grid* gridToCopy );
 	bool isFieldsFree4Ship( Ship* shipToCheck );
 	bool checkOneField( Koordinaten* pos );
+	
+	//drehung
+	bool rotateShip( Ship* shipToRotate );
+	bool canRotate_right( Ship* shipToRotate );
 
 	//Game funktionen
 	bool fireToGrid( Grid* targetGrid );

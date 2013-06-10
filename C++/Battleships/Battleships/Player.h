@@ -47,7 +47,6 @@ public:
 	void showShips4Setup();
 	void confirmSelection();
 	void updateCurrentSelectedShip();
-	void rotateShip( Ship* shipToRotate );
 
 	//Game functions
 	void makeTurn( int gameRound );
