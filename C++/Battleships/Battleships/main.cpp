@@ -6,7 +6,7 @@ using namespace std;
 
 int main(void)
 {
-	system("title CJs Battleships v201306082222");
+	system("title CJs Battleships v201306101736");
 	Battleships* game = new Battleships();
 
 	//Ein neues Spiel erstellen

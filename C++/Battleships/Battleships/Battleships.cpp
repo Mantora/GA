@@ -11,14 +11,14 @@ Battleships::Battleships()
 void Battleships::createPlayers()
 {
 	//Release:
-//	cout << "Player 1 please enter Name: " ;
-//	this->p1 = new Player();
-//	cout << "Player 2 please enter Name: " ;
-//	this->p2 = new Player();
+	cout << "Player 1 please enter Name: " ;
+	this->p1 = new Player();
+	cout << "Player 2 please enter Name: " ;
+	this->p2 = new Player();
 
 	//ToDelet 4 Development
-	this->p1 = new Player("eins");
-	this->p1 = new Player("zwei");
+//	this->p1 = new Player("eins");
+//	this->p1 = new Player("zwei");
 }
 
 void Battleships::setupShipsPlayer1()

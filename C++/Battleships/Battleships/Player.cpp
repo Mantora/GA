@@ -482,6 +482,7 @@ void Player::showGameGUI()
 	cout << "HINT #1: Move your cross hairs with the arrow keys." << endl;
 	cout << "HINT #2: Fire to your position with <RETURN>." << endl;
 	this->showSelectionGrid();
+	cout << "INPUT: (see above)> " ;
 }
 
 bool Player::allShipsSunk()

@@ -32,7 +32,7 @@ void Grid::showGrid()
 				case 0: cout << ' '; break; //leer
 				case 1: cout << '+'; break; //aktuelles Feld
 				case 2: cout << 'S'; break; //Schiffteil
-				case 3: cout << '3'; break; //gesperrter bereich um ein Schiffsteil (hier kann kein weiteres Sciff plaziert werden
+				case 3: cout << ' '; break; //gesperrter bereich um ein Schiffsteil (hier kann kein weiteres Sciff plaziert werden
 				case '-': cout << '-'; break; //für das aktuelle Feld
 				case '|': cout << '|'; break; //für das aktuelle Feld
 				case 'O': cout << 'O'; break; //Hier hast du etwas getroffen
