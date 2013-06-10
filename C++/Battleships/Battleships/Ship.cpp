@@ -23,7 +23,7 @@ Koordinaten* Ship::getKoordinatenFromHead()
 	return this->parts[0]->getKoordinaten();
 }
 
-bool Ship::hastNextPart(int index)
+bool Ship::hasNextPart(int index)
 {
 	//gibt es diesen Part ?
 	if( index < this->size )
@@ -57,7 +57,7 @@ void Ship::rotate_right()
 	Koordinaten* ursprung = this->parts[0]->getKoordinaten();
 
 	int index = 1;
-	while( this->hastNextPart(index) )
+	while( this->hasNextPart(index) )
 	{
 		Koordinaten* posToRotate = parts[index]->getKoordinaten();
 
@@ -124,7 +124,7 @@ void Ship::rotate_left()
 	Koordinaten* ursprung = this->parts[0]->getKoordinaten();
 
 	int index = 1;
-	while( this->hastNextPart(index) )
+	while( this->hasNextPart(index) )
 	{
 		Koordinaten* posToRotate = parts[index]->getKoordinaten();
 

@@ -87,6 +87,7 @@ void Player::setReady(bool newState) { this->ready = newState; }
 //input
 void Player::handleInput_setup(int KB_code)
 {
+	this->updateCurrentSelectedShip();
 	switch(KB_code)
 	{
 		case KB_LEFT: 
@@ -114,139 +115,175 @@ void Player::handleInput_setup(int KB_code)
 		break;
 
 		case KB_ONE:
-			this->ship_two1 = new Ship( 2, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
-			if( this->SelectionGrid->isOneFieldFreeAroundShip( this->ship_two1 ) )
-			{			
+		{
+			Ship* tmp = new Ship( 2, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
+
+			if( this->SelectionGrid->isFieldsFree4Ship( tmp ) )
+			{	
+				//alten gesperrten Bereich leeren falls ein Schiff schon gesetzt wurde
+				if( this->ship_two1 != NULL )
+					this->SelectionGrid->clearLockedArea( this->ship_two1 );
+
+				this->ship_two1 = tmp;
 				this->SelectionGrid->setShip( 0, this->ship_two1 );
 				this->doFeedback_OK();
 			}
 			else
 			{
+				//speicher des temporären schiffes freigeben
+				//delete [] tmp;
 				//ToDo: Ordentliches Feedback einbauen:
 				//"Hier ist kein Platz für dieses Schiff"
 				this->doFeedback_ERROR();
-				this->ship_two1 = NULL;
+				//ToDo: Speicher wieder frei geben 
+				//delete [] this->ship_two1;
+				//ToFiX: Speicher bleibt allociert
+				//this->ship_two1 = NULL;
 			}
+		}
 		break;
 
 		case KB_TWO:
-			this->ship_two2 = new Ship( 2, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
-			if( this->SelectionGrid->isOneFieldFreeAroundShip( this->ship_two2 ) )
-			{			
+		{
+			Ship* tmp = new Ship( 2, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
+
+			if( this->SelectionGrid->isFieldsFree4Ship( tmp ) )
+			{	
+				//alten gesperrten Bereich leeren falls ein Schiff schon gesetzt wurde
+				if( this->ship_two2 != NULL )
+					this->SelectionGrid->clearLockedArea( this->ship_two2 );
+
+				this->ship_two2 = tmp;
 				this->SelectionGrid->setShip( 1, this->ship_two2 );
 				this->doFeedback_OK();
 			}
 			else
 			{
+				//speicher des temporären schiffes freigeben
+				//delete [] tmp;
 				//ToDo: Ordentliches Feedback einbauen:
 				//"Hier ist kein Platz für dieses Schiff"
 				this->doFeedback_ERROR();
-				this->ship_two2 = NULL;
+				//ToDo: Speicher wieder frei geben 
+				//delete [] this->ship_two1;
+				//ToFiX: Speicher bleibt allociert
+				//this->ship_two2 = NULL;
 			}
+		}
 		break;
 
 		case KB_THREE:
-			this->ship_three = new Ship( 3, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
-			if( this->SelectionGrid->isOneFieldFreeAroundShip( this->ship_three ) )
-			{			
+		{
+			Ship* tmp = new Ship( 3, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
+
+			if( this->SelectionGrid->isFieldsFree4Ship( tmp ) )
+			{	
+				//alten gesperrten Bereich leeren falls ein Schiff schon gesetzt wurde
+				if( this->ship_three != NULL )
+					this->SelectionGrid->clearLockedArea( this->ship_three );
+
+				this->ship_three = tmp;
 				this->SelectionGrid->setShip( 2, this->ship_three );
 				this->doFeedback_OK();
 			}
 			else
 			{
+				//speicher des temporären schiffes freigeben
+				//delete [] tmp;
 				//ToDo: Ordentliches Feedback einbauen:
 				//"Hier ist kein Platz für dieses Schiff"
 				this->doFeedback_ERROR();
-				this->ship_three = NULL;
+				//ToDo: Speicher wieder frei geben 
+				//delete [] this->ship_two1;
+				//ToFiX: Speicher bleibt allociert
+				//this->ship_two2 = NULL;
 			}
+		}
 		break;
 
 		case KB_FOUR:
-			this->ship_four = new Ship( 4, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
-			if( this->SelectionGrid->isOneFieldFreeAroundShip( this->ship_four ) )
-			{			
-				this->SelectionGrid->setShip( 3, this->ship_four );
+		{
+			Ship* tmp = new Ship( 4, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
+
+			if( this->SelectionGrid->isFieldsFree4Ship( tmp ) )
+			{	
+				//alten gesperrten Bereich leeren falls ein Schiff schon gesetzt wurde
+				if( this->ship_four != NULL )
+					this->SelectionGrid->clearLockedArea( this->ship_four );
+
+				this->ship_four = tmp;
+				this->SelectionGrid->setShip( 0, this->ship_four );
 				this->doFeedback_OK();
 			}
 			else
 			{
+				//speicher des temporären schiffes freigeben
+				//delete [] tmp;
 				//ToDo: Ordentliches Feedback einbauen:
 				//"Hier ist kein Platz für dieses Schiff"
 				this->doFeedback_ERROR();
-				this->ship_four = NULL;
+				//ToDo: Speicher wieder frei geben 
+				//delete [] this->ship_two1;
+				//ToFiX: Speicher bleibt allociert
+				//this->ship_two1 = NULL;
 			}
+		}
 		break;
 
 		case KB_FIVE:
-			this->ship_five = new Ship( 5, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
-			if( this->SelectionGrid->isOneFieldFreeAroundShip( this->ship_five ) )
-			{			
-				this->SelectionGrid->setShip( 4, this->ship_five );
+		{
+			Ship* tmp = new Ship( 5, new Koordinaten( this->SelectionGrid->getCurrentPosition()->x, this->SelectionGrid->getCurrentPosition()->y) );
+			
+			if( this->SelectionGrid->isFieldsFree4Ship( tmp ) )
+			{	
+				//alten gesperrten Bereich leeren falls ein Schiff schon gesetzt wurde
+				if( this->ship_five != NULL )
+					this->SelectionGrid->clearLockedArea( this->ship_five );
+
+				this->ship_five = tmp;
+				this->SelectionGrid->setShip( 0, this->ship_five );
 				this->doFeedback_OK();
 			}
 			else
 			{
+				//speicher des temporären schiffes freigeben
+				//delete [] tmp;
 				//ToDo: Ordentliches Feedback einbauen:
 				//"Hier ist kein Platz für dieses Schiff"
 				this->doFeedback_ERROR();
-				this->ship_five = NULL;
+				//ToDo: Speicher wieder frei geben 
+				//delete [] this->ship_two1;
+				//ToFiX: Speicher bleibt allociert
+				//this->ship_two1 = NULL;
 			}
+		}
 		break;
 
 		case KB_ROTATE:
 			switch( this->currentSelectedShip )
 			{
 				case 0:
-					if( this->ship_two1->canRotate_right( GRID_MAX_X, GRID_MAX_Y) )
-					{
-						//prüfen, ob ein anderes Schiff im bereich ist
-						
-
-						this->ship_two1->rotate_right();
-						this->doFeedback_OK();
-					}
-					else
-						this->doFeedback_ERROR();
+					this->rotateShip( this->ship_two1 );
 				break;
 
-				case 1: 
-					if( this->ship_two2->canRotate_right(GRID_MAX_X, GRID_MAX_Y) )
-					{
-						this->ship_two2->rotate_right();
-						this->doFeedback_OK();
-					}
-					else
-						this->doFeedback_ERROR();
+				case 1:
+					this->rotateShip( this->ship_two2 );
 				break;
 
 				case 2:
-					if( this->ship_three->canRotate_right(GRID_MAX_X, GRID_MAX_Y) )
-					{
-						this->ship_three->rotate_right();
-						this->doFeedback_OK();
-					}
-					else
-						this->doFeedback_ERROR();
+					this->rotateShip( this->ship_three );
 				break;
 
 				case 3:
-					if( this->ship_four->canRotate_right(GRID_MAX_X, GRID_MAX_Y) )
-					{
-						this->ship_four->rotate_right();
-						this->doFeedback_OK();
-					}
-					else
-						this->doFeedback_ERROR();
+					this->rotateShip( this->ship_four );
 				break;
 
 				case 4: 
-					if( this->ship_five->canRotate_right(GRID_MAX_X, GRID_MAX_Y) )
-					{
-						this->ship_five->rotate_right();
-						this->doFeedback_OK();
-					}
-					else
-						this->doFeedback_ERROR();
+					this->rotateShip( this->ship_five );
+				break;
+
+				default: 
+					this->doFeedback_ERROR();
 				break;
 			}
 		break;
@@ -257,7 +294,22 @@ void Player::handleInput_setup(int KB_code)
 	}
 }
 
-//Setup
+void Player::rotateShip( Ship* shipToRotate )
+{
+	if( shipToRotate->canRotate_right( GRID_MAX_X, GRID_MAX_Y) )
+	{
+		//prüfen, ob ein anderes Schiff im bereich ist
+		
+		this->SelectionGrid->clearLockedArea( shipToRotate );
+		shipToRotate->rotate_right();
+		this->SelectionGrid->makeLockedArea( shipToRotate );
+		this->doFeedback_OK();
+	}
+	else
+		this->doFeedback_ERROR();
+}
+
+//Setup functions
 void Player::showShips4Setup()
 {
 	cout << "Ships to place:" << endl;
@@ -341,6 +393,21 @@ void Player::confirmSelection()
 
 	//Dieser Spieler ist fertig mit dem Platzieren seiner Schiffe
 	this->ready = true;
+}
+
+void Player::updateCurrentSelectedShip()
+{
+	Ship* tmp = this->SelectionGrid->getShipOnPosition( this->SelectionGrid->getCurrentPosition() );
+	if( tmp != NULL )
+	{
+		if( tmp == this->ship_two1 ) this->currentSelectedShip = 0;
+		else if( tmp == this->ship_two2 ) this->currentSelectedShip = 1;
+		else if( tmp == this->ship_three ) this->currentSelectedShip = 2;
+		else if( tmp == this->ship_four ) this->currentSelectedShip = 3;
+		else if( tmp == this->ship_five ) this->currentSelectedShip = 4;
+	}
+	else
+		this->currentSelectedShip = -1;
 }
 
 //Game functions
@@ -465,7 +532,7 @@ Player::Player( char* developmentName)
 	cout << "Player " << this->name << " created !" << endl;
 
 	//Shiffe erstellen
-	this->ship_two1 = new Ship( 2, new Koordinaten( 6, 0) );
+/*	this->ship_two1 = new Ship( 2, new Koordinaten( 6, 0) );
 	this->ship_two2 = new Ship( 2, new Koordinaten( 3, 3) );
 	this->ship_three = new Ship( 3, new Koordinaten( 0, 5) );
 	this->ship_four = new Ship( 4, new Koordinaten( 5, 7) );
@@ -478,5 +545,6 @@ Player::Player( char* developmentName)
 	this->SelectionGrid->setShip( 4, this->ship_five );
 
 	this->ShipGrid->copy( &(*this->SelectionGrid) );
+*/
 }
 //-------------------------------------------------------------------------------//

@@ -32,6 +32,7 @@ void Grid::showGrid()
 				case 0: cout << ' '; break; //leer
 				case 1: cout << '+'; break; //aktuelles Feld
 				case 2: cout << 'S'; break; //Schiffteil
+				case 3: cout << '3'; break; //gesperrter bereich um ein Schiffsteil (hier kann kein weiteres Sciff plaziert werden
 				case '-': cout << '-'; break; //für das aktuelle Feld
 				case '|': cout << '|'; break; //für das aktuelle Feld
 				case 'O': cout << 'O'; break; //Hier hast du etwas getroffen
@@ -100,6 +101,8 @@ void Grid::updateSelection()
 	
 				case 'O': break;
 
+				case 3: break;
+
 				default: 
 					if( this->currentPosition->x == x && y < this->currentPosition->y ) this->data[x][y] = '|';
 					if( this->currentPosition->y == y && x < this->currentPosition->x) this->data[x][y] = '-';
@@ -116,6 +119,8 @@ void Grid::updateSelection()
 
 		case 'O': break;
 
+		case 3: break;
+
 		default: 
 			this->data[ this->currentPosition->x ][ this->currentPosition->y ] = 1;
 		break;
@@ -128,6 +133,83 @@ void Grid::setShip( int ID, Ship* newShip )
 	//ob ein Feld um die Einzelteile frei ist
 
 	this->ships[ID] = newShip;
+
+	//Um das schiff herum einen gesperrten bereich einrichten
+	this->makeLockedArea( newShip );
+}
+
+void Grid::makeLockedArea( Ship* shipToLock )
+{
+	int partIndex = 0;
+	while( shipToLock->hasNextPart( partIndex ) )
+	{
+		Koordinaten* partPos = shipToLock->getKoordinatenFromPart( partIndex );
+		
+		int fromX = partPos->x - 1;
+		int fromY = partPos->y - 1;
+
+		int toX = partPos->x + 1;
+		int toY = partPos->y + 1;
+
+		//Variablen kontrollieren
+		if( fromX < 0 ) fromX = 0;
+		if( fromY < 0 ) fromY = 0;
+		if( toX >= GRID_MAX_X ) toX = GRID_MAX_X - 1;
+		if( toY >= GRID_MAX_Y ) toY = GRID_MAX_Y - 1;
+
+		for( int x = fromX; x <= toX; x++)
+		{
+			for( int y = fromY; y <= toY; y++)
+			{
+				this->data[ x ][ y ] = 3;
+			}
+		}
+	
+		partIndex++;
+	}
+}
+
+void Grid::clearLockedArea( Ship* shipToUnlock )
+{
+	int partIndex = 0;
+	while( shipToUnlock->hasNextPart( partIndex ) )
+	{
+		Koordinaten* partPos = shipToUnlock->getKoordinatenFromPart( partIndex );
+		
+		int fromX = partPos->x - 1;
+		int fromY = partPos->y - 1;
+
+		int toX = partPos->x + 1;
+		int toY = partPos->y + 1;
+
+		//Variablen kontrollieren
+		if( fromX < 0 ) fromX = 0;
+		if( fromY < 0 ) fromY = 0;
+		if( toX >= GRID_MAX_X ) toX = GRID_MAX_X - 1;
+		if( toY >= GRID_MAX_Y ) toY = GRID_MAX_Y - 1;
+
+		for( int x = fromX; x <= toX; x++)
+		{
+			for( int y = fromY; y <= toY; y++)
+			{
+				if( this->data[ x ][ y ] != 2 )
+				{
+					this->data[ x ][ y ] = 0;
+				}
+			}
+		}
+	
+		partIndex++;
+	}
+
+	//nachdem dieser bereich gereinigt ist, all bereiche der anderen Schiffe nachzeichnen
+	//es kann sein, das diese funktion einen gesperrten Bereich eines anderen Schiffes geleert hat
+	for( int i = 0; i < GRID_MAX_SHIPS_COUNT; i++)
+	{
+		//vom "shipToUnlock" den bereich nicht nachzeichnen
+		if( shipToUnlock != ships[i] && ships[i] != NULL)
+			this->makeLockedArea( ships[i] );
+	}
 }
 
 //GET
@@ -156,8 +238,9 @@ void Grid::clear()
 			//für Gamescene: 
 			switch( this->data[x][y] )
 			{
-				case 'O': this->data[x][y] = 'O'; break;
-				case '#': this->data[x][y] = '#'; break;
+				case 'O': break;
+				case '#': break;
+				case 3:	break;
 				default: this->data[x][y] = 0; break;
 //hier wird irgendwie im selectionGrid nicht die alten schüsse gespeichert
 			}
@@ -187,7 +270,7 @@ void Grid::drawShips()
 			}
 
 			int nextPart = 1;
-			while( ships[i]->hastNextPart( nextPart ) )
+			while( ships[i]->hasNextPart( nextPart ) )
 			{
 				//Eintragen
 				//wurde hier hin geschossen ?
@@ -230,18 +313,18 @@ void Grid::copy( Grid* gridToCopy )
 	*gridToCopy = *newGrid;
 }
 
-bool Grid::isOneFieldFreeAroundShip( Ship* shipToCheck )
+bool Grid::isFieldsFree4Ship( Ship* shipToCheck )
 {
 	//1. Prüfen ob der Platz für das Schiff reicht
 	int shipSize = shipToCheck->partsCount();
 	//ist das schiff zu lang
 	//ToFix: Länge in abhängigkeit der drehung beachten
-	if( shipToCheck->getKoordinatenFromHead()->x+shipSize > GRID_MAX_X )
+	if( shipToCheck->getKoordinatenFromHead()->x + shipSize > GRID_MAX_X )
 		return false;
 
 	//2. Für alle Teile dieses Schiffes durchgehen, ob platz ist
 	int index = 0;
-	while( shipToCheck->hastNextPart( index ) )
+	while( shipToCheck->hasNextPart( index ) )
 	{
 		Koordinaten* posToCheck = shipToCheck->getKoordinatenFromPart( index );
 
@@ -257,154 +340,20 @@ bool Grid::isOneFieldFreeAroundShip( Ship* shipToCheck )
 
 bool Grid::checkOneField( Koordinaten* posToCheck )
 {
-	int checkFrom_X = 0;
-	int checkTo_X = 0;
-	int checkFrom_Y = 0;
-	int checkTo_Y = 0;
-
-	if( posToCheck->x == 0 && posToCheck->y == 0 )
+	if( this->data[ posToCheck->x ][ posToCheck->y ] == 2 )
 	{
-		//OX
-		//XX
-		checkFrom_X = posToCheck->x;
-		checkTo_X = posToCheck->x+1;
-		
-		checkFrom_Y = posToCheck->y;
-		checkTo_Y = posToCheck->y+1;
+		//an dieser Position gibt es schon ein anderes Schiffsteil
+		return false;		
 	}
-	else if( posToCheck->x == 0 && ( posToCheck->y > 0 && posToCheck->y < GRID_MAX_Y) )
+	else if( this->data[ posToCheck->x ][ posToCheck->y ] == 3 )
 	{
-		//XX
-		//OX
-		//XX
-		checkFrom_X = posToCheck->x;
-		checkTo_X = posToCheck->x+1;
-
-		checkFrom_Y = posToCheck->y-1;
-		checkTo_Y = posToCheck->y+1;
-	}
-	else if( posToCheck->x == 0 && posToCheck->y == GRID_MAX_Y )
-	{
-		//XX
-		//OX
-		checkFrom_X = posToCheck->x;
-		checkTo_X = posToCheck->x+1;
-		
-		checkFrom_Y = posToCheck->y-1;
-		checkTo_Y = posToCheck->y;
-	}
-	else if( posToCheck->x == GRID_MAX_X && ( posToCheck->y > 0 && posToCheck->y < GRID_MAX_Y) )
-	{
-		//XXX
-		//XOX
-		checkFrom_X = posToCheck->x-1;
-		checkTo_X = posToCheck->x+1;
-		
-		checkFrom_Y = posToCheck->y-1;
-		checkTo_Y = posToCheck->y;
-	}
-	else if( posToCheck->x == GRID_MAX_X && posToCheck->y == GRID_MAX_Y )
-	{
-		//XX
-		//XO
-		checkFrom_X = posToCheck->x-1;
-		checkTo_X = posToCheck->x;
-		
-		checkFrom_Y = posToCheck->y-1;
-		checkTo_Y = posToCheck->y;
-	}
-	else if( posToCheck->x == GRID_MAX_X && ( posToCheck->y > 0 && posToCheck->y < GRID_MAX_Y) )
-	{
-		//XX
-		//XO
-		//XX
-		checkFrom_X = posToCheck->x-1;
-		checkTo_X = posToCheck->x;
-
-		checkFrom_Y = posToCheck->y-1;
-		checkTo_Y = posToCheck->y+1;
-	}
-	else if( posToCheck->x == 0 && posToCheck->y == GRID_MAX_Y )
-	{
-		//XO
-		//XX
-		checkFrom_X = posToCheck->x-1;
-		checkTo_X = posToCheck->x;
-		
-		checkFrom_Y = posToCheck->y;
-		checkTo_Y = posToCheck->y-1;
-	}
-	else if( posToCheck->x == 0 && ( posToCheck->y > 0 && posToCheck->y < GRID_MAX_Y) )
-	{
-		//XOX
-		//XXX
-		checkFrom_X = posToCheck->x-1;
-		checkTo_X = posToCheck->x+1;
-		
-		checkFrom_Y = posToCheck->y;
-		checkTo_Y = posToCheck->y+1;
+		//zu nah an einem anderen Schiff
+		return false;	
 	}
 	else
 	{
-		//XXX
-		//XOX
-		//XXX
-		checkFrom_X = posToCheck->x-1;
-		checkTo_X = posToCheck->x+1;
-
-		checkFrom_Y = posToCheck->y-1;
-		checkTo_Y = posToCheck->y+1;
-	}
-
-	for( int x = checkFrom_X; x <= checkTo_X; x++)
-	{
-		for( int y = checkFrom_Y; y <= checkTo_Y; y++)
-		{
-			if( this->data[ x ][ y ] == 2 )
-			{
-				//an dieser Position gibt es schon ein anderes Schiffsteil
-				return false;		
-			}
-		}
-	}
-	//wenn er bis zum ende durchläuft, gibt es kein Problem
-	return true;
-}
-
-bool Grid::checkFromTo( int fromX, int fromY, int toX, int toY)
-{
-	//Das eigene Schiff soll ignoriert werden
-	Koordinaten* pos = new Koordinaten( fromX, fromY );
-	Ship* i = getShipOnPosition( pos );
-
-	//Koordinaten aufbereiten, falls Rand
-//ToDO
-//	if( fromX == 0
-
-
-	for( int x = fromX-1; x <= toX+1; x++)
-	{
-		for( int y = fromY-1; y <= toY+1; y++)
-		{
-			if( this->data[ x ][ y ] == 2 )
-			{
-				//an dieser Position gibt es schon ein Schiffsteil
-				//prüfen ob es das eigene Schiff ist
-				int partIndex = 0;
-				while( i->hastNextPart( partIndex ) )
-				{
-					Koordinaten* partKoords = i->getKoordinatenFromPart( partIndex );
-					
-					Koordinaten* current = new Koordinaten( x, y );
-					//gibt es eine übereinstimmung, diesen Punkt ignorieren
-					if( partKoords->Equals( current ) )
-						break;
-
-					partIndex++;
-				}
-				return false;		
-			}
-		}
+		//kein Problem
+		return true;
 	}
 }
 
@@ -461,7 +410,7 @@ Ship* Grid::getShipOnPosition( Koordinaten* pos )
 		if( currentShip != NULL )
 		{
 			int partIndex = 0;
-			while( currentShip->hastNextPart( partIndex ) )
+			while( currentShip->hasNextPart( partIndex ) )
 			{
 				Koordinaten* posCurrentShipPart = currentShip->getKoordinatenFromPart( partIndex );
 				

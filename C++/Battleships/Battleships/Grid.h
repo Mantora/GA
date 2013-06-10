@@ -34,6 +34,8 @@ public:
 	void selectDown();
 	void updateSelection();
 	void setShip( int ID, Ship* newShip );
+	void makeLockedArea( Ship* shipToLock );
+	void clearLockedArea( Ship* shipToLock );
 
 	//GET
 	Koordinaten* getCurrentPosition();
@@ -45,9 +47,8 @@ public:
 	void drawShips();
 
 	void copy( Grid* gridToCopy );
-	bool isOneFieldFreeAroundShip( Ship* shipToCheck );
+	bool isFieldsFree4Ship( Ship* shipToCheck );
 	bool checkOneField( Koordinaten* pos );
-	bool checkFromTo( int fromX, int fromY, int toX, int toY);
 
 	//Game funktionen
 	bool fireToGrid( Grid* targetGrid );

@@ -22,7 +22,7 @@ public:
 
 	//alle koordinaten der Teile
 	Koordinaten* getKoordinatenFromHead();
-	bool hastNextPart(int index);
+	bool hasNextPart(int index);
 	Koordinaten* getKoordinatenFromPart( int partNumber );
 
 	//GET
