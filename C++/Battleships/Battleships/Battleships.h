@@ -7,17 +7,16 @@
 
 class Battleships
 {
-private:
+public:
+	//Player Public ??!
 	Player* p1;
 	Player* p2;
 
-public:
 	Battleships();
 
 	//1: SetUp function
 	void createPlayers();
-	void setupShipsPlayer1();
-	void setupShipsPlayer2();
+	void setupShips( Player* currentPlayer );
 
 	//2: Game Scene funktions
 	Player* runGameLoop();

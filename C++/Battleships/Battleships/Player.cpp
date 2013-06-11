@@ -8,11 +8,6 @@ Player::Player()
 	this->init();
 
 //	cout << "Name : " ;
-	//Name eingeben
-	while( strcmp( this->name, "" ) == 0 )
-	{
-		cin.getline( this->name, sizeof(this->name), '\n');
-	}
 
 	//Spieler fertig erstellt
 //	cout << "Player \"" << this->name << "\" created !" << endl << endl;
@@ -21,7 +16,7 @@ Player::Player()
 void Player::init()
 {
 	//name leeren
-	strcpy( this->name, "");
+	strncpy( this->name, "", sizeof(this->name) );
 
 	//startposition festlegen für auswahl
 	this->x = this->y = 0;
@@ -301,6 +296,7 @@ void Player::handleInput_setup(int KB_code)
 
 
 //Setup functions
+//TOFIX: Player::showShips4Setup() ist doch arg umständlich gelöst das geht besser
 void Player::showShips4Setup()
 {
 	cout << "Ships to place:" << endl;
@@ -309,8 +305,7 @@ void Player::showShips4Setup()
 	{
 		cout << "<1> REplace SS" << endl;
 		//überprüfen, ob die position im "SelectionGrid" == position des Schiffes (Kopfes)
-		if( this->SelectionGrid->getCurrentPosition()->x == this->ship_two1->getKoordinatenFromHead()->x && 
-			this->SelectionGrid->getCurrentPosition()->y == this->ship_two1->getKoordinatenFromHead()->y )
+		if( this->SelectionGrid->getCurrentPosition()->Equals( this->ship_two1->getKoordinatenFromHead() ) )
 		{
 			cout << " => <r> rotate ship (from head)" << endl;
 			this->currentSelectedShip = 0;
@@ -322,8 +317,7 @@ void Player::showShips4Setup()
 	{
 		cout << "<2> REplace SS" << endl;
 		//überprüfen, ob die position im "SelectionGrid" == position des Schiffes (Kopfes)
-		if( this->SelectionGrid->getCurrentPosition()->x == this->ship_two2->getKoordinatenFromHead()->x && 
-			this->SelectionGrid->getCurrentPosition()->y == this->ship_two2->getKoordinatenFromHead()->y )
+		if( this->SelectionGrid->getCurrentPosition()->Equals( this->ship_two2->getKoordinatenFromHead() ) )
 		{
 			cout << " => <r> rotate ship (from head)" << endl;
 			this->currentSelectedShip = 1;
@@ -335,8 +329,7 @@ void Player::showShips4Setup()
 	{
 		cout << "<3> REplace SSS" << endl;
 		//überprüfen, ob die position im "SelectionGrid" == position des Schiffes (Kopfes)
-		if( this->SelectionGrid->getCurrentPosition()->x == this->ship_three->getKoordinatenFromHead()->x && 
-			this->SelectionGrid->getCurrentPosition()->y == this->ship_three->getKoordinatenFromHead()->y )
+		if( this->SelectionGrid->getCurrentPosition()->Equals( this->ship_three->getKoordinatenFromHead() ) )
 		{
 			cout << " => <r> rotate ship (from head)" << endl;
 			this->currentSelectedShip = 2;
@@ -348,8 +341,7 @@ void Player::showShips4Setup()
 	{
 		cout << "<4> REplace SSSS" << endl ;
 		//überprüfen, ob die position im "SelectionGrid" == position des Schiffes (Kopfes)
-		if( this->SelectionGrid->getCurrentPosition()->x == this->ship_four->getKoordinatenFromHead()->x && 
-			this->SelectionGrid->getCurrentPosition()->y == this->ship_four->getKoordinatenFromHead()->y )
+		if( this->SelectionGrid->getCurrentPosition()->Equals( this->ship_four->getKoordinatenFromHead() ) )
 		{
 			cout << " => <r> rotate ship (from head)" << endl;
 			this->currentSelectedShip = 3;
@@ -361,8 +353,7 @@ void Player::showShips4Setup()
 	{
 		cout << "<5> REplace SSSSS" << endl;
 		//überprüfen, ob die position im "SelectionGrid" == position des Schiffes (Kopfes)
-		if( this->SelectionGrid->getCurrentPosition()->x == this->ship_five->getKoordinatenFromHead()->x && 
-			this->SelectionGrid->getCurrentPosition()->y == this->ship_five->getKoordinatenFromHead()->y )
+		if( this->SelectionGrid->getCurrentPosition()->Equals( this->ship_five->getKoordinatenFromHead() ) )
 		{
 			cout << " => <r> rotate ship (from head)" << endl;
 			this->currentSelectedShip = 4;
@@ -407,6 +398,7 @@ void Player::makeTurn( int gameRound)
 	while( !this->ready )
 	{
 		if( _kbhit() ) //http://msdn.microsoft.com/de-de/library/58w7c94c%28v=vs.80%29.aspx
+
 		{
 			int KB_code = 0;
 			/* 1: EINGABE */
@@ -520,11 +512,11 @@ Player::Player( char* developmentName)
 	//Variablen ordentlich initialisieren (Grids erstellen usw)
 	this->init();
 
-	strcpy( this->name, developmentName);
-	cout << "Player " << this->name << " created !" << endl;
+	strncpy( this->name, developmentName, sizeof(this->name) );
+//	cout << "Player " << this->name << " created !" << endl;
 
 	//Shiffe erstellen
-/*	this->ship_two1 = new Ship( 2, new Koordinaten( 6, 0) );
+	this->ship_two1 = new Ship( 2, new Koordinaten( 6, 0) );
 	this->ship_two2 = new Ship( 2, new Koordinaten( 3, 3) );
 	this->ship_three = new Ship( 3, new Koordinaten( 0, 5) );
 	this->ship_four = new Ship( 4, new Koordinaten( 5, 7) );
@@ -537,6 +529,6 @@ Player::Player( char* developmentName)
 	this->SelectionGrid->setShip( 4, this->ship_five );
 
 	this->ShipGrid->copy( &(*this->SelectionGrid) );
-*/
+
 }
 //-------------------------------------------------------------------------------//

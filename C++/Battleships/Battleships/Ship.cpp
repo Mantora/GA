@@ -192,7 +192,6 @@ void Ship::rotate_left()
 	}
 }
 
-
 //Hit
 void Ship::hitPartWithPos( Koordinaten* pos )
 {

@@ -7,25 +7,25 @@ using namespace std;
 int main(void)
 {
 	system("title CJs Battleships v201306101736");
-	Battleships* game = new Battleships();
+	Battleships* BSmain = new Battleships();
 
 	//Ein neues Spiel erstellen
-	game->createPlayers();
+//	BSmain->createPlayers();
 
 	//P1 schiffe plazieren
-	game->setupShipsPlayer1();
+//	BSmain->setupShips( BSmain->p1 );
 
 	//P2 schiffe plazieren
-	game->setupShipsPlayer2();
+//	BSmain->setupShips( BSmain->p2 );
 
 	//TODEL 4 DEV:
-//	game->DEV_createPlayersFULL();
+	BSmain->DEV_createPlayersFULL();
 	
 	//Alle spieler haben ihre Schiffe gesetzt, GameLoop starten
-	Player* winner = game->runGameLoop();
+	Player* winner = BSmain->runGameLoop();
 
 	//Das Spiel ist vorbei, verlierer Ehren
-	game->playerWin( winner );
+	BSmain->playerWin( winner );
 
 	system("pause");
 	return 0;
