@@ -166,7 +166,7 @@ int main()
 ///////////////////////////////////////////////////////////
 	cout << "Writing to file: " ;
 	
-	ofstream ofs ("test.txt",ofstream::out);
+	ofstream ofs("output.txt", ofstream::out);
 
 	//maximal gelesene Zeichenanzahl pro Wort ermitteln
 	unsigned int maxCharakterRead = 0;
@@ -184,8 +184,8 @@ int main()
 
 		ofs << words[i]->getWord() ;
 
-
-		ofs << " - " << words[i]->getAppearence() << endl;
+		//Rechts orientiert: bis zu einer anzahl von "xx.xxx" 
+		ofs << right << std::setw(5) << words[i]->getAppearence() << endl;
 	}
 	ofs.close();
 
