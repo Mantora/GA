@@ -16,31 +16,40 @@ namespace RenderingBasics
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        Camera camera;
+        private GraphicsDeviceManager graphics;
+        private Camera camera;
+         
+        private SpriteBatch spriteBatch;
+        private SpriteFont font;
+         
+        private float minX = -15.0f;
+        private float maxX = 15.0f;
+        private float minY = -10.0f;
+        private float maxY = 10.0f;
+        private float minZ = -20.0f;
+        private float maxZ = 20.0f;
+         
+        private Random rand = new Random();
+         
+        private int numSpheres = 10000;
+        private List<GraphicsEntity> spheres;
+         
+        private int framesLastSecond = 0;
+        private int frameCounter = 0;
+        private double frameTimer = 0;
+         
+        private BSP bsp;
 
-        SpriteBatch spriteBatch;
-        SpriteFont font;
+        //ToDelet: 4 dev
+        private int direktion;
+        private float currentX;
 
-        float minX = -15.0f;
-        float maxX = 15.0f;
-        float minY = -10.0f;
-        float maxY = 10.0f;
-        float minZ = 0.0f;
-        float maxZ = 20.0f;
-
-        Random rand = new Random();
-
-        int numSpheres = 10000;
-        List<GraphicsEntity> spheres;
-
-        int framesLastSecond = 0;
-        int frameCounter = 0;
-        double frameTimer = 0;
-        
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            this.bsp = new BSP( new Vector3( minX-1, minY-1, minZ-1), new Vector3( maxX+1, maxY+1, maxZ+1) );
+            this.currentX = 0;
+            this.direktion = 1;
+            this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -85,16 +94,18 @@ namespace RenderingBasics
                 GraphicsEntity newShip = new GraphicsEntity();
                 newShip.Position = new Vector3(this.randomFloat(minX, maxX), this.randomFloat(minY, maxY), this.randomFloat(minZ, maxZ));
                 newShip.Model = shipmodel;
+                newShip.BoundingBox = new BoundingBox( new Vector3(-0.4f, -0.4f, -0.4f), new Vector3(0.4f,0.4f,0.4f) );
                 newShip.Texture = textures[this.rand.Next(0, 3)];
-                this.spheres.Add(newShip);
+
+               //this.spheres.Add(newShip);
+                this.bsp.addObject( newShip );
             }
 
             this.font = Content.Load<SpriteFont>("Fonts//SpriteFont1");
         }
 
         /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
+        /// UnloadContent will be called once per game and is the place to unload all content.
         /// </summary>
         protected override void UnloadContent()
         {
@@ -152,18 +163,24 @@ namespace RenderingBasics
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             
-            foreach (GraphicsEntity entity in this.spheres)
+            List<GraphicsEntity> tmp = new List<GraphicsEntity>();
+
+            BoundingBox BBtoCheck = new BoundingBox( new Vector3( -1+this.currentX,-3,-5), new Vector3(1+this.currentX,3,-4) );
+
+            tmp = this.bsp.FindObjects( BBtoCheck );
+
+            foreach( GraphicsEntity entity in tmp )
             {
                 // Copy any parent transforms.
                 Matrix[] transforms = new Matrix[entity.Model.Bones.Count];
                 entity.Model.CopyAbsoluteBoneTransformsTo(transforms);
 
                 // Draw the model. A model can have multiple meshes, so loop.
-                foreach (ModelMesh mesh in entity.Model.Meshes)
+                foreach( ModelMesh mesh in entity.Model.Meshes )
                 {
                     // This is where the mesh orientation is set, as well 
                     // as our camera and projection.
-                    foreach (BasicEffect effect in mesh.Effects)
+                    foreach( BasicEffect effect in mesh.Effects )
                     {
                         effect.Texture = entity.Texture;
                         effect.EnableDefaultLighting();
@@ -192,6 +209,17 @@ namespace RenderingBasics
             spriteBatch.DrawString(this.font, "FPS " + this.framesLastSecond.ToString(), new Vector2(0.1f, 0.1f), Color.White);
             spriteBatch.End();
 
+
+            //ToDel: 4 dev
+            if( this.currentX > 15 )
+                this.direktion = -1;
+            if( this.currentX < -15 )
+                this.direktion = 1;
+
+            if( this.direktion > 0 )
+                this.currentX += 0.1f;
+            else
+                this.currentX -= 0.1f;
         }
 
         #region helper methods
@@ -200,7 +228,7 @@ namespace RenderingBasics
         /// </summary>
         private float randomFloat(float min, float max)
         {
-            return minX + (maxX - minX) * (float)rand.NextDouble();
+            return min + (max - min) * (float)rand.NextDouble();
         }
 
         #endregion
