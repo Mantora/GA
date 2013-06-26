@@ -107,7 +107,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BSPTree.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="GraphicsEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
