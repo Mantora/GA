@@ -10,16 +10,16 @@ int main(void)
 	Battleships* BSmain = new Battleships();
 
 	//Ein neues Spiel erstellen
-//	BSmain->createPlayers();
+	BSmain->createPlayers();
 
 	//P1 schiffe plazieren
-//	BSmain->setupShips( BSmain->p1 );
+	BSmain->setupShips( BSmain->p1 );
 
 	//P2 schiffe plazieren
-//	BSmain->setupShips( BSmain->p2 );
+	BSmain->setupShips( BSmain->p2 );
 
 	//TODEL 4 DEV:
-	BSmain->DEV_createPlayersFULL();
+//	BSmain->DEV_createPlayersFULL();
 	
 	//Alle spieler haben ihre Schiffe gesetzt, GameLoop starten
 	Player* winner = BSmain->runGameLoop();

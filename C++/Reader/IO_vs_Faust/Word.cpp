@@ -14,9 +14,14 @@ Word::Word()
 	this->appearance = 1;
 }
 
+Word::Word( char* initWord )
+{
+	strncpy( this->data, initWord, strlen(initWord) );
+}
+
 Word::~Word()
 {
-	delete [] this->data;
+	delete [] &this->data;
 }
 
 void Word::finished()

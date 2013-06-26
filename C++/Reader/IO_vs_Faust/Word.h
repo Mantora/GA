@@ -5,11 +5,12 @@ class Word
 {
 	private:
 		char data[MAX_WORT_LENGTH];
-		unsigned int currentIndex;
-		unsigned int appearance;
+		int currentIndex;
+		int appearance;
 
 	public:
 		Word();
+		Word( char* initWord );
 		~Word();
 
 		//SET
