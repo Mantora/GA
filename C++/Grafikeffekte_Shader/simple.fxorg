@@ -1,0 +1,59 @@
+// global effect parameters
+float4x4	g_mWorld;
+float4x4	g_mView;
+float4x4	g_mProjection;
+
+float		g_fTime;
+
+// -----------------------------------------------------------------------------
+
+struct TInputVertex
+{
+	float3	vPositionOS	: POSITION0;
+	float3	vNormalOS	: NORMAL0;
+	float4	vColor		: COLOR0;
+	float2	vTexCoord	: TEXCOORD0;
+};
+
+struct TOutputVertex
+{
+	float4	vPositionPS	: POSITION0;
+	float4	vColor		: COLOR0;
+	float2	vTexCoord	: TEXCOORD0;
+	float3	vNormal		: TEXCOORD1;
+};
+
+// -----------------------------------------------------------------------------
+TOutputVertex
+vsMain(TInputVertex i)
+{
+	const float4x4 mWorldView = mul(g_mWorld, g_mView);
+	const float4x4 mWorldViewProjection = mul(mWorldView, g_mProjection);
+	
+	TOutputVertex o;
+	o.vPositionPS = mul(float4(i.vPositionOS, 1), mWorldViewProjection);
+	o.vColor = i.vColor;
+	o.vTexCoord = i.vTexCoord;
+	o.vNormal = i.vNormalOS;
+	
+	return o;	
+}
+
+// -----------------------------------------------------------------------------
+float4
+psMain(TOutputVertex i) : COLOR0
+{
+	return i.vColor;
+}
+
+// -----------------------------------------------------------------------------
+// techniques
+technique MyTechnique
+{
+	pass p1
+	{
+		VertexShader = compile vs_2_0 vsMain();
+	}
+}
+
+// -----------------------------------------------------------------------------

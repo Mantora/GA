@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawOnConsole", "DrawOnConsole\DrawOnConsole.vcproj", "{D9CDCBE8-D1A2-4C3D-BC80-6705AFA53A5F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GetKeyboardInput", "GetKeyboardInput\GetKeyboardInput.vcproj", "{3F671E50-83A5-46EA-A617-76D6992F3852}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Battleships", "Battleships\Battleships.vcproj", "{C00976B9-DC28-4236-B92D-ADD3943A346E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9CDCBE8-D1A2-4C3D-BC80-6705AFA53A5F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D9CDCBE8-D1A2-4C3D-BC80-6705AFA53A5F}.Debug|Win32.Build.0 = Debug|Win32
+		{D9CDCBE8-D1A2-4C3D-BC80-6705AFA53A5F}.Release|Win32.ActiveCfg = Release|Win32
+		{D9CDCBE8-D1A2-4C3D-BC80-6705AFA53A5F}.Release|Win32.Build.0 = Release|Win32
+		{3F671E50-83A5-46EA-A617-76D6992F3852}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3F671E50-83A5-46EA-A617-76D6992F3852}.Debug|Win32.Build.0 = Debug|Win32
+		{3F671E50-83A5-46EA-A617-76D6992F3852}.Release|Win32.ActiveCfg = Release|Win32
+		{3F671E50-83A5-46EA-A617-76D6992F3852}.Release|Win32.Build.0 = Release|Win32
+		{C00976B9-DC28-4236-B92D-ADD3943A346E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C00976B9-DC28-4236-B92D-ADD3943A346E}.Debug|Win32.Build.0 = Debug|Win32
+		{C00976B9-DC28-4236-B92D-ADD3943A346E}.Release|Win32.ActiveCfg = Release|Win32
+		{C00976B9-DC28-4236-B92D-ADD3943A346E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

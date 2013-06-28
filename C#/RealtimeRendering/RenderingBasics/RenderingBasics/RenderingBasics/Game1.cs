@@ -33,22 +33,40 @@ namespace RenderingBasics
          
         private int numSpheres = 10000;
         private List<GraphicsEntity> spheres;
-         
+        
+        //GUI
         private int framesLastSecond = 0;
         private int frameCounter = 0;
         private double frameTimer = 0;
+
+        private int objectsCount = 0;
          
         private BSP bsp;
 
+        //Einstellung, was gezeigt werden soll:
+        private enum VIEW_OPTIMIZATION
+        {
+            NONE,
+            BOUNDING_FRUSTUM,
+            BOUNDING_BOX
+        }
+        private VIEW_OPTIMIZATION optimization = VIEW_OPTIMIZATION.NONE;
+
         //ToDelet: 4 dev
-        private int direktion;
+        private enum DIRECTION
+        {
+            RIGHT,
+            LEFT
+        }
+
+        private DIRECTION direktion;
         private float currentX;
 
         public Game1()
         {
             this.bsp = new BSP( new Vector3( minX-1, minY-1, minZ-1), new Vector3( maxX+1, maxY+1, maxZ+1) );
             this.currentX = 0;
-            this.direktion = 1;
+            this.direktion = DIRECTION.RIGHT;
             this.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
@@ -65,11 +83,11 @@ namespace RenderingBasics
 
             this.camera = new Camera();
             this.camera.AspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-            this.camera.NearClipDistance = 1.0f;
+            this.camera.NearClipDistance = 0.01f;
             this.camera.FarClipDistance = 10000.0f;
             this.camera.FieldOfViewDegree = 45.0f;
             this.camera.UpVector = Vector3.Up;
-            this.camera.Position = Vector3.Zero;
+            this.camera.Position = new Vector3( 0,0, 40 );
             this.camera.ViewDirection = Vector3.Forward;
 
             this.spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
@@ -97,7 +115,7 @@ namespace RenderingBasics
                 newShip.BoundingBox = new BoundingBox( new Vector3(-0.4f, -0.4f, -0.4f), new Vector3(0.4f,0.4f,0.4f) );
                 newShip.Texture = textures[this.rand.Next(0, 3)];
 
-               //this.spheres.Add(newShip);
+                this.spheres.Add(newShip);
                 this.bsp.addObject( newShip );
             }
 
@@ -127,26 +145,31 @@ namespace RenderingBasics
             if (Keyboard.GetState().IsKeyDown(Keys.S)
                 || Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Backward;
+                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Backward*2;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.W)
             || Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Forward;
+                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Forward*2;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.A)
             || Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Left;
+                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Left*2;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.D)
             || Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Right;
+                tempCamPos += (float)gameTime.ElapsedGameTime.TotalSeconds * Vector3.Right*2;
             }
+
+            //Anzeigemodus umschalten
+            if(Keyboard.GetState().IsKeyDown(Keys.D1) )  this.optimization = VIEW_OPTIMIZATION.NONE;
+            if(Keyboard.GetState().IsKeyDown(Keys.D2) )  this.optimization = VIEW_OPTIMIZATION.BOUNDING_BOX;
+            if(Keyboard.GetState().IsKeyDown(Keys.D3) )  this.optimization = VIEW_OPTIMIZATION.BOUNDING_FRUSTUM;
 
             this.camera.Position = tempCamPos;
 
@@ -163,36 +186,112 @@ namespace RenderingBasics
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             
-            List<GraphicsEntity> tmp = new List<GraphicsEntity>();
-
-            BoundingBox BBtoCheck = new BoundingBox( new Vector3( -1+this.currentX,-3,-5), new Vector3(1+this.currentX,3,-4) );
-
-            tmp = this.bsp.FindObjects( BBtoCheck );
-
-            foreach( GraphicsEntity entity in tmp )
+            switch( optimization )
             {
-                // Copy any parent transforms.
-                Matrix[] transforms = new Matrix[entity.Model.Bones.Count];
-                entity.Model.CopyAbsoluteBoneTransformsTo(transforms);
-
-                // Draw the model. A model can have multiple meshes, so loop.
-                foreach( ModelMesh mesh in entity.Model.Meshes )
+                case VIEW_OPTIMIZATION.NONE:
                 {
-                    // This is where the mesh orientation is set, as well 
-                    // as our camera and projection.
-                    foreach( BasicEffect effect in mesh.Effects )
+                    foreach( GraphicsEntity entity in this.spheres )
                     {
-                        effect.Texture = entity.Texture;
-                        effect.EnableDefaultLighting();
-                        effect.World = transforms[mesh.ParentBone.Index] *
-                            Matrix.CreateRotationY(0.0f)
-                            * Matrix.CreateTranslation(entity.Position);
-                        effect.View = this.camera.ViewMatrix;
-                        effect.Projection = this.camera.ProjectionMatrix;
+                        this.objectsCount++;
+
+                        // Copy any parent transforms.
+                        Matrix[] transforms = new Matrix[entity.Model.Bones.Count];
+                        entity.Model.CopyAbsoluteBoneTransformsTo(transforms);
+
+                        // Draw the model. A model can have multiple meshes, so loop.
+                        foreach( ModelMesh mesh in entity.Model.Meshes )
+                        {
+                            // This is where the mesh orientation is set, as well 
+                            // as our camera and projection.
+                            foreach( BasicEffect effect in mesh.Effects )
+                            {
+                                effect.Texture = entity.Texture;
+                                effect.EnableDefaultLighting();
+                                effect.World = transforms[mesh.ParentBone.Index] *
+                                    Matrix.CreateRotationY(0.0f)
+                                    * Matrix.CreateTranslation(entity.Position);
+                                effect.View = this.camera.ViewMatrix;
+                                effect.Projection = this.camera.ProjectionMatrix;
+                            }
+                            // Draw the mesh, using the effects set above.
+                            mesh.Draw();
+                        }
                     }
-                    // Draw the mesh, using the effects set above.
-                    mesh.Draw();
                 }
+                break;
+
+                case VIEW_OPTIMIZATION.BOUNDING_BOX:
+                {
+                    List<GraphicsEntity> tmp = new List<GraphicsEntity>();
+                    BoundingBox viewBB = new BoundingBox( new Vector3( -1+this.currentX,-10,-7), new Vector3(1+this.currentX,-9,-6) );
+                    tmp = this.bsp.FindObjects( viewBB );
+
+                    foreach( GraphicsEntity entity in tmp )
+                    {
+                        this.objectsCount++;
+
+                        // Copy any parent transforms.
+                        Matrix[] transforms = new Matrix[entity.Model.Bones.Count];
+                        entity.Model.CopyAbsoluteBoneTransformsTo(transforms);
+
+                        // Draw the model. A model can have multiple meshes, so loop.
+                        foreach( ModelMesh mesh in entity.Model.Meshes )
+                        {
+                            // This is where the mesh orientation is set, as well 
+                            // as our camera and projection.
+                            foreach( BasicEffect effect in mesh.Effects )
+                            {
+                                effect.Texture = entity.Texture;
+                                effect.EnableDefaultLighting();
+                                effect.World = transforms[mesh.ParentBone.Index] *
+                                    Matrix.CreateRotationY(0.0f)
+                                    * Matrix.CreateTranslation(entity.Position);
+                                effect.View = this.camera.ViewMatrix;
+                                effect.Projection = this.camera.ProjectionMatrix;
+                            }
+                            // Draw the mesh, using the effects set above.
+                            mesh.Draw();
+                        }
+                    }
+                }
+                break;
+
+                case VIEW_OPTIMIZATION.BOUNDING_FRUSTUM:
+                {
+                    List<GraphicsEntity> tmp = new List<GraphicsEntity>();
+                    BoundingFrustum viewFrustum = new BoundingFrustum( this.camera.ViewMatrix * this.camera.ProjectionMatrix );
+                    
+                    tmp = this.bsp.FindObjects( viewFrustum );
+                    
+                    foreach( GraphicsEntity entity in tmp )
+                    {
+                        this.objectsCount++;
+
+                        // Copy any parent transforms.
+                        Matrix[] transforms = new Matrix[entity.Model.Bones.Count];
+                        entity.Model.CopyAbsoluteBoneTransformsTo(transforms);
+
+                        // Draw the model. A model can have multiple meshes, so loop.
+                        foreach( ModelMesh mesh in entity.Model.Meshes )
+                        {
+                            // This is where the mesh orientation is set, as well 
+                            // as our camera and projection.
+                            foreach( BasicEffect effect in mesh.Effects )
+                            {
+                                effect.Texture = entity.Texture;
+                                effect.EnableDefaultLighting();
+                                effect.World = transforms[mesh.ParentBone.Index] *
+                                    Matrix.CreateRotationY(0.0f)
+                                    * Matrix.CreateTranslation(entity.Position);
+                                effect.View = this.camera.ViewMatrix;
+                                effect.Projection = this.camera.ProjectionMatrix;
+                            }
+                            // Draw the mesh, using the effects set above.
+                            mesh.Draw();
+                        }
+                    }
+                }
+                break;
             }
 
             this.frameCounter++;
@@ -206,20 +305,31 @@ namespace RenderingBasics
             }
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(this.font, "FPS " + this.framesLastSecond.ToString(), new Vector2(0.1f, 0.1f), Color.White);
+            spriteBatch.DrawString(this.font, "FPS " + this.framesLastSecond.ToString() + "\nObjects " + this.objectsCount, new Vector2(0.1f, 0.1f), Color.Red );
             spriteBatch.End();
 
+            spriteBatch.Begin();
+            spriteBatch.DrawString(this.font, "Press 1-3 to switch mod\nCurrent mod: " + this.optimization.ToString() , new Vector2(0.1f, 400f), Color.Wheat );
+            spriteBatch.End();
+            this.objectsCount = 0;
 
             //ToDel: 4 dev
+            //moving the viewBox
             if( this.currentX > 15 )
-                this.direktion = -1;
+                this.direktion = DIRECTION.LEFT;
             if( this.currentX < -15 )
-                this.direktion = 1;
+                this.direktion = DIRECTION.RIGHT;
 
-            if( this.direktion > 0 )
-                this.currentX += 0.1f;
-            else
-                this.currentX -= 0.1f;
+            switch( this.direktion )
+            {
+                case DIRECTION.RIGHT:
+                    this.currentX += 0.1f;
+                break;
+
+                case DIRECTION.LEFT:
+                    this.currentX -= 0.1f;
+                break;
+            }
         }
 
         #region helper methods

@@ -35,6 +35,17 @@ namespace RenderingBasics
 
             return tmp;
         }
+
+        public List<GraphicsEntity> FindObjects( BoundingFrustum BBtoCheck )
+        {
+            List<GraphicsEntity> tmp = new List<GraphicsEntity>();
+
+            //von root aus alle nodes absuchen
+            //und anhand von min & max objekte zurückgeben
+            root.isObjectInView( BBtoCheck, tmp );
+
+            return tmp;
+        }
     }
     
     public class BSPNode
@@ -49,12 +60,13 @@ namespace RenderingBasics
         //Konstruktor
         public BSPNode(Vector3 min, Vector3 max)
         {
-            this.bb = new BoundingBox( min, max );
+//            this.bb = new BoundingBox( min, max );
+            Vector3 mi = Vector3.Min( min, max );
+            Vector3 ma = Vector3.Max( min, max );
+
+            this.bb = new BoundingBox( mi, ma );
 
             this.contents = new List<GraphicsEntity>();
-
-            //nur array erzeugen
-            this.childNodes = new BSPNode[8];
         }
 
         //Methode zum hinzufügen eines objektes
@@ -69,6 +81,7 @@ namespace RenderingBasics
             {
                 case ContainmentType.Contains:
                     //beinhaltet
+                    
                     //unterboxen erstellen zum kontrollieren
                     initChildNotes();
                     //unterboxen durchgehen
@@ -89,37 +102,64 @@ namespace RenderingBasics
         //function zum herausfinden, ob die BoundingBox im bereich ist
         public void isObjectInView( BoundingBox BBtoCheck, List<GraphicsEntity> list )
         {
-            foreach( GraphicsEntity entity in this.contents )
+            if( this.bb.Contains( BBtoCheck ) != ContainmentType.Disjoint )
             {
-                switch( entity.BoundingBox.Contains( BBtoCheck ) )
-                {
-                    case ContainmentType.Contains:
-                        list.Add( entity );
-                        foreach( BSPNode node in this.childNodes )
-                        {
-                            node.isObjectInView( BBtoCheck, list );
-                        }
-                    break;
+                list.AddRange( this.contents );
 
-                    case ContainmentType.Intersects:
-                        list.Add( entity );
-                    break;
+                if( this.childNodes != null )
+                {
+                    foreach( BSPNode node in this.childNodes )
+                    {
+                        node.isObjectInView( BBtoCheck, list );
+                    }
                 }
             }
+        }
+
+        public void isObjectInView( BoundingFrustum BBtoCheck, List<GraphicsEntity> list )
+        {
+            
+            if( this.bb.Contains( BBtoCheck ) != ContainmentType.Disjoint )
+            {
+                list.AddRange( this.contents );
+
+                if( this.childNodes != null )
+                {
+                    foreach( BSPNode node in this.childNodes )
+                    {
+                        node.isObjectInView( BBtoCheck, list );
+                    }
+                }
+            }
+            
         }
 
         internal void initChildNotes()
         {
             //wurden die childNodes schon erzeugt ?
-            if( null == this.childNodes )
+            if( null != this.childNodes )
                 return;
+
+            //nur array erzeugen
+            this.childNodes = new BSPNode[8];
 
             Vector3 center = (this.bb.Min + this.bb.Max ) * 0.5f;
 
             Vector3[] corners = this.bb.GetCorners();
+ 
+            float offset = 2;
 
             for( int i = 0; i < 8; i++ )
             {
+                Vector3 corner = corners[i];
+                if( corner.X < 0 ) corner.X -= offset;
+                if( corner.Y < 0 ) corner.Y -= offset;
+                if( corner.Z < 0 ) corner.Z -= offset;
+
+                if( corner.X > 0 ) corner.X += offset;
+                if( corner.Y > 0 ) corner.Y += offset;
+                if( corner.Z > 0 ) corner.Z += offset;
+
                 this.childNodes[i] = new BSPNode( center, corners[i] );
             }
         }
