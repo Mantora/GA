@@ -1,0 +1,3 @@
+- Mesh + Textur aus .tg4 laden
+- anzeigen
+- Vertexschattiert

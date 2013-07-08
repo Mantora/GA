@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL", "OpenGL\OpenGL.vcproj", "{AB197C63-6272-495B-A9EB-097A4F4F904F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcproj", "{40F34F8B-4D1D-4FBF-8F94-AFC8B4CBD642}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_3D", "OpenGL_3D\OpenGL_3D.vcproj", "{130B8DE6-3D0E-4171-8970-3609E9754B29}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine_Asteroids", "GameEngine_Asteroids\GameEngine_Asteroids.vcproj", "{573E17A1-0955-4CC1-B176-99D31A851477}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine_Terrain", "GameEngine_Terrain\GameEngine_Terrain.vcproj", "{761F9665-C031-439C-B9DD-949C190C3D49}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine_Terrain_movement", "GameEngine_Terrain_movement\GameEngine_Terrain_movement.vcproj", "{519EB093-6B92-4989-A9FB-7EEABBA9C2F3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_3D_sphere", "OpenGL_3D_sphere\OpenGL_3D_sphere.vcproj", "{DD483954-7672-4C78-A513-F9AA18D8A277}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_texturprojektion", "OpenGL_texturprojektion\OpenGL_texturprojektion.vcproj", "{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB197C63-6272-495B-A9EB-097A4F4F904F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AB197C63-6272-495B-A9EB-097A4F4F904F}.Debug|Win32.Build.0 = Debug|Win32
+		{AB197C63-6272-495B-A9EB-097A4F4F904F}.Release|Win32.ActiveCfg = Release|Win32
+		{AB197C63-6272-495B-A9EB-097A4F4F904F}.Release|Win32.Build.0 = Release|Win32
+		{40F34F8B-4D1D-4FBF-8F94-AFC8B4CBD642}.Debug|Win32.ActiveCfg = Debug|Win32
+		{40F34F8B-4D1D-4FBF-8F94-AFC8B4CBD642}.Debug|Win32.Build.0 = Debug|Win32
+		{40F34F8B-4D1D-4FBF-8F94-AFC8B4CBD642}.Release|Win32.ActiveCfg = Release|Win32
+		{40F34F8B-4D1D-4FBF-8F94-AFC8B4CBD642}.Release|Win32.Build.0 = Release|Win32
+		{130B8DE6-3D0E-4171-8970-3609E9754B29}.Debug|Win32.ActiveCfg = Debug|Win32
+		{130B8DE6-3D0E-4171-8970-3609E9754B29}.Debug|Win32.Build.0 = Debug|Win32
+		{130B8DE6-3D0E-4171-8970-3609E9754B29}.Release|Win32.ActiveCfg = Release|Win32
+		{130B8DE6-3D0E-4171-8970-3609E9754B29}.Release|Win32.Build.0 = Release|Win32
+		{573E17A1-0955-4CC1-B176-99D31A851477}.Debug|Win32.ActiveCfg = Debug|Win32
+		{573E17A1-0955-4CC1-B176-99D31A851477}.Debug|Win32.Build.0 = Debug|Win32
+		{573E17A1-0955-4CC1-B176-99D31A851477}.Release|Win32.ActiveCfg = Release|Win32
+		{573E17A1-0955-4CC1-B176-99D31A851477}.Release|Win32.Build.0 = Release|Win32
+		{761F9665-C031-439C-B9DD-949C190C3D49}.Debug|Win32.ActiveCfg = Debug|Win32
+		{761F9665-C031-439C-B9DD-949C190C3D49}.Debug|Win32.Build.0 = Debug|Win32
+		{761F9665-C031-439C-B9DD-949C190C3D49}.Release|Win32.ActiveCfg = Release|Win32
+		{761F9665-C031-439C-B9DD-949C190C3D49}.Release|Win32.Build.0 = Release|Win32
+		{519EB093-6B92-4989-A9FB-7EEABBA9C2F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{519EB093-6B92-4989-A9FB-7EEABBA9C2F3}.Debug|Win32.Build.0 = Debug|Win32
+		{519EB093-6B92-4989-A9FB-7EEABBA9C2F3}.Release|Win32.ActiveCfg = Release|Win32
+		{519EB093-6B92-4989-A9FB-7EEABBA9C2F3}.Release|Win32.Build.0 = Release|Win32
+		{DD483954-7672-4C78-A513-F9AA18D8A277}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD483954-7672-4C78-A513-F9AA18D8A277}.Debug|Win32.Build.0 = Debug|Win32
+		{DD483954-7672-4C78-A513-F9AA18D8A277}.Release|Win32.ActiveCfg = Release|Win32
+		{DD483954-7672-4C78-A513-F9AA18D8A277}.Release|Win32.Build.0 = Release|Win32
+		{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}.Debug|Win32.Build.0 = Debug|Win32
+		{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}.Release|Win32.ActiveCfg = Release|Win32
+		{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
