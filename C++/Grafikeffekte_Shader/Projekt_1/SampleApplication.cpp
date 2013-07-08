@@ -64,13 +64,12 @@ CSampleApplication::AutoLoadEffectTextures(ID3DXEffect* pEffect) const
 void 
 CSampleApplication::CreateScene()
 {
-	
-		CreateTorus(m_pD3dDevice,
-			128, 32, 0.5f, 0.25f,
+	//*
+	CreateTorus(m_pD3dDevice,
+			60, 40, 0.5f, 0.25f,
 			&m_iNumVertices, &m_iNumTriangles, &m_iVertexSize,
 			&m_pVertexDeclaration, &m_pVertexBuffer, &m_pIndexBuffer);
-
-	/*
+	/*/
 	CreateCube(m_pD3dDevice,
 			&m_iNumVertices, &m_iNumTriangles, &m_iVertexSize,
 			&m_pVertexDeclaration, &m_pVertexBuffer, &m_pIndexBuffer);
@@ -195,14 +194,13 @@ CSampleApplication::RenderScene() const
 	m_pEffect->SetMatrix("g_mView", &m_mView);
 	m_pEffect->SetMatrix("g_mProjection", &m_mProjection);
 
-    D3DXMATRIX mViewInverse;
-    D3DXMatrixInverse( &mViewInverse, NULL, &m_mView);
-    m_pEffect->SetMatrix("g_mViewInverse", &mViewInverse);
-
-	m_pEffect->SetTexture("g_tTexture", m_pTexture);
+	D3DXMATRIX mViewInverse;
+	D3DXMatrixInverse(&mViewInverse, NULL, &m_mView);
+	m_pEffect->SetMatrix("g_mViewInverse", &mViewInverse);
 
 
-	D3DXVECTOR4 vPlane(0, 0.05, 1, -0.95);
+
+	D3DXVECTOR4 vPlane(0, 0.05f, 1, -0.95f);
 	m_pD3dDevice->SetClipPlane(0, vPlane);
 
 	RECT xRect = { 100, 100, 500, 500 };

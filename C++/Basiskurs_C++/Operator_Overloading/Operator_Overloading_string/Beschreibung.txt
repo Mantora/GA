@@ -1,0 +1,30 @@
+Aufgabe aus "Part 16: Operator overloading"
+
+Schreibe eine Klasse "CString" die intern mit einen char array arbeitet und die folgenden Funktionen und Operatoren unterstützt:
+	- allen sinnvollen Konstruktoren
+	- copie construktors
+	- string [index] (lesen/schreiben)
+	- string + string, string += string 
+	- string + *char, string += *char
+	- =, <, >, <=, >=, ==, !=
+	- GetLength()
+	- IsEmpthy()
+	- Clear()
+	- Find(substring) - gibt den Index des Fundes wieder bzw. -1
+	- Contains(substring)
+	- Reverse()
+	- operator const char*() const
+
+Zusatzleistungen:
+	- Keine Memory Leaks
+	- arbeite wo es nur geht mit const Funktionen, const Referenzen etc..
+	- überschreibe den Stream operator >> für die Ausgabe
+	- Funktionen bzw. Fälle finden die ich mit meinem Unittest (Unittest.cpp) nicht abgedeckt habe
+	
+Hinweis:
+	- Denkt dran nicht nur flache Kopien zu erzeugen im Zuweisungsoperator und den Kopiekonstruktor
+	- Wenn ihr euch an die Namen von oben hält könnt ihr meine Unittestklasse
+
+
+
+

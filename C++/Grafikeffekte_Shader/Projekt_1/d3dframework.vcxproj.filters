@@ -52,5 +52,8 @@
     <None Include="Earth_Specular.jpg">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="EarthNormalMap.jpg">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

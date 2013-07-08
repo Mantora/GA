@@ -22,6 +22,8 @@ CreateTorus(IDirect3DDevice9* pDevice,
 	{
 		D3DXVECTOR3 vPosition;
 		D3DXVECTOR3 vNormal;
+		D3DXVECTOR3 vTangent;
+		D3DXVECTOR3 vBinormal;
 		D3DCOLOR	dwColor;
 		D3DXVECTOR2 vTexCoord;
 	};
@@ -34,8 +36,10 @@ CreateTorus(IDirect3DDevice9* pDevice,
 	{
 		{ 0,  0, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 },
 		{ 0, 12, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL,   0 },
-		{ 0, 24, D3DDECLTYPE_D3DCOLOR,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR,	  0 },
-		{ 0, 28, D3DDECLTYPE_FLOAT2,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
+		{ 0, 24, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TANGENT,  0 },
+		{ 0, 36, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_BINORMAL, 0 },
+		{ 0, 48, D3DDECLTYPE_D3DCOLOR,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR,	  0 },
+		{ 0, 52, D3DDECLTYPE_FLOAT2,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
 		D3DDECL_END()
 	};
 
@@ -75,13 +79,19 @@ CreateTorus(IDirect3DDevice9* pDevice,
 			pVertexArray->vNormal.y = sinf(fAngle2);
 			pVertexArray->vNormal.z = cosf(fAngle2) * sinf(fAngle1);
 
+			pVertexArray->vTangent.x = sinf(fAngle1);
+			pVertexArray->vTangent.y = 0;
+			pVertexArray->vTangent.z = -cosf(fAngle1);
+
+			D3DXVec3Cross(&pVertexArray->vBinormal, &pVertexArray->vTangent, &pVertexArray->vNormal);
+
+
 			pVertexArray->dwColor = 0;
 			if (i & 1) pVertexArray->dwColor |= 0x0000ff00;
 			if (j & 1) pVertexArray->dwColor |= 0x00ff0000;
-//			if (!pVertexArray->dwColor) pVertexArray->dwColor = 0x000000ff;
-//			pVertexArray->dwColor = 0x00ffffff;
+			if (!pVertexArray->dwColor) pVertexArray->dwColor = 0x000000ff;
 
-			pVertexArray->vTexCoord.x = fProgress1;
+			pVertexArray->vTexCoord.x = -fProgress1;
 			pVertexArray->vTexCoord.y = fProgress2 + 0.5f;
 
 			pVertexArray++;
@@ -147,6 +157,8 @@ CreateCube(IDirect3DDevice9* pDevice,
 	{
 		D3DXVECTOR3 vPosition;
 		D3DXVECTOR3 vNormal;
+		D3DXVECTOR3 vTangent;
+		D3DXVECTOR3 vBinormal;
 		D3DCOLOR	dwColor;
 		D3DXVECTOR2 vTexCoord;
 	};
@@ -159,8 +171,10 @@ CreateCube(IDirect3DDevice9* pDevice,
 	{
 		{ 0,  0, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 },
 		{ 0, 12, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL,   0 },
-		{ 0, 24, D3DDECLTYPE_D3DCOLOR,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR,	  0 },
-		{ 0, 28, D3DDECLTYPE_FLOAT2,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
+		{ 0, 24, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TANGENT,  0 },
+		{ 0, 36, D3DDECLTYPE_FLOAT3,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_BINORMAL, 0 },
+		{ 0, 48, D3DDECLTYPE_D3DCOLOR,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR,	  0 },
+		{ 0, 52, D3DDECLTYPE_FLOAT2,	D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 },
 		D3DDECL_END()
 	};
 
@@ -178,8 +192,8 @@ CreateCube(IDirect3DDevice9* pDevice,
 	TCubeVertex* pVertexArray;
 	pVertexBuffer->Lock(0, 0, (void**)&pVertexArray, 0);
 
-	//DWORD aFaceColors[] = {0x00FF0000, 0x0000FF00, 0x000000FF, 0x0000FFFF, 0x00FF00FF, 0x00FFFF00};
-	DWORD aFaceColors[] = {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF};
+	DWORD aFaceColors[] = {0x00FF0000, 0x0000FF00, 0x000000FF, 0x0000FFFF, 0x00FF00FF, 0x00FFFF00};
+	//DWORD aFaceColors[] = {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF};
 
 	for (int iFace = 0; iFace < 6; iFace++)
 	{
@@ -204,9 +218,11 @@ CreateCube(IDirect3DDevice9* pDevice,
 			if (iCorner % 2 == 0) vPosition += vTangent; else vPosition -= vTangent;
 			if (iCorner / 2 == 0) vPosition += vBiTangent; else vPosition -= vBiTangent;
 
-			pVertexArray[iFace * 4 + iCorner].vPosition = vPosition / 2;
+			pVertexArray[iFace * 4 + iCorner].vPosition = vPosition;
 
 			pVertexArray[iFace * 4 + iCorner].vNormal = vNormal;
+			pVertexArray[iFace * 4 + iCorner].vTangent = -vTangent;
+			pVertexArray[iFace * 4 + iCorner].vBinormal = -vBiTangent;
 
 			pVertexArray[iFace * 4 + iCorner].vTexCoord.x = (float)(iCorner % 2);
 			pVertexArray[iFace * 4 + iCorner].vTexCoord.y = (float)(iCorner / 2);
@@ -253,4 +269,3 @@ CreateCube(IDirect3DDevice9* pDevice,
 	return S_OK;
 }
 //---------------------------------------------------------------------------------------------------------------------
- 

@@ -107,6 +107,7 @@
     <ClInclude Include="SampleApplication.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EarthNormalMap.jpg" />
     <None Include="Earth_Diffuse.dds" />
     <None Include="Earth_Specular.jpg" />
   </ItemGroup>

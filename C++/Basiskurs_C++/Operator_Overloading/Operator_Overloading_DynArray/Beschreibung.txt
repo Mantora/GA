@@ -1,0 +1,26 @@
+Aufgabe aus "Part 16: Operator overloading"
+
+Schreibe eine Klasse "CDynArray" die Intergers verarbeiten kann und die folgenden Funktionen und Operatoren unterstützt:
+	- CDynArray()
+	- CDynArray(CDynArray&)
+	- CDynArray(int iInitialSize)
+	- operator[int](lesen)
+	- GetSize()
+	- Print()
+	- AddElement(int iValue)
+	- InsertBeforeElement(int iValue, int iIndex)
+	- InsertAfterElement(int iValue, int iIndex)
+	- DeleteElement(int iIndex)
+	- DeleteRange(int iFirst, int iLast)
+	
+Zusatzleistungen:
+	- Keine Memory Leaks
+	- arbeite wo es nur geht mit const Funktionen, const Referenzen etc..
+	- überschreibe die Operatoren ==, !=
+	- ein oder mehrere Sortierfunktionen implementieren
+	- Funktionen bzw. Fälle finden die ich mit meinem Unittest (Unittest.cpp) nicht abgedeckt habe
+	
+Hinweis:
+	- Denkt dran nicht nur flache Kopien zu erzeugen im Zuweisungsoperator und den Kopiekonstruktor
+	- Wenn ihr euch an die Namen von oben hält könnt ihr meine Unittestklasse
+

@@ -1,0 +1,29 @@
+Aufgabe aus "Part 16: Operator overloading"
+
+Schreibe eine Klasse "CVector3" mit den folgenden Funktionen und Operatoren:
+	- vec + vec, vec – vec
+	- vec * vec (dot-product) 
+	- vec ^ vec (vector product)
+	- vec * float, float * vec
+	- vec == vec
+	- vec != vec
+	- -vec (unary minus)
+	- =, +=, -=, *=, ^=
+	- Normalize()
+	- GetLength()
+	- GetLengthSquared()
+	- allen sinnvollen Konstruktoren
+	- copie construktors
+
+Zusatzleistungen:
+	- Keine Memory Leaks
+	- arbeite wo es nur geht mit const Funktionen, const Referenzen etc..
+	- Funktionen bzw. Fälle finden die ich mit meinem Unittest (Unittest.cpp) nicht abgedeckt habe
+	
+Hinweis:
+	- -vec verändert sich selbst und gibt eine Referenz auf sich selbst zurück
+	- *= ist ist die Scalierung von sich selbst
+	- Wenn ihr euch an die Namen von oben hält könnt ihr meine Unittestklasse nutzen, dafür müssen die variablen x, y, z public sein
+
+
+
