@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CString TestString;
-
+	
 //ToDel 4 CJ:
 /*	TestString = "Mama";
 	cout << TestString.getArray() << endl;
@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
 	TestString[0] = 'D';
 */
 //	assert(strcmp(TestString.getArray(), "") == 0);
+//	TestString.test();
 ///////////////////////////////////////////////////////////
 
 	assert(strcmp(TestString, "") == 0);
@@ -25,8 +26,9 @@ int main(int argc, char* argv[])
 	assert(TestString.IsEmpthy());
 	
 	TestString = "Mama";
+
 	cout << "Ich bin der \"TestString\" : " << TestString << endl;
-	assert(TestString.GetLength()==4);
+	assert(TestString.GetLength() == 4);
 	assert(TestString.IsEmpthy() == false);
 	assert(TestString[0] == 'M');
 	assert(TestString[1] == 'a');
@@ -78,6 +80,8 @@ int main(int argc, char* argv[])
 	assert(TestString.IsEmpthy() == false);
 	TestString.Clear();
 	assert(TestString.IsEmpthy());
+
+	system("pause");
 
 	return 0;
 }

@@ -51,4 +51,14 @@ class CString
 		void Reverse();
 
 		void Clear();
+
+		////////////////custom <cstring> funktion//////////////////
+		void CString_cpy( char* dest, const char* src );
+		void CString_cat( char* dest, const char* src );
+		int CString_len( const char* str );
+		int CString_cmp( const char* dest, const char* src );
+		bool CString_contain( const char* dest, const char* src );
+		///////////////////////////////////////////////////////////
+
+		void test();
 };
