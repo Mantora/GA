@@ -12,12 +12,12 @@ CString::CString( const char* cstr )
 	strcpy( this->data, cstr );
 }
 
-/*
+/*//ToDel 4 dev:
 char* CString::getArray()
 {
 	return this->data;
 }
-*/
+*/////////////////
 
 void CString::operator =( const char* cstr )
 {
@@ -59,7 +59,7 @@ CString::operator char*()
 	return this->data;
 }
 
-bool CString::operator ==( CString &other )
+bool CString::operator ==( const CString &other )
 {
 	int result = strcmp( this->data, other.data );
 	switch( result )
@@ -75,7 +75,7 @@ bool CString::operator ==( CString &other )
 	}
 }
 
-bool CString::operator <=( CString &other )
+bool CString::operator <=( const CString &other )
 {
 	int result = strcmp( this->data, other.data );
 
@@ -85,7 +85,7 @@ bool CString::operator <=( CString &other )
 		return false;
 }
 
-bool CString::operator >=( CString &other )
+bool CString::operator >=( const CString &other )
 {
 	int result = strcmp( this->data, other.data );
 
@@ -95,7 +95,7 @@ bool CString::operator >=( CString &other )
 		return false;
 }
 
-bool CString::operator !=( CString &other )
+bool CString::operator !=( const CString &other )
 {
 	int result = strcmp( this->data, other.data );
 
@@ -109,7 +109,7 @@ bool CString::operator !=( CString &other )
 //beachte für 2 parameter: 
 //in header: "private: friend bool operator ==(const CString &left, const CString &right );"
 //in cpp: siehe unten
-bool operator ==(const CString &left, const CString &right )
+bool operator ==( const CString &left, const CString &right )
 {
 	int result = strcmp( left.data, right.data);
 
@@ -125,19 +125,19 @@ bool operator ==(const CString &left, const CString &right )
 	}
 }
 
-int CString::operator <( CString &other )
+int CString::operator <( const CString &other )
 {
 	int result = strcmp( this->data, other.data);
 	return result;
 }
 
-int CString::operator >( CString &other )
+int CString::operator >( const CString &other )
 {
 	int result = strcmp( this->data, other.data);
 	return result;
 }
 
-CString CString::operator +=( CString &other )
+CString CString::operator +=( const CString &other )
 {
 	char tmp[MAX_CHARAKTERS] = {};
 	strcpy( tmp, this->data );
@@ -147,7 +147,7 @@ CString CString::operator +=( CString &other )
 	return c;
 }
 
-CString CString::operator +( char* cstr )
+CString CString::operator +( const char* cstr )
 {
 	char tmp[MAX_CHARAKTERS] = {0};
 	strcat( tmp, this->data );
@@ -157,7 +157,7 @@ CString CString::operator +( char* cstr )
 	return c;
 }
 
-CString CString::operator +=( char* cstr )
+CString CString::operator +=( const char* cstr )
 {
 	char tmp[MAX_CHARAKTERS] = {0};
 	strcat( tmp, this->data );
@@ -167,7 +167,7 @@ CString CString::operator +=( char* cstr )
 	return c;
 }
 
-int CString::Find( char* cstr )
+int CString::Find( const char* cstr )
 {
 	int foundOnIndex = -1;
 //	cout << strlen( cstr ) << endl;
@@ -203,7 +203,7 @@ int CString::Find( char* cstr )
 	return foundOnIndex;
 }
 
-bool CString::Contains( char* cstr )
+bool CString::Contains( const char* cstr )
 {
 	char* tmp;
 

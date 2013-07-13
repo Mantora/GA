@@ -25,6 +25,7 @@ int main(int argc, char* argv[])
 	assert(TestString.IsEmpthy());
 	
 	TestString = "Mama";
+	cout << "Ich bin der \"TestString\" : " << TestString << endl;
 	assert(TestString.GetLength()==4);
 	assert(TestString.IsEmpthy() == false);
 	assert(TestString[0] == 'M');
@@ -39,11 +40,13 @@ int main(int argc, char* argv[])
 	TestString[3] = 'r';
 	assert(strcmp(TestString, "Bier") == 0);
 	CString TestString2 = "Bier";
+	cout << "Ich bin der \"TestString2\" : " << TestString2 << endl;
 	assert(strcmp(TestString,TestString2) == 0 && TestString == TestString2);
 	assert(strcmp(TestString,TestString2) == 0 && TestString <= TestString2);
 	assert(strcmp(TestString,TestString2) == 0 && TestString >= TestString2);
 	assert((TestString != TestString2) == false);
 	CString TestString3 = TestString2;
+	cout << "Ich bin der \"TestString3\" : " << TestString3 << endl;
 	TestString2 = "Bier2";
 	assert(strcmp(TestString3, "Bier") == 0);
 	assert(TestString3 == CString("Bier"));
@@ -69,6 +72,7 @@ int main(int argc, char* argv[])
 	assert(TestString2.Contains("Mama") == false);
 		
 	TestString2.Reverse();
+	cout << "Ich bin der \"TestString2\" : " << TestString2 << endl;
 	assert(strcmp(TestString2, "reiBiBiBehcuShcItseTollaH") == 0);
 	
 	assert(TestString.IsEmpthy() == false);

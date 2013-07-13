@@ -18,7 +18,9 @@ class CString
 
 		void operator =( const char* cstr);
 
+		//ToDel 4 dev:
 //		char* getArray();
+		/////////////////
 
 		CString operator +( const CString& anotherCString);
 
@@ -29,22 +31,22 @@ class CString
 
 		operator char*();
 
-		bool operator ==( CString &other );
-		bool operator <=( CString &other );
-		bool operator >=( CString &other );
+		bool operator ==(const CString &other );
+		bool operator <=(const CString &other );
+		bool operator >=(const CString &other );
 
-		bool operator !=( CString &other );
+		bool operator !=(const CString &other );
 
-		int operator <( CString &other );
-		int operator >( CString &other );
+		int operator <(const CString &other );
+		int operator >(const CString &other );
 
-		CString operator +=( CString &other );
-		CString operator +( char* cstr );
-		CString operator +=( char* cstr );
+		CString operator +=(const CString &other );
+		CString operator +(const char* cstr );
+		CString operator +=(const char* cstr );
 
-		int Find( char* cstr );
+		int Find(const char* cstr );
 
-		bool Contains( char* cstr );
+		bool Contains(const char* cstr );
 
 		void Reverse();
 
