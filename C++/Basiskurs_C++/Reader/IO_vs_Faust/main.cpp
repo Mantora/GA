@@ -7,12 +7,17 @@
 
 #include "Word.h"
 
+#include "Performance.h"
+
 using namespace std;
 
 #define MAX_WORDS 50000
 
 int main()
 {
+//Performancetest starten
+Performance p;
+
 	Word* words[MAX_WORDS] = { 0 };
 
 	int currentWordIndex = 0;
@@ -190,6 +195,10 @@ int main()
 	ofs.close();
 
 	cout << "Done!" << endl;
+
+//Performancetest beenden um zeit zu ermitteln
+double zeit = p.stop();
+cout << "Performance : " << zeit << endl;
 
 	system("pause");
 	return 0;

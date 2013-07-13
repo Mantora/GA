@@ -1,22 +1,29 @@
 // StringClass.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
-#include "vld.h"
 #include <iostream>
 #include <assert.h>
 #include "CString.h"
 
 using namespace std;
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	CString TestString;
+
+//ToDel 4 CJ:
+/*	TestString = "Mama";
+	cout << TestString.getArray() << endl;
+	cout << TestString[0] << endl;
+	TestString[0] = 'D';
+*/
+//	assert(strcmp(TestString.getArray(), "") == 0);
+///////////////////////////////////////////////////////////
 
 	assert(strcmp(TestString, "") == 0);
 	assert(TestString.GetLength()==0);
 	assert(TestString.IsEmpthy());
-		
+	
 	TestString = "Mama";
 	assert(TestString.GetLength()==4);
 	assert(TestString.IsEmpthy() == false);
