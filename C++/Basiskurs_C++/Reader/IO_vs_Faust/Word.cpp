@@ -39,13 +39,22 @@ void Word::addChar( char c )
 	// 122 z
 
 	//GROSS zu klein
-	if( c >= 65 && c <= 90 )
-		c += 32;
+//	if( c >= 65 && c <= 90 )
+//		c += 32;
 
 	//klein zu GROSS
 	if( c >= 97 && c <= 122 )
 		c -= 32;
-
+/*	else
+	{
+		//alles anzeigen lassen, was kein buchstabe ist
+		//aber zum ord dazugehört
+		if( c >= 65 && c <= 90 )
+		{}
+		else 
+			cout << (int)c << endl;
+	}
+*/
 	this->data[ this->currentIndex ] = c;
 	this->currentIndex++;
 }
@@ -84,6 +93,9 @@ bool Word::Equals( Word* w )
 		if( this->data[i] != currentChar )
 			return false;
 	}
+
+	if( this->currentIndex != w->currentIndex )
+		return false;
 
 	return true;
 }

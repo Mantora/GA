@@ -1,3 +1,8 @@
+#pragma once
+
+#include <iostream>
+
+using namespace std;
 
 #define MAX_WORT_LENGTH 128
 

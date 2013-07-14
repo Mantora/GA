@@ -53,7 +53,7 @@ Performance p;
 */
 //////////////////////////////////////////////////////////////
 
-	char file[] = { "Faust.txt" };
+	char file[] = { "faust.txt" };
 
 //	char tmp[256] = {0};
 //	cout << "Filename to analyse: ";
@@ -80,12 +80,11 @@ Performance p;
 				case ':':
 				case '?':
 				case '!':
+				case '"':
 
 				case '-':
 
-				//klären
-				case '\'': charakterCount++;
-				case '\n':
+				case '\n': charakterCount++;
 				case ' ':
 				{
 					w->finished();
@@ -136,6 +135,8 @@ Performance p;
 
 	if( w->getCharakterCount() > 0)
 	{
+		wordCount_every++;
+
 		//nach einer Übereinstimmung suchen
 		for( int i = 0; i < currentWordIndex+1; i++ )
 		{
@@ -198,7 +199,7 @@ Performance p;
 
 //Performancetest beenden um zeit zu ermitteln
 double zeit = p.stop();
-cout << "Performance : " << zeit << endl;
+cout << "Performance : " << zeit << " sek" << endl;
 
 	system("pause");
 	return 0;
