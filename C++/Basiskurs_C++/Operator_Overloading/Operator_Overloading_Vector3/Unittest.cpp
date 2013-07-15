@@ -1,15 +1,15 @@
 // Vectorclass.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
-#include "Vectorclass.h"
+#include "CVector3.h"
 #include <iostream>
 #include <assert.h>
 
 using namespace std;
 
+#define WITHPRINT
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	cout << "Test CVector3" << endl;
 	
@@ -78,7 +78,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	result.Print();
 #endif
 	assert(result.x == 0 && result.y == 0 && result.z == 0);
-	
+
 //--------------------------------------------------------------------------------
 	cout << endl << "//------------------------------------------------------------------------------";
 	cout << "substration" << endl;
@@ -166,7 +166,7 @@ int _tmain(int argc, _TCHAR* argv[])
 #endif
 	assert(X.x == 1 && X.y == 0 && X.z == 0);
 
-	
+
 //--------------------------------------------------------------------------------
 	cout << endl << "//------------------------------------------------------------------------------";
 	cout << "Addition and assignment" << endl;
@@ -209,7 +209,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	Y.Print();
 #endif
 	assert(Y.x == 0 && Y.y == 3 && Y.z == 0);
-	
+
 	float scalar = 0.f;
 //--------------------------------------------------------------------------------
 	cout << endl << "//------------------------------------------------------------------------------";
@@ -233,7 +233,7 @@ int _tmain(int argc, _TCHAR* argv[])
 #endif
 	assert(scalar == -2.5f);
 
-	
+
 //--------------------------------------------------------------------------------
 	cout << endl << "//------------------------------------------------------------------------------";
 	cout << "cross product" << endl;
@@ -382,7 +382,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	B.Print();
 #endif
 	assert(B.x == 0 && B.y == 1 && B.z == 0);
-
 
 	float länge = 0.f;
 //--------------------------------------------------------------------------------

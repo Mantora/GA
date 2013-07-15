@@ -11,6 +11,7 @@
 
 using namespace std;
 
+#define MAX_PERFORMANCE false
 #define MAX_WORDS 50000
 
 int main()
@@ -64,6 +65,7 @@ Performance p;
 	unsigned long wordCount_different = 0;
 	unsigned long wordCount_every = 0;
 	unsigned long charakterCount = 0;
+	unsigned long count_space = 0;
 
 	while( is.good() ) // loop while extraction from file is possible
 	{
@@ -84,15 +86,17 @@ Performance p;
 
 				case '-':
 
-				case '\n': charakterCount++;
+				case '\n': if( !MAX_PERFORMANCE ) charakterCount++;
 				case ' ':
 				{
+					if( !MAX_PERFORMANCE ) count_space++;
+
 					w->finished();
 
 					if( w->getCharakterCount() > 0)
 					{
-						wordCount_every++;
-
+						if( !MAX_PERFORMANCE ) wordCount_every++;
+						
 						//nach einer Übereinstimmung suchen
 						for( int i = 0; i < currentWordIndex+1; i++ )
 						{
@@ -124,7 +128,7 @@ Performance p;
 					w->addChar( c );
 
 					//statistics
-					charakterCount++;
+						if( !MAX_PERFORMANCE ) charakterCount++;
 				break;
 			}
 		}
@@ -135,7 +139,7 @@ Performance p;
 
 	if( w->getCharakterCount() > 0)
 	{
-		wordCount_every++;
+		if( !MAX_PERFORMANCE ) wordCount_every++;
 
 		//nach einer Übereinstimmung suchen
 		for( int i = 0; i < currentWordIndex+1; i++ )
@@ -158,31 +162,59 @@ Performance p;
 			}
 		}
 	}
-
-	cout << "Total 4 file \"" << file << "\":" << endl;
-	cout << "---------------------------------" << endl;
-
-	cout << "Total: " << currentWordIndex << " different words. " << endl;
-	cout << "Total: " << wordCount_every << " words. " << endl;
-
-	cout << "Charakters: " << charakterCount << endl;
-	cout << "With spaces: " << 0 << endl;
-
 	is.close(); // close file
-///////////////////////////////////////////////////////////
-	cout << "Writing to file: " ;
-	
-	ofstream ofs("output.txt", ofstream::out);
 
+	if( !MAX_PERFORMANCE )
+	{
+		cout << "Total 4 file \"" << file << "\":" << endl;
+		cout << "---------------------------------" << endl;
+
+		cout << "Total: " << currentWordIndex << " different words. " << endl;
+		cout << "Total: " << wordCount_every << " words. " << endl;
+
+		cout << "Charakters: " << charakterCount << endl;
+		cout << "With spaces: " << count_space << endl;
+
+		cout << "Writing to file: " ;
+	}
+///////////////////////////////////////////////////////////
+	
 	//maximal gelesene Zeichenanzahl pro Wort ermitteln
 	unsigned int maxCharakterRead = 0;
-	for( int i = 0; i < currentWordIndex; i++)
+	if( !MAX_PERFORMANCE ) 
+ 	{
+		for( int i = 0; i < currentWordIndex; i++)
+		{
+			if( words[i]->getCharakterCount() > maxCharakterRead )
+				maxCharakterRead = words[i]->getCharakterCount();
+		}
+	}
+	else
+		maxCharakterRead = 40;
+
+	//sortieren nach Wortanzahl
+	if( !MAX_PERFORMANCE )
 	{
-		if( words[i]->getCharakterCount() > maxCharakterRead )
-			maxCharakterRead = words[i]->getCharakterCount();
+		for( int i = 0; i < currentWordIndex; i++ )
+		{
+			//mit allen folgenden vergleichen
+			for( int x = i; x < currentWordIndex; x++ )
+			{
+				if( words[x]->getAppearence() > words[i]->getAppearence() )
+				{
+					//vertauschen
+					Word* tmp = words[i];
+					words[i] = words[x];
+					words[x] = tmp;
+				}
+			}
+		}
 	}
 
-	for( int i = 0; i < currentWordIndex; i++)
+	//words in datei schreiben
+	ofstream ofs("output.txt", ofstream::out);
+
+	for( int i = 0; i < currentWordIndex; i++ )
 	{	
 		//Für schöne ausgabe in der Datei
 		ofs << left << std::setw(maxCharakterRead);
@@ -193,6 +225,28 @@ Performance p;
 		//Rechts orientiert: bis zu einer anzahl von "xx.xxx" 
 		ofs << right << std::setw(5) << words[i]->getAppearence() << endl;
 	}
+
+	if( !MAX_PERFORMANCE )
+	{
+		ofs << endl;
+		ofs << "statistics enabled because MAX_PERFORMANCE mod if OFF!" << endl;
+		ofs << endl;
+
+		ofs << "Total 4 file \"" << file << "\":" << endl;
+		ofs << "---------------------------------" << endl;
+
+		ofs << "Total: " << currentWordIndex << " different words. " << endl;
+		ofs << "Total: " << wordCount_every << " words. " << endl;
+
+		ofs << "Charakters: " << charakterCount << endl;
+		ofs << "With spaces: " << count_space << endl;
+	}
+	else
+	{
+		ofs << endl;
+		ofs << "statistics disabled because MAX_PERFORMANCE mod is ON!" << endl;
+	}
+
 	ofs.close();
 
 	cout << "Done!" << endl;
