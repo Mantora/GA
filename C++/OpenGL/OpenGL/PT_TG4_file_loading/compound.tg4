@@ -51,11 +51,13 @@
 	picture4.bmp
 
 
---------------------------------------------------------------------------------------------------------------
+
 BITTE KEINE KOMMENTARE ZWISCHEN DEN ZAHLENWERTEN EINFÜGEN
 
+
+
 Angaben:
---------------------------------------------------------------------------------------------------------------
+
 (Anzahl der Objektkoordinaten) (x-, y- und z-Koordinaten der ersten räumlichen Position)
                                (x-, y- und z-Koordinaten der zweiten räumlichen Position)
 
@@ -70,7 +72,8 @@ Angaben:
                                  ...
 
                                (x- und y-Koordinaten der letzten Texturposition)
---------------------------------------------------------------------------------------------------------------
+
+
 (Anzahl der Polygone)
 
     (Anzahl der Punkte des ersten Polygons)
@@ -111,7 +114,8 @@ Angaben:
     (Verweis auf die Objektkoordinaten des dritten Punktes des letzten Polyogns)
     (Verweis auf die Texturkoordinaten des dritten Punktes des letzten Polyogns)
     (Verweis auf die Textur des ersten Polygons)
---------------------------------------------------------------------------------------------------------------
+
+
 (Anzahl der Texturen)  (Name des Bildes mit der ersten Textur)
                        (Name des Bildes mit der ersten Textur)
 
