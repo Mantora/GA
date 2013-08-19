@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessServer", "ChessServer\ChessServer.vcxproj", "{6AABBE25-CF91-4E31-AE97-07595422BA49}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D204141F-4640-4FC6-9869-91CBF8471197} = {D204141F-4640-4FC6-9869-91CBF8471197}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessClient", "ChessClient\ChessClient.vcxproj", "{FA3A4B61-0D7E-48E4-9E84-EA32A620A789}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D204141F-4640-4FC6-9869-91CBF8471197} = {D204141F-4640-4FC6-9869-91CBF8471197}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessCommon", "Chesslib\Chesslib.vcxproj", "{D204141F-4640-4FC6-9869-91CBF8471197}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6AABBE25-CF91-4E31-AE97-07595422BA49}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6AABBE25-CF91-4E31-AE97-07595422BA49}.Debug|Win32.Build.0 = Debug|Win32
+		{6AABBE25-CF91-4E31-AE97-07595422BA49}.Release|Win32.ActiveCfg = Release|Win32
+		{6AABBE25-CF91-4E31-AE97-07595422BA49}.Release|Win32.Build.0 = Release|Win32
+		{FA3A4B61-0D7E-48E4-9E84-EA32A620A789}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FA3A4B61-0D7E-48E4-9E84-EA32A620A789}.Debug|Win32.Build.0 = Debug|Win32
+		{FA3A4B61-0D7E-48E4-9E84-EA32A620A789}.Release|Win32.ActiveCfg = Release|Win32
+		{FA3A4B61-0D7E-48E4-9E84-EA32A620A789}.Release|Win32.Build.0 = Release|Win32
+		{D204141F-4640-4FC6-9869-91CBF8471197}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D204141F-4640-4FC6-9869-91CBF8471197}.Debug|Win32.Build.0 = Debug|Win32
+		{D204141F-4640-4FC6-9869-91CBF8471197}.Release|Win32.ActiveCfg = Release|Win32
+		{D204141F-4640-4FC6-9869-91CBF8471197}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
