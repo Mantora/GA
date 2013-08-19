@@ -17,6 +17,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_3D_sphere", "OpenGL_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_texturprojektion", "OpenGL_texturprojektion\OpenGL_texturprojektion.vcproj", "{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PT_Algorithmen_Datenstructuren", "PT_Algorithmen_Datenstructuren\PT_Algorithmen_Datenstructuren.vcproj", "{2116C89F-6006-47A2-8C80-F8AD93D2AF59}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PT_TG4_file_loading", "PT_TG4_file_loading\PT_TG4_file_loading.vcproj", "{4E2E9AF5-F159-4B07-9FD8-BFC8A1CD08C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -55,6 +59,14 @@ Global
 		{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}.Debug|Win32.Build.0 = Debug|Win32
 		{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}.Release|Win32.ActiveCfg = Release|Win32
 		{F02AD52D-9E22-4B5F-B5CB-4AAC144BF851}.Release|Win32.Build.0 = Release|Win32
+		{2116C89F-6006-47A2-8C80-F8AD93D2AF59}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2116C89F-6006-47A2-8C80-F8AD93D2AF59}.Debug|Win32.Build.0 = Debug|Win32
+		{2116C89F-6006-47A2-8C80-F8AD93D2AF59}.Release|Win32.ActiveCfg = Release|Win32
+		{2116C89F-6006-47A2-8C80-F8AD93D2AF59}.Release|Win32.Build.0 = Release|Win32
+		{4E2E9AF5-F159-4B07-9FD8-BFC8A1CD08C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4E2E9AF5-F159-4B07-9FD8-BFC8A1CD08C1}.Debug|Win32.Build.0 = Debug|Win32
+		{4E2E9AF5-F159-4B07-9FD8-BFC8A1CD08C1}.Release|Win32.ActiveCfg = Release|Win32
+		{4E2E9AF5-F159-4B07-9FD8-BFC8A1CD08C1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

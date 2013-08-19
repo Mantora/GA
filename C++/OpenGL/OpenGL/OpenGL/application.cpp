@@ -8,9 +8,6 @@
 #include "simple_types.h"
 #include "input_interface.h"
 
-#include "Buffer.h"
-
-
 //Prototypen
 uchar handle_input( void );
 void drawTest(void);
