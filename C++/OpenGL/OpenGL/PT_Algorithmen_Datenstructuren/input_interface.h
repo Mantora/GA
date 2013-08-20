@@ -4,6 +4,8 @@
 #include <windows.h>
 #include "simple_types.h"
 
+#include "screen_interface.h"
+
 class input_interface
 {
   public:

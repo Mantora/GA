@@ -1,7 +1,15 @@
 #ifndef PICTURE_H
 #define PICTURE_H
 
+#include <fstream>
+
 #include "simple_types.h"
+//#include "screen_interface.h"
+
+void exit_error( char *message );
+void exit_nofile( char *user, char *filename );
+void exit_nomemory( char *user, char *array );
+void message( char *title, char *message );
 
 class picture
 {

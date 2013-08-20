@@ -17,6 +17,21 @@ void Polyeder::setNextPolygon( const vertex* points, const int pointsCount )
 	this->currentPoly++;
 }
 
+void Polyeder::setTextureCoords( const vertex* points, const int pointsCount )
+{
+	this->polys[ this->currentPoly ].setTextureCoords( points, pointsCount );
+}
+
+void Polyeder::setTexture( char* textureName )
+{
+	this->polys[ this->currentPoly ].setTexture( textureName );
+}
+
+void Polyeder::setPolygonColor( int colorIndex )
+{
+	this->polys[ this->currentPoly ].setColorIndex( colorIndex );
+}
+
 //funktion zum bewegen
 void Polyeder::update_pos( Matrix m )
 {

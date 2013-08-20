@@ -1,45 +1,16 @@
-#include <stdio.h>
-#include <stdlib.h>     /* system, NULL, EXIT_FAILURE */
+#include "LoadMeshFromFile.h"
 
-struct Points3D
+LoadMeshFromFile::LoadMeshFromFile( char* fileName )
 {
-	float x,y,z;
-};
-
-struct Points2D
-{
-	float x,y;
-};
-
-struct Polygone
-{
-	int count_vertices;
-	int index_pos[256];
-	int index_textureKoords[256];
-	int index_texture;
-};
-
-int main()
-{
-////////////////////////////variables////////////////////////////
-	char str[128] = "";
-	int i_countVerts = 0;
-	Points3D points3D[256] = { 0 };
-
-	int i_countTexturePos = 0;
-	Points2D points2D[256] = { 0 };
-
-	int i_countPolygone = 0;
-	Polygone polygones[256] = { 0 };
-
-	int i_countTextures = 0;
-	char cstr_textureNames[256][30] = { 0 };
-
-	FILE * pFile;
-	const char* fileName = "compound.tg4";
-
-
 	pFile = fopen(fileName,"r");
+
+	i_countVerts = 0;
+
+	i_countTexturePos = 0;
+
+	i_countPolygone = 0;
+
+	i_countTextures = 0;
 
 /******************read verts*****************/
 	fscanf(pFile, "%d", &i_countVerts);
@@ -106,15 +77,8 @@ int main()
 
 /******************end of read*****************/
 	fclose(pFile);
+}
 
-	//printf file info
-	printf("\n");
-	printf("%s:\n",fileName);
-	printf("%d vertices\n", i_countVerts);
-	printf("%d texture positions\n", i_countTexturePos);
-	printf("%d polygones\n", i_countPolygone);
-	printf("%d textures\n", i_countTextures);
-
-	system("pause");
-	return 0;
+LoadMeshFromFile::~LoadMeshFromFile(void)
+{
 }

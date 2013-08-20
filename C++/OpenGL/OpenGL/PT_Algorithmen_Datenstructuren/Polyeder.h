@@ -17,6 +17,9 @@ class Polyeder
 
 		//set
 		void setNextPolygon( const vertex* points, const int pointsCount );
+		void setTextureCoords( const vertex* points, const int pointsCount );
+		void setTexture( char* textureName );
+		void setPolygonColor( int colorIndex );
 
 		//funktion zum bewegen
 		void update_pos( Matrix m );

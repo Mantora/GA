@@ -1,20 +1,30 @@
 #include <windows.h>
 #include <gl\glew.h>
 #include <gl\glu.h>
-#include <math.h>
+
 #include <time.h>
 
-#include "screen_interface.h"
+//FILE HANDLING
+#include <iostream>
+#include <fstream>
+#include <string>
+////////////////
+
+//#include "screen_interface.h"
 #include "simple_types.h"
 #include "input_interface.h"
+
 
 #include "Matrix.h"
 #include "Polyeder.h"
 
+#include "LoadMeshFromFile.h"
+
+
+using namespace std;
+
 //Prototypen
 uchar handle_input( void );
-void drawTest(void);
-void drawCircle(void);
 
 int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 {
@@ -24,137 +34,90 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 	glLoadIdentity(); //http://wiki.delphigl.com/index.php/glLoadIdentity
 
-	//2d
-//	gluOrtho2D( 0, screen_interface.get_xr()-1, 0, screen_interface.get_yr()-1 ); //http://www.opengl.org/sdk/docs/man2/xhtml/gluOrtho2D.xml
-
 	//3D
-	gluPerspective( 100, GLdouble( x_res ) / y_res, 2.0, 10000.0 );
+	gluPerspective( 30, GLdouble( x_res ) / y_res, 0.1f, 10000.0f );
 
-	/* Buffer init: */
-/*	pixel Bildschirm;
-	Bildschirm.x = screen_interface.get_xr();
-	Bildschirm.y = screen_interface.get_yr();
+//	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	glPolygonMode( GL_FRONT_AND_BACK, GL_POLYGON );
+	glEnable( GL_DEPTH_TEST );
 
-	Vector2* v = new Vector2( 50, 50 );
-
-	Buffer* b1 = new Buffer(Bildschirm);
-	MyColor red = { 1, 0, 0 };
-	b1->createCube(10, red);
-*/	//b1->updatePos( &v );
-//	b1->updatePos( new Vector2( screen_interface.get_xr()*0.5f, screen_interface.get_yr()*0.5f ) );
+	/* Texturen Laden */
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE ); //<-- FÜR HAUSAUFGABE
 
 
-/*	Buffer* b2 = new Buffer(Bildschirm);
-	MyColor blue = { 0, 0, 1 };
-	b2->createCube(100, blue);
+///////////////////////////////// Polyeder mit daten aus datei füllen /////////////////////////////////
+	LoadMeshFromFile* mesh = new LoadMeshFromFile( "compound.tg4" );
+	Polyeder* tg4Poly = new Polyeder( mesh->i_countPolygone );
 
-*/
+	for( int i = 0; i < mesh->i_countPolygone; i++ )
+	{
+		//texturePositions
+		vertex* textureCoords = new vertex[ mesh->polygones[i].count_vertices ];
+		for( int anzahlVerts = 0; anzahlVerts < mesh->polygones[i].count_vertices; anzahlVerts++ )
+		{
+			int indexCurrentText = mesh->polygones[i].index_textureKoords[ anzahlVerts ];
+			textureCoords[ anzahlVerts ] = vertex( 
+												mesh->points2D[ indexCurrentText ].x,
+												mesh->points2D[ indexCurrentText ].y,
+												0
+											);
+		}
+		tg4Poly->setTextureCoords( textureCoords, mesh->polygones[i].count_vertices );
+
+		//textur bestimmen
+		char* textureName = mesh->cstr_textureNames[ mesh->polygones[i].index_texture ];
+		tg4Poly->setTexture( textureName );
+
+		//vertexPositions
+		vertex* points = new vertex[ mesh->polygones[i].count_vertices ];
+		for( int anzahlVerts = 0; anzahlVerts < mesh->polygones[i].count_vertices; anzahlVerts++ )
+		{
+			int indexCurrentVert = mesh->polygones[i].index_pos[ anzahlVerts ];
+			points[ anzahlVerts ] = vertex( 
+												mesh->points3D[ indexCurrentVert ].x,
+												mesh->points3D[ indexCurrentVert ].y,
+												mesh->points3D[ indexCurrentVert ].z
+											);
+		}
+		
+		tg4Poly->setPolygonColor( mesh->polygones[i].index_texture );
+
+		tg4Poly->setNextPolygon( points, mesh->polygones[i].count_vertices );
+	}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Matrixdefinitionen
+	Matrix m;
+	m.translate( 0, 0, -3.0f );
+	tg4Poly->update_pos( m );
+
 //	glPointSize( 10 ); //Da das Objekt kein Polygone ist und die Pixel Float sind -> vergrößern
 
 	while( handle_input() == 0 )
 	{
-		glClear( GL_COLOR_BUFFER_BIT ); //Bildschirm löschen
+		//glClear( GL_COLOR_BUFFER_BIT ); //Bildschirm löschen
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-		glBegin( GL_POINTS );
+		tg4Poly->display();
 
-		//drawTest();
-		//drawCircle();
+		m.clear();
+		//m.rotate_x( 0.01f );
+		m.rotate_z( 0.001f );
 
-//		b1->draw();
-//		b2->draw();
-
-		glEnd();
+		m.clear();
+		m.translate( 0,0,3);
+		m.rotate_x( 0.001f );
+		m.rotate_y( 0.001f );
+		m.rotate_z( 0.001f );
+		m.translate( 0,0,-3);
+		tg4Poly->update_pos( m );
 
 		screen_interface.swap_buffers(); // buffer leeren ist hier automatisch drin
 //		glFlush(); //buffer leeren
-
-/*		pixel p = b1->getPos();
-		if( (p.x+b1->side) > screen_interface.get_xr() || p.x < 0 )
-		{
-			movement_b1_X *= (-1);
-		}
-		if( (p.y+b1->side) > screen_interface.get_yr() || p.y < 0)
-		{
-			movement_b1_Y *= (-1);
-		}
-
-		p = b2->getPos();
-		if( (p.x+b2->side) > screen_interface.get_xr() || p.x < 0 )
-		{
-			movement_b2_X *= (-1);
-		}
-		if( (p.y+b2->side) > screen_interface.get_yr() || p.y < 0)
-		{
-			movement_b2_Y *= (-1);
-		}	
-*/	}
+	}
   
 	return input.msg.wParam;
 }
 
-void drawCircle()
-{
-	//Bildschirmmittelpunkt
-	GLdouble middleX = screen_interface.get_xr()/2;
-	GLdouble middleY = screen_interface.get_yr()/2;
-
-	//einen neuen Pixel definieren
-	GLdouble newX = rand() % screen_interface.get_xr();
-	GLdouble newY = rand() % screen_interface.get_yr();
-
-	//distanz von der Mitte zum Punkt
-	GLdouble dis = sqrt( (newX-middleX)*(newX-middleX) + (newY-middleY)*(newY-middleY) );
-
-	if( dis < 10 )
-	{
-		glColor3d(1,0,0);
-		glVertex2d( newX, newY );
-	}
-}
-
-void drawTest()
-{
-	GLdouble borderOutside = 100;
-	GLdouble borderInside = 400;
-
-	GLdouble newX = rand() % screen_interface.get_xr();
-	GLdouble newY = rand() % screen_interface.get_yr();
-
-	GLdouble middleX = screen_interface.get_xr()/2;
-	GLdouble middleY = screen_interface.get_yr()/2;
-
-	GLdouble maxDis = sqrt( (1-middleX)*(1-middleX) + (1-middleY)*(1-middleY) );
-	GLdouble dis = sqrt( (newX-middleX)*(newX-middleX) + (newY-middleY)*(newY-middleY) );
-
-	if( newX < borderOutside || newX > screen_interface.get_xr()-borderOutside || newY > screen_interface.get_yr()-borderOutside || newY < borderOutside)
-	{
-		if( dis < 400 )
-		{
-			glColor3d( dis/maxDis, dis/maxDis, 0 );
-		}
-		else
-		glColor3d( 0, 0, dis/maxDis );
-	}
-	else if(dis < 200)
-	{
-		glColor3d( dis/maxDis, dis/maxDis, 0 );
-	}
-	else if( (newX > middleX-borderInside/2) && (newX < middleX+borderInside/2) && (newY < middleY+borderInside/2) && (newY > middleY-borderInside/2) )
-	{
-		//inneres Quadrat
-		glColor3d( 0, dis/maxDis, 0 );
-	}
-	else if( dis < 300 )
-	{
-		glColor3d( dis/maxDis, dis/maxDis, 0 );
-	}
-	else
-	{
-		glColor3d( dis/maxDis, 0, 0 );
-	}
-
-	glVertex2d( newX, newY );
-}
 
 uchar handle_input( void )
 {
