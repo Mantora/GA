@@ -125,7 +125,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		{
           matrix m;
 
-//          terrain->draw( m );
+//        terrain->draw( m );
 		terrain->drawWireframe( m );
 		//locales_system anzeigen
 		  display( user_ls ); 

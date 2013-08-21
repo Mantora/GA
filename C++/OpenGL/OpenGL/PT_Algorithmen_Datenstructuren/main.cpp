@@ -31,20 +31,20 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 	screen_interface.open_window( hinst, 800, 600 );
 
 	glMatrixMode( GL_PROJECTION ); //http://www.opengl.org/sdk/docs/man2/xhtml/glMatrixMode.xml
-
 	glLoadIdentity(); //http://wiki.delphigl.com/index.php/glLoadIdentity
-
 	//3D
 	gluPerspective( 30, GLdouble( x_res ) / y_res, 0.1f, 10000.0f );
+	glMatrixMode( GL_MODELVIEW );
+
+	glClearColor( 1, 1, 1, 1 );
+	glLineWidth( 2.0f );
+
 
 //	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	glPolygonMode( GL_FRONT_AND_BACK, GL_POLYGON );
 	glEnable( GL_DEPTH_TEST );
 
-	/* Texturen Laden */
-	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE ); //<-- FÜR HAUSAUFGABE
-
-
+	//für Textur:
 ///////////////////////////////// Polyeder mit daten aus datei füllen /////////////////////////////////
 	LoadMeshFromFile* mesh = new LoadMeshFromFile( "compound.tg4" );
 	Polyeder* tg4Poly = new Polyeder( mesh->i_countPolygone );
@@ -84,32 +84,89 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 		tg4Poly->setNextPolygon( points, mesh->polygones[i].count_vertices );
 	}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Matrixdefinitionen
 	Matrix m;
-	m.translate( 0, 0, -3.0f );
+	m.translate( 0, 0, -4.0f );
 	tg4Poly->update_pos( m );
 
 //	glPointSize( 10 ); //Da das Objekt kein Polygone ist und die Pixel Float sind -> vergrößern
 
+	/*Für Schattierung:*/
+	//licht definieren
+	GLfloat light_diffuse[]=  { 1.0f, 1.0f, 1.0f, 0.0f };
+	//Lichtposition definieren
+	GLfloat light_position[]= { 10.0f, 0.0f, -1.0f, 1.0f };
+	//licht setzen
+	glLightfv( GL_LIGHT1, GL_DIFFUSE,  light_diffuse );
+	//Lichtpostion setzen
+	glLightfv( GL_LIGHT1, GL_POSITION, light_position );
+	//Licht aktivieren
+//	glEnable( GL_LIGHT1 );
+	//OpenGL Beleuchtung aktivieren
+//	glEnable( GL_LIGHTING );
+	
+	float transX = 0;
+	float transY = 0;
+	float transZ = 0;
 	while( handle_input() == 0 )
 	{
 		//glClear( GL_COLOR_BUFFER_BIT ); //Bildschirm löschen
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-		tg4Poly->display();
-
+		//Drehung
 		m.clear();
-		//m.rotate_x( 0.01f );
-		m.rotate_z( 0.001f );
 
-		m.clear();
-		m.translate( 0,0,3);
-		m.rotate_x( 0.001f );
-		m.rotate_y( 0.001f );
-		m.rotate_z( 0.001f );
-		m.translate( 0,0,-3);
+		m.translate( transX, transY, transZ+4);
+
+		//bewegung
+		if( input.key_pressed('J') ) transX -= 0.01;
+		if( input.key_pressed('L') ) transX += 0.01;
+
+		if( input.key_pressed('U') ) transY -= 0.01;
+		if( input.key_pressed('O') ) transY += 0.01;
+
+		if( input.key_pressed('I') ) transZ -= 0.01;
+		if( input.key_pressed('K') ) transZ += 0.01;
+
+		//drehung
+		bool autRotate = true;
+		if( autRotate )
+		{
+			float speed = 0.1f;
+			m.rotate_x( speed );
+			m.rotate_y( speed );
+			m.rotate_z( speed );
+		}
+		else
+		{
+			float speed = 0.1f;
+
+			float rotX = 0;
+			if( input.key_pressed('E') ) rotX -= speed;
+			if( input.key_pressed('D') ) rotX += speed;
+			m.rotate_x( rotX );
+			
+			float rotY = 0;
+			if( input.key_pressed('S') ) rotY -= speed;
+			if( input.key_pressed('F') ) rotY += speed;
+			m.rotate_y( rotY );
+
+			float rotZ = 0;
+			if( input.key_pressed('R') ) rotZ -= speed;
+			if( input.key_pressed('W') ) rotZ += speed;
+			m.rotate_z( rotZ );
+		}
+
+
+
+		m.translate( -transX, -transY, -(transZ+4));
+
 		tg4Poly->update_pos( m );
+	
+
+		tg4Poly->display();
 
 		screen_interface.swap_buffers(); // buffer leeren ist hier automatisch drin
 //		glFlush(); //buffer leeren

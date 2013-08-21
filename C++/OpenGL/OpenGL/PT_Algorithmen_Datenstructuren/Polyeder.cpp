@@ -32,6 +32,13 @@ void Polyeder::setPolygonColor( int colorIndex )
 	this->polys[ this->currentPoly ].setColorIndex( colorIndex );
 }
 
+//get
+polygon* Polyeder::getPolys()
+{
+	return this->polys;
+}
+
+
 //funktion zum bewegen
 void Polyeder::update_pos( Matrix m )
 {

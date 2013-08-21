@@ -93,12 +93,12 @@ void Landscape::drawWireframe( matrix m )
       for( long x=0 ; x<this->size ; x++ )
 	  {
 //        glColor3ubv( (GLubyte *) &this->points[ offset ].c );
-//		glTexCoord2dv( (GLdouble *) &this->points[ offset ].tx );
+		glTexCoord2dv( (GLdouble *) &this->points[ offset ].tx );
 		vertex current = m * this->points[ offset ];
         glVertex3dv( (GLdouble *) &current );
         
 //        glColor3ubv( (GLubyte *) &this->points[ offset+this->size ].c );
-//		glTexCoord2dv( (GLdouble *) &this->points[ offset+this->size ].tx );
+		glTexCoord2dv( (GLdouble *) &this->points[ offset+this->size ].tx );
 	    current = m * this->points[ offset+this->size ];
         glVertex3dv( (GLdouble *) &current );
 

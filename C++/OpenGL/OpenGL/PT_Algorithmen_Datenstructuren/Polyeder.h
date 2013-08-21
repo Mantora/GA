@@ -1,8 +1,9 @@
 //Klasse zum verwalten eines Polyeder
 
-#include "polygon.h"
 #include "simple_types.h"
 #include "Matrix.h"
+
+#include "polygon.h"
 
 class Polyeder
 {
@@ -20,6 +21,9 @@ class Polyeder
 		void setTextureCoords( const vertex* points, const int pointsCount );
 		void setTexture( char* textureName );
 		void setPolygonColor( int colorIndex );
+
+		//get
+		polygon* getPolys();
 
 		//funktion zum bewegen
 		void update_pos( Matrix m );
