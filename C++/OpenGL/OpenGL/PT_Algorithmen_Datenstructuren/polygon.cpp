@@ -97,8 +97,8 @@ void polygon::display()
 	for( long i = 0; i < this->pointsCount; i++ )
 	{
 		//texturCoordinaten in 2d
-		vertex texCoords = this->textureCoords[ i ];
-		glTexCoord2d( texCoords.wx, texCoords.wy );
+//		vertex texCoords = this->textureCoords[ i ];
+//		glTexCoord2d( texCoords.wx, texCoords.wy );
 		
 		//position in 3D
 		vertex pos = this->points[ i ];
@@ -136,6 +136,8 @@ void polygon::calculateNormal( vertex p_vector1, vertex p_vector2 )
 	this->normal.wy = (p_vector1.wz * p_vector2.wx) - (p_vector1.wx * p_vector2.wz);
 	this->normal.wz = (p_vector1.wx * p_vector2.wy) - (p_vector1.wy * p_vector2.wx);
 
+	VectNormalize( this->normal );
+
 	vertex point_light( 10.0f, 0.0f, -1.0f);
 	vertex point_zero( 0,0,0 );
 
@@ -168,12 +170,18 @@ double polygon::VectScalarProduct( vertex p_vector1, vertex p_vector2 )
 //zum Testen
 void polygon::drawNormal()
 {
-	int scaling = 2;
+	int scaling = 1;
 
 	vertex v_start;
-	v_start.wx = ( this->points[0].wx + this->points[1].wx + this->points[2].wx ) / 3;
-	v_start.wy = ( this->points[0].wy + this->points[1].wy + this->points[2].wy ) / 3;
-	v_start.wz = ( this->points[0].wz + this->points[1].wz + this->points[2].wz ) / 3;
+	for( int i = 0; i < this->pointsCount; i++ )
+	{
+		v_start.wx += this->points[i].wx;
+		v_start.wy += this->points[i].wy;
+		v_start.wz += this->points[i].wz;
+	}
+	v_start.wx /= this->pointsCount;
+	v_start.wy /= this->pointsCount;
+	v_start.wz /= this->pointsCount;
 
 	glBegin( GL_LINES );
 		switch( this->colorIndex )
@@ -186,6 +194,17 @@ void polygon::drawNormal()
 		}
 
 		glVertex3d( v_start.wx, v_start.wy, v_start.wz );
+		glVertex3d( v_start.wx + this->normal.wx*scaling, 
+					v_start.wy + this->normal.wy*scaling, 
+					v_start.wz + this->normal.wz*scaling );
+	glEnd();
+
+	glBegin( GL_LINES );
+		glColor3d(1,1,1);
+		glVertex3d( v_start.wx + this->normal.wx*scaling, 
+					v_start.wy + this->normal.wy*scaling, 
+					v_start.wz + this->normal.wz*scaling );
+		scaling = 2;
 		glVertex3d( v_start.wx + this->normal.wx*scaling, 
 					v_start.wy + this->normal.wy*scaling, 
 					v_start.wz + this->normal.wz*scaling );

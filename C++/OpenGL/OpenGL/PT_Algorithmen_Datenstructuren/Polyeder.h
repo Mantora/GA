@@ -14,7 +14,11 @@ class Polyeder
 
 	public:
 		//kontruktor
+		Polyeder();
 		Polyeder( int maxFaces );
+
+		//generate primitives
+		void generatePrimitivCube();
 
 		//set
 		void setNextPolygon( const vertex* points, const int pointsCount );
