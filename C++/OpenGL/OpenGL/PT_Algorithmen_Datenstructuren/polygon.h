@@ -1,4 +1,5 @@
 //Diese Klasse verwaltet ein Polygon
+#pragma once
 
 #include "simple_types.h"
 #include "Matrix.h"
@@ -15,6 +16,7 @@ class polygon
 		vertex* textureCoords;
 
 		int colorIndex;
+
 
 		//textur
 		picture texture;
@@ -40,6 +42,7 @@ class polygon
 
 	public:
 		char textureName[256];
+		vertex* v_RGBcolor;
 
 		//Konstruktors
 		polygon();

@@ -99,6 +99,37 @@ vertex Matrix::operator *( vertex p )
   p.wx = wx;  p.wy = wy;  p.wz = wz;  return p;
 }
 
+vector Matrix::operator * ( vector v )
+{
+  GLdouble x = v.x * mx[ 0 ] + v.y * mx[ 4 ] + v.z * mx[ 8 ];
+  GLdouble y = v.x * mx[ 1 ] + v.y * mx[ 5 ] + v.z * mx[ 9 ];
+  GLdouble z = v.x * mx[ 2 ] + v.y * mx[ 6 ] + v.z * mx[ 10 ];
+
+  return vector( x, y, z );
+}
+
+local_system Matrix::operator * ( local_system ls )
+{
+  ls.pos = this->operator * ( ls.pos );
+  ls.right = this->operator * ( ls.right );
+  ls.up = this->operator * ( ls.up );
+  ls.sight = this->operator * ( ls.sight );
+
+  return ls;
+}
+
+void Matrix::rows( vector a, vector b, vector c )
+{
+  GLdouble rm[ 16 ];
+
+  rm[ 0 ] = a.x;  rm[ 4 ] = a.y;  rm[ 8  ] = a.z;  rm[ 12 ] = 0;
+  rm[ 1 ] = b.x;  rm[ 5 ] = b.y;  rm[ 9  ] = b.z;  rm[ 13 ] = 0;
+  rm[ 2 ] = c.x;  rm[ 6 ] = c.y;  rm[ 10 ] = c.z;  rm[ 14 ] = 0;
+  rm[ 3 ] = 0;    rm[ 7 ] = 0;    rm[ 11 ] = 0;    rm[ 15 ] = 1;
+
+  multiplicate( rm );
+}
+
 void Matrix::clear( void )
 {
   mx[ 0 ] = 1;  mx[ 4 ] = 0;  mx[ 8  ] = 0;  mx[ 12 ] = 0;

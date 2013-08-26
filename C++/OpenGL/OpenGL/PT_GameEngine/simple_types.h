@@ -24,4 +24,25 @@ struct vertex
   vertex( GLdouble x, GLdouble y, GLdouble z ) : wx( x ), wy( y ), wz( z ) { }
 };
 
+struct vector
+{
+  GLdouble x, y, z;
+
+  double length( void ) {  return sqrt( x*x + y*y + z*z );  }
+
+  vector( void ) : x( 0 ), y( 0 ), z( 0 ) { }
+  vector( double vx, double vy, double vz ) : x( vx ), y( vy ), z( vz ) { }
+};
+
+struct local_system
+{
+  vertex pos;
+  vector right, up, sight;
+
+  local_system( void )
+  {
+    pos = vertex( 0, 0, 0 );  right = vector( 1, 0, 0 );  up = vector( 0, 1, 0 );  sight = vector( 0, 0, 1 );
+  }
+};
+
 #endif

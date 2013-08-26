@@ -12,6 +12,8 @@ polygon::polygon()
 	this->textureCoords = 0;
 
 	this->colorIndex = 0;
+
+	this->v_RGBcolor = new vertex(0,0,0);
 }
 
 //SET
@@ -76,7 +78,7 @@ void polygon::display()
 	calculateNormal( v1, v2 );
 
 	//TEST: NORMALE ANZEIGEN
-	drawNormal();
+//	drawNormal();
 
 	//weil schön ist: MESH anzeigen
 	drawMesh();
@@ -88,7 +90,7 @@ void polygon::display()
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, this->texture.xsize, this->texture.ysize, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->texture.content ); //Aussehen der Textur festlegen
 
 	// Farbe des Polygons festlegen
-	glColor3d( 1, 1, 1 ); //Helligkeitswert finden
+	glColor3d( this->v_RGBcolor->wx, this->v_RGBcolor->wy, this->v_RGBcolor->wz );
 //	glColor3d( this->helligkeit, this->helligkeit, this->helligkeit ); //Helligkeitswert finden
 
 	//glBegin( GL_TRIANGLE_FAN );

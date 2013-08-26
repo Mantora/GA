@@ -88,8 +88,8 @@ void polygon::display()
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, this->texture.xsize, this->texture.ysize, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->texture.content ); //Aussehen der Textur festlegen
 
 	// Farbe des Polygons festlegen
-	glColor3d( 1, 1, 1 ); //Helligkeitswert finden
-//	glColor3d( this->helligkeit, this->helligkeit, this->helligkeit ); //Helligkeitswert finden
+//	glColor3d( this->v_RGBcolor->wx, this->v_RGBcolor->wy, this->v_RGBcolor->wz );
+	glColor3d( this->helligkeit, this->helligkeit, this->helligkeit ); //Helligkeitswert finden
 
 	//glBegin( GL_TRIANGLE_FAN );
 	glBegin( GL_POLYGON );
@@ -97,8 +97,8 @@ void polygon::display()
 	for( long i = 0; i < this->pointsCount; i++ )
 	{
 		//texturCoordinaten in 2d
-//		vertex texCoords = this->textureCoords[ i ];
-//		glTexCoord2d( texCoords.wx, texCoords.wy );
+		vertex texCoords = this->textureCoords[ i ];
+		glTexCoord2d( texCoords.wx, texCoords.wy );
 		
 		//position in 3D
 		vertex pos = this->points[ i ];

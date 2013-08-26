@@ -19,6 +19,10 @@ class Matrix
     void scale( GLdouble xs, GLdouble ys, GLdouble zs );
 
 	vertex operator *( vertex v );
+    vector operator * ( vector v );
+    local_system operator * ( local_system ls );
+
+	void rows( vector a, vector b, vector c );
 
     void clear( void );
 

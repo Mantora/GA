@@ -85,6 +85,16 @@ void Polyeder::setPolygonColor( int colorIndex )
 	this->polys[ this->currentPoly ].setColorIndex( colorIndex );
 }
 
+void Polyeder::setPolygonColor( vertex* v_RGBcolor )
+{
+	for( int i = 0; i < this->currentPoly; i++ )
+	{
+		this->polys[ i ].v_RGBcolor->wx = v_RGBcolor->wx;
+		this->polys[ i ].v_RGBcolor->wy = v_RGBcolor->wy;
+		this->polys[ i ].v_RGBcolor->wz = v_RGBcolor->wz;
+	}
+}
+
 //get
 polygon* Polyeder::getPolys()
 {

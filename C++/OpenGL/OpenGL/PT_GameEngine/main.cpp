@@ -14,9 +14,10 @@
 #include "simple_types.h"
 #include "input_interface.h"
 
-
+#include "charset.h"
 #include "matrix.h"
-#include "Polyeder.h"
+
+#include "3DPong.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ void drawCircle(void);
 
 int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 {
-	screen_interface.open_window( hinst, 800, 600 );
+	screen_interface.open_window( hinst, 1100, 700 );
 
 	glMatrixMode( GL_PROJECTION ); //http://www.opengl.org/sdk/docs/man2/xhtml/glMatrixMode.xml
 
@@ -38,27 +39,229 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-	Polyeder* cube = new Polyeder();
-	cube->generatePrimitivCube();
+	Spielfeld* spielfeld = new Spielfeld();
+	Spieler1* spieler1 = new Spieler1();
+	Spieler2* spieler2 = new Spieler2();
+	Ball* ball = new Ball();
 
 	// Matrixdefinitionen
 	Matrix m;
-	m.translate( 0, 0, -10.0f );
-	cube->update_pos( m );
+	m.translate( 0, 0, -20.0f );
+	spielfeld->update_pos( m );
+	ball->update_pos( m );
+
+	float f_player1_startX = -3.75f;
+	float f_player2_startX = 7.75f;
+
+//	m.translate( -4.75f, 0, 0 );
+	m.translate( f_player1_startX, 0, 0 );
+	spieler1->update_pos( m );
+	spieler1->v_globalPos->wx += f_player1_startX;
+
+//	m.translate( 9.75f, 0, 0 );
+	m.translate( f_player2_startX, 0, 0 );
+	spieler2->update_pos( m );
+	spieler2->v_globalPos->wx = (f_player1_startX + f_player2_startX);
+
+
+	//Locale Ausrichtung def:
+	float rotMapSpeed = 0.1f;
+	local_system user_ls;
+	user_ls.pos.wz = -50;
+
+//	glPixelZoom( 2, 2 ); //ändern der schriftgröße von write
 
 	while( handle_input() == 0 )
 	{
 		glClear( GL_COLOR_BUFFER_BIT ); //Bildschirm löschen
 
-		cube->display();
 
 		m.clear();
-		m.translate( 0,0,10);
-		m.rotate_x( 0.001f );
-		m.rotate_y( 0.001f );
-		m.rotate_z( 0.001f );
-		m.translate( 0,0,-10);
-		cube->update_pos( m );
+//		m.translate( 0,0,20);
+//		m.rotate_x( 0.01f );
+//		m.rotate_y( 0.01f );
+//		m.rotate_z( 0.01f );
+//		m.translate( 0,0,-20);
+
+		/* P1 */
+		if( spieler1->isBot )
+		{
+			spieler1->PerfectBotMovement( ball );
+
+			char hintActivateBotP1[64] = { "P1: Press 'v' to DEactivate ultimateBot" };
+			chars.write( 0, y_res - 20, hintActivateBotP1 );
+
+			if( input.key_pressed('V') )
+			{
+				spieler1->isBot = !spieler1->isBot;
+			}
+		}
+		else
+		{
+			char hintActivateBotP1[64] = { "P1: Press 'v' to Activate ultimateBot" };
+			chars.write( 0, y_res - 20, hintActivateBotP1 );
+
+			if( input.key_pressed('V') )
+			{
+				spieler1->isBot = !spieler1->isBot;
+			}
+
+			m.clear();
+			m.translate( spieler1->localPosition->wx, spieler1->localPosition->wy, spieler1->localPosition->wz+20 );
+			//bewegung P1
+			float movementSpeed_P1 = 0.01f; 
+			if( input.key_pressed('D') && spieler1->localPosition->wy > -2.5f)
+			{
+				spieler1->localPosition->wy -= movementSpeed_P1; 
+				spieler1->v_globalPos->wy += movementSpeed_P1;
+			}
+			if( input.key_pressed('E') && spieler1->localPosition->wy < 2.5f)
+			{
+				spieler1->localPosition->wy += movementSpeed_P1; 
+				spieler1->v_globalPos->wy -= movementSpeed_P1;
+			}
+			if( input.key_pressed('F') && spieler1->localPosition->wz > -2.5f)
+			{
+				spieler1->localPosition->wz -= movementSpeed_P1; 
+				spieler1->v_globalPos->wz -= movementSpeed_P1;
+			}
+			if( input.key_pressed('S') && spieler1->localPosition->wz < 2.5f)
+			{
+				spieler1->localPosition->wz += movementSpeed_P1; 
+				spieler1->v_globalPos->wz += movementSpeed_P1;
+			}
+
+			m.translate( -spieler1->localPosition->wx, -spieler1->localPosition->wy, -(spieler1->localPosition->wz+20) );
+
+			spieler1->update_pos( m );
+		}
+
+		/* P2 */
+		if( spieler2->isBot )
+		{
+			spieler2->PerfectBotMovement( ball );
+
+			char hintActivateBotP2[64] = { "P2: Press 'b' to DEactivate ultimateBot" };
+			chars.write( x_res * 0.7f, y_res - 20, hintActivateBotP2 );
+
+			if( input.key_pressed('B') )
+			{
+				spieler2->isBot = !spieler2->isBot;
+			}
+		}
+		else
+		{
+			char hintActivateBotP2[64] = { "P2: Press 'b' to Activate ultimateBot" };
+			chars.write( x_res * 0.7f, y_res - 20, hintActivateBotP2 );
+
+			if( input.key_pressed('B') )
+			{
+				spieler2->isBot = !spieler2->isBot;
+			}
+
+			m.clear();
+			m.translate( spieler2->localPosition->wx, spieler2->localPosition->wy, spieler2->localPosition->wz+20 );
+			//bewegung P2
+			if( input.key_pressed('K') && spieler2->localPosition->wy > -2.5f)
+			{
+				spieler2->localPosition->wy -= 0.001f;
+			}
+			if( input.key_pressed('I') && spieler2->localPosition->wy < 2.5f) 
+			{
+				spieler2->localPosition->wy += 0.001f;
+			}
+			if( input.key_pressed('L') && spieler2->localPosition->wz > -2.5f) 
+			{
+				spieler2->localPosition->wz -= 0.001f;
+			}
+			if( input.key_pressed('J') && spieler2->localPosition->wz < 2.5f) 
+			{
+				spieler2->localPosition->wz += 0.001f;
+			}
+
+			m.translate( -spieler2->localPosition->wx, -spieler2->localPosition->wy, -(spieler2->localPosition->wz+20) );
+
+			spieler2->update_pos( m );
+		}
+		
+
+		m.clear();
+		ball->doRandomMovement( spielfeld );
+
+		spieler1->check4BallContakt( ball );
+		spieler2->check4BallContakt( ball );
+
+		//prüfen auf punkte:
+		if( ball->localPosition->wx < spielfeld->v_boundsUHL->wx-2 )
+		{
+			spieler2->points++;
+			ball->respawn();
+		}
+
+		if( ball->localPosition->wx > spielfeld->v_boundsUVR->wx+2 )
+		{
+			spieler1->points++;
+			ball->respawn();
+		}
+
+		/* Sicht aus der Localen Ausrichtung*/
+		//sicht nach der localen ausrichtung ausrichten
+		m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
+		m.rows( user_ls.right, user_ls.up, user_ls.sight );
+		if( input.key_pressed( VK_DOWN ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.rotate_x( -rotMapSpeed );
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+		if( input.key_pressed( VK_UP ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.rotate_x( +rotMapSpeed );
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+		//anzeigen
+		spielfeld->display();
+		spieler1->display();
+		spieler2->display();
+		ball->display();
+
+
+		//GUI:
+		char countPoints[32] = { "XX : XX" };
+		sprintf( countPoints, "%d : %d", spieler1->points, spieler2->points);
+		chars.write( x_res * 0.5f - 14, y_res - 20, countPoints );
+
+		char countBallHits[32] = { "XX : XX" };
+		sprintf( countBallHits, "%d : %d", spieler1->ballHits, spieler2->ballHits);
+		chars.write( x_res * 0.5f - 14, y_res - 40, countBallHits );
+
+		//DEBUG:
+		char DEBUG_BALL[128] = { "XX : XX" };
+		sprintf( DEBUG_BALL, "ball->localPosition: x:%f y:%f z:%f", ball->localPosition->wx, ball->localPosition->wy, ball->localPosition->wz);
+		chars.write( 0, 20, DEBUG_BALL );
+
+		char DEBUG_P1[128] = { "XX : XX" };
+		sprintf( DEBUG_P1, "spieler1->v_globalPos: x:%f y:%f z:%f", spieler1->v_globalPos->wx, spieler1->v_globalPos->wy, spieler1->v_globalPos->wz);
+		chars.write( 0, 40, DEBUG_P1 );
+
+		char DEBUG_P2[128] = { "XX : XX" };
+		sprintf( DEBUG_P2, "spieler2->v_globalPos: x:%f y:%f z:%f", spieler2->v_globalPos->wx, spieler2->v_globalPos->wy, spieler2->v_globalPos->wz);
+		chars.write( 0, 60, DEBUG_P2 );
 
 		screen_interface.swap_buffers(); // buffer leeren ist hier automatisch drin
 //		glFlush(); //buffer leeren
