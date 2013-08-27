@@ -48,19 +48,21 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 	Matrix m;
 	m.translate( 0, 0, -20.0f );
 	spielfeld->update_pos( m );
+	spielfeld->v_globalPos->wz -= 20.0f;
 	ball->update_pos( m );
+	ball->v_globalPos->wz -= 20.0f;
 
-	float f_player1_startX = -3.75f;
-	float f_player2_startX = 7.75f;
+	float f_player1_startX = -3.75f; //-4.75
+	float f_player2_startX = 7.75f; //9.75
 
-//	m.translate( -4.75f, 0, 0 );
 	m.translate( f_player1_startX, 0, 0 );
 	spieler1->update_pos( m );
+	spieler1->v_globalPos->wz -= 20.0f;
 	spieler1->v_globalPos->wx += f_player1_startX;
 
-//	m.translate( 9.75f, 0, 0 );
 	m.translate( f_player2_startX, 0, 0 );
 	spieler2->update_pos( m );
+	spieler2->v_globalPos->wz -= 20.0f;
 	spieler2->v_globalPos->wx = (f_player1_startX + f_player2_startX);
 
 
@@ -195,12 +197,23 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		if( ball->localPosition->wx < spielfeld->v_boundsUHL->wx-2 )
 		{
 			spieler2->points++;
-			ball->respawn();
+			ball = new Ball();
+			Matrix m;
+			m.translate( 0, 0, -20.0f );
+			ball->update_pos( m );
+			ball->v_globalPos->wz -= 20.0f;
 		}
 
 		if( ball->localPosition->wx > spielfeld->v_boundsUVR->wx+2 )
 		{
 			spieler1->points++;
+			ball = new Ball();
+			Matrix m;
+			m.translate( 0, 0, -20.0f );
+			ball->update_pos( m );
+			ball->v_globalPos->wz -= 20.0f;
+			ball->b_hasContactP1 = true;
+
 			ball->respawn();
 		}
 
@@ -215,6 +228,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			m.rotate_x( -rotMapSpeed );
 			m.translate( 0, 0, -20 );
 			user_ls = m * user_ls;
+			
 			spielfeld->update_pos( m );
 			ball->update_pos( m );
 			spieler1->update_pos( m );
@@ -227,6 +241,89 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			m.rotate_x( +rotMapSpeed );
 			m.translate( 0, 0, -20 );
 			user_ls = m * user_ls;
+			
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+
+		if( input.key_pressed( VK_LEFT ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.rotate_y( +rotMapSpeed );
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+		if( input.key_pressed( VK_RIGHT ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.rotate_y( -rotMapSpeed );
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+		if( input.key_pressed( VK_PRIOR ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.rotate_z( -rotMapSpeed );
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+		if( input.key_pressed( VK_DELETE ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.rotate_z( +rotMapSpeed );
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+		
+		if( input.key_pressed( VK_END ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.translate( 0, 0, +rotMapSpeed );
+			user_ls.pos.wz += rotMapSpeed;
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			
+			spielfeld->update_pos( m );
+			ball->update_pos( m );
+			spieler1->update_pos( m );
+			spieler2->update_pos( m );
+		}
+		if( input.key_pressed( VK_HOME ) )
+		{
+			m.clear();
+			m.translate( 0, 0, +20 );
+			m.translate( 0, 0, -rotMapSpeed );
+			user_ls.pos.wz -= rotMapSpeed;
+			m.translate( 0, 0, -20 );
+			user_ls = m * user_ls;
+			
 			spielfeld->update_pos( m );
 			ball->update_pos( m );
 			spieler1->update_pos( m );
@@ -251,8 +348,12 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		chars.write( x_res * 0.5f - 14, y_res - 40, countBallHits );
 
 		//DEBUG:
+		char DEBUG_SPIELFELD[128] = { "XX : XX" };
+		sprintf( DEBUG_SPIELFELD, "spielfeld->v_globalPos: x:%f y:%f z:%f", spielfeld->v_globalPos->wx, spielfeld->v_globalPos->wy, spielfeld->v_globalPos->wz);
+		chars.write( 0, 0, DEBUG_SPIELFELD );
+
 		char DEBUG_BALL[128] = { "XX : XX" };
-		sprintf( DEBUG_BALL, "ball->localPosition: x:%f y:%f z:%f", ball->localPosition->wx, ball->localPosition->wy, ball->localPosition->wz);
+		sprintf( DEBUG_BALL, "ball->v_globalPos: x:%f y:%f z:%f", ball->v_globalPos->wx, ball->v_globalPos->wy, ball->v_globalPos->wz);
 		chars.write( 0, 20, DEBUG_BALL );
 
 		char DEBUG_P1[128] = { "XX : XX" };

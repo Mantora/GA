@@ -2,7 +2,8 @@
 
 Ball::Ball( void )
 {
-	this->localPosition = new vertex(0,0,0);
+	this->localPosition = new vertex( 0,0,0 );
+	this->v_globalPos = new vertex( 0,0,0 );
 
 	this->b_hasContactP1 = false;
 	this->b_hasContactP2 = false;
@@ -73,6 +74,10 @@ void Ball::doRandomMovement( Spielfeld* spielfeld )
 	this->localPosition->wy += this->v_direction->wy;
 	this->localPosition->wz += this->v_direction->wz;
 
+	this->v_globalPos->wx += this->v_direction->wx;
+	this->v_globalPos->wy += this->v_direction->wy;
+	this->v_globalPos->wz += this->v_direction->wz;
+
 /*	//X
 	if( this->localPosition->wx > spielfeld->v_boundsOHR->wx ||
 		this->localPosition->wx < spielfeld->v_boundsOHL->wx )
@@ -95,7 +100,6 @@ void Ball::doRandomMovement( Spielfeld* spielfeld )
 		//neue bewegungsmatrix def.
 		this->m_movment->clear();
 		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
-
 	}
 
 	//Z
@@ -108,7 +112,6 @@ void Ball::doRandomMovement( Spielfeld* spielfeld )
 		//neue bewegungsmatrix def.
 		this->m_movment->clear();
 		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
-
 	}
 
 	this->update_pos( *this->m_movment );
@@ -117,6 +120,9 @@ void Ball::doRandomMovement( Spielfeld* spielfeld )
 //public funktion zum richtungsändern bei Spielerkontakt
 void Ball::contactPlayer1()
 {
+	this->b_hasContactP1 = true;
+	this->b_hasContactP2 = false;
+
 	this->v_direction->wx *= (-1);
 	this->v_direction->wz *= (-1);
 
@@ -129,6 +135,9 @@ void Ball::contactPlayer1()
 
 void Ball::contactPlayer2()
 {
+	this->b_hasContactP1 = false;
+	this->b_hasContactP2 = true;
+
 	this->v_direction->wx *= (-1);
 	this->v_direction->wz *= (-1);
 
@@ -141,18 +150,18 @@ void Ball::contactPlayer2()
 
 void Ball::respawn()
 {
-	this->b_hasContactP1 = false;
-	this->b_hasContactP2 = false;
-
-	this->m_movment->clear();
-	this->m_movment->translate( -this->localPosition->wx, -this->localPosition->wy, -this->localPosition->wz );
-	this->update_pos( *this->m_movment );
-
 	//neue richtung bestimmen
 	this->localPosition = new vertex( 0,0,0 );
-	this->v_direction = new vertex( BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
+	if( this->b_hasContactP1 )
+		this->v_direction = new vertex( -BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
+	else
+		this->v_direction = new vertex( BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
 
-//	this->m_movment = new Matrix();
+	this->v_globalPos = new vertex( 0,0,-20.0f );
+
 	this->m_movment->clear();
 	this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
+
+	this->b_hasContactP1 = false;
+	this->b_hasContactP2 = false;
 }

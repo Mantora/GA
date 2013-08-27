@@ -5,6 +5,8 @@
 class Spielfeld : public Polyeder
 {
 	public:
+		vertex* v_globalPos;
+
 		vertex* v_boundsOHL;
 		vertex* v_boundsOVL;
 		vertex* v_boundsOVR;

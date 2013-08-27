@@ -10,17 +10,16 @@
 
 class Ball : public Polyeder
 {
-	private:
-		Matrix* m_movment;
-
 	public:
 		Ball( void );
 		~Ball( void );
 
 		//zur positionsbestimmung
 		vertex* localPosition;
+		vertex* v_globalPos;
 		vertex* v_direction;
 
+		Matrix* m_movment;
 		void doRandomMovement( Spielfeld* spielfeld );
 
 		//public funktion zum richtungsändern bei Spielerkontakt

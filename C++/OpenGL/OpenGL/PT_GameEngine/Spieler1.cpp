@@ -71,20 +71,19 @@ void Spieler1::PerfectBotMovement( Ball* ball )
 
 	//bot zurücktransformieren
 	Matrix m_bot;
-	m_bot.translate( this->localPosition->wx, this->localPosition->wy, (this->localPosition->wz + 20 ) );
+	m_bot.translate( this->localPosition->wx, this->localPosition->wy, (this->localPosition->wz + 20.0f ) );
 
 	float DEV_offset4ColisionTesting = 0.0f;
 
 	//position übernehmen
-	this->localPosition->wx = 0;
-	this->localPosition->wy = -ball->localPosition->wy + DEV_offset4ColisionTesting;
+	this->localPosition->wy = -ball->localPosition->wy;// + DEV_offset4ColisionTesting;
 	this->localPosition->wz = -ball->localPosition->wz;
 
-	this->v_globalPos->wy = ball->localPosition->wy + DEV_offset4ColisionTesting;
-	this->v_globalPos->wz = ball->localPosition->wz;
+	this->v_globalPos->wy = ball->v_globalPos->wy;// + DEV_offset4ColisionTesting;
+	this->v_globalPos->wz = ball->v_globalPos->wz;
 
 	//bot wieder hintransformieren
-	m_bot.translate( -this->localPosition->wx, -this->localPosition->wy, -(this->localPosition->wz + 20) );
+	m_bot.translate( -this->localPosition->wx, -this->localPosition->wy, -(this->localPosition->wz + 20.0f) );
 
 	//ausführen
 	this->update_pos( m_bot );
@@ -93,13 +92,11 @@ void Spieler1::PerfectBotMovement( Ball* ball )
 //funktion zum überprüfen, ob der ball am spieler abprallt
 void Spieler1::check4BallContakt( Ball* ball )
 {
-	if( ball->localPosition->wx < this->v_globalPos->wx + this->width*0.5f && ball->localPosition->wx > this->v_globalPos->wx - this->width*0.5f &&
-		ball->localPosition->wy < this->v_globalPos->wy + this->hight*0.5f && ball->localPosition->wy > this->v_globalPos->wy - this->hight*0.5f &&
-		ball->localPosition->wz < this->v_globalPos->wz + this->deep*0.5f && ball->localPosition->wz > this->v_globalPos->wz - this->deep*0.5f &&
-		!ball->b_hasContactP1)
+	if( ball->v_globalPos->wx < this->v_globalPos->wx + this->width*0.5f && ball->v_globalPos->wx > this->v_globalPos->wx - this->width*0.5f &&
+		ball->v_globalPos->wy < this->v_globalPos->wy + this->hight*0.5f && ball->v_globalPos->wy > this->v_globalPos->wy - this->hight*0.5f &&
+		ball->v_globalPos->wz < this->v_globalPos->wz + this->deep*0.5f && ball->v_globalPos->wz > this->v_globalPos->wz - this->deep*0.5f &&
+		!ball->b_hasContactP1 )
 	{
-		ball->b_hasContactP1 = true;
-		ball->b_hasContactP2 = false;
 		this->ballHits++;
 		ball->contactPlayer1();
 	}

@@ -2,6 +2,8 @@
 
 Spielfeld::Spielfeld( void )
 {
+	this->v_globalPos = new vertex( 0,0,0 );
+
 	this->faces = 6;
 
 	this->polys = new polygon[ this->faces ];
