@@ -6,7 +6,7 @@
 
 #include "Spielfeld.h"
 
-#define BALL_MOVMENT_SPEED 0.01f
+#define BALL_MOVMENT_SPEED 0.005f
 
 class Ball : public Polyeder
 {
@@ -20,7 +20,7 @@ class Ball : public Polyeder
 		vertex* v_direction;
 
 		Matrix* m_movment;
-		void doRandomMovement( Spielfeld* spielfeld );
+		void doRandomMovement( Spielfeld* spielfeld, local_system ls_user );
 
 		//public funktion zum richtungsändern bei Spielerkontakt
 		void contactPlayer1();

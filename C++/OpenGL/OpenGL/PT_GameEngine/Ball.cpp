@@ -67,7 +67,7 @@ Ball::~Ball( void )
 
 }
 
-void Ball::doRandomMovement( Spielfeld* spielfeld )
+void Ball::doRandomMovement( Spielfeld* spielfeld, local_system user_ls )
 {
 	//locale position updaten
 	this->localPosition->wx += this->v_direction->wx;
@@ -77,6 +77,7 @@ void Ball::doRandomMovement( Spielfeld* spielfeld )
 	this->v_globalPos->wx += this->v_direction->wx;
 	this->v_globalPos->wy += this->v_direction->wy;
 	this->v_globalPos->wz += this->v_direction->wz;
+
 
 /*	//X
 	if( this->localPosition->wx > spielfeld->v_boundsOHR->wx ||
@@ -99,11 +100,13 @@ void Ball::doRandomMovement( Spielfeld* spielfeld )
 
 		//neue bewegungsmatrix def.
 		this->m_movment->clear();
+
+//		this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
 		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
 	}
 
 	//Z
-	if( this->localPosition->wz > spielfeld->v_boundsOVL->wz ||
+	if( this->localPosition->wz > spielfeld->v_boundsOHL->wz ||
 		this->localPosition->wz < spielfeld->v_boundsUHL->wz )
 	{
 		//richtung umdrehen
@@ -111,6 +114,8 @@ void Ball::doRandomMovement( Spielfeld* spielfeld )
 
 		//neue bewegungsmatrix def.
 		this->m_movment->clear();
+
+//		this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
 		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
 	}
 
@@ -156,11 +161,6 @@ void Ball::respawn()
 		this->v_direction = new vertex( -BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
 	else
 		this->v_direction = new vertex( BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
-
-	this->v_globalPos = new vertex( 0,0,-20.0f );
-
-	this->m_movment->clear();
-	this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
 
 	this->b_hasContactP1 = false;
 	this->b_hasContactP2 = false;

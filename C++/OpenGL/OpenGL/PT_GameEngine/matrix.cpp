@@ -96,7 +96,17 @@ vertex Matrix::operator *( vertex p )
   GLdouble wy = p.wx * mx[ 1 ] + p.wy * mx[ 5 ] + p.wz * mx[ 9  ] + mx[ 13 ];
   GLdouble wz = p.wx * mx[ 2 ] + p.wy * mx[ 6 ] + p.wz * mx[ 10 ] + mx[ 14 ];
 
-  p.wx = wx;  p.wy = wy;  p.wz = wz;  return p;
+  p.wx = wx;  p.wy = wy;  p.wz = wz;  
+  return p;
+}
+
+vertex* Matrix::operator *( vertex* p )
+{
+	GLdouble wx = p->wx * mx[ 0 ] + p->wy * mx[ 4 ] + p->wz * mx[ 8  ] + mx[ 12 ];
+	GLdouble wy = p->wx * mx[ 1 ] + p->wy * mx[ 5 ] + p->wz * mx[ 9  ] + mx[ 13 ];
+	GLdouble wz = p->wx * mx[ 2 ] + p->wy * mx[ 6 ] + p->wz * mx[ 10 ] + mx[ 14 ];
+
+	return new vertex( wx, wy, wz );
 }
 
 vector Matrix::operator * ( vector v )
