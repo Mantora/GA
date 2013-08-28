@@ -62,7 +62,10 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 	Spielfeld* spielfeld = new Spielfeld();
 	Spieler1* spieler1 = new Spieler1();
+	spieler1->isBot = true;
+
 	Spieler2* spieler2 = new Spieler2();
+	spieler2->isBot = true;
 	Ball* ball = new Ball();
 
 	// Matrixdefinitionen
@@ -266,6 +269,8 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			m.clear();
 			m.rotate_x( -rotMapSpeed );
 			(*ball->v_direction) = m * (*ball->v_direction);
+			ball->m_movment->rotate_x( -rotMapSpeed );
+			spielfeld->updateBounds( m );
 /////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_UP ) )
@@ -287,6 +292,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			m.clear();
 			m.rotate_x( +rotMapSpeed );
 			(*ball->v_direction) = m * (*ball->v_direction);
+			spielfeld->updateBounds( m );
 /////////////////////////////////////////////////////////////////////////////
 		}
 
@@ -445,6 +451,13 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		char DEBUG_DIRECTION[128] = { "XX : XX" };
 		sprintf( DEBUG_DIRECTION, "ball->v_direction->: x:%f y:%f z:%f", ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
 		chars.write( 0, 100, DEBUG_DIRECTION );
+
+		char DEBUG_BOUNDS1[128] = { "XX : XX" };
+		sprintf( DEBUG_BOUNDS1, "spielfeld->v_boundsOHL->: x:%f y:%f z:%f", spielfeld->v_boundsOHL->wx, spielfeld->v_boundsOHL->wy, spielfeld->v_boundsOHL->wz);
+		chars.write( 0, 120, DEBUG_BOUNDS1 );
+
+
+
 
 		ball->DEBUG_drawDirection();
 		

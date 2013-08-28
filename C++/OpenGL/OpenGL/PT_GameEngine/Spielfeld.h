@@ -2,6 +2,8 @@
 
 #include "polyeder.h"
 
+#include "matrix.h"
+
 class Spielfeld : public Polyeder
 {
 	public:
@@ -19,4 +21,7 @@ class Spielfeld : public Polyeder
 
 		Spielfeld( void );
 		~Spielfeld( void );
+
+		//funktion zum updaten der Bounds bei drehung
+		void updateBounds( Matrix m );
 };

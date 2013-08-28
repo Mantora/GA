@@ -64,3 +64,10 @@ Spielfeld::~Spielfeld( void )
 {
 
 }
+
+//funktion zum updaten der Bounds bei drehung
+void Spielfeld::updateBounds( Matrix m )
+{
+	(*this->v_boundsOHL) = m * (*this->v_boundsOHL);
+	(*this->v_boundsUHL) = m * (*this->v_boundsUHL);
+}

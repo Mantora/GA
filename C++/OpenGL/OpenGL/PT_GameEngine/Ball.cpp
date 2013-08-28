@@ -77,40 +77,55 @@ void Ball::doRandomMovement( Spielfeld* spielfeld, vertex* rotations )
 	this->v_globalPos->wx += this->v_direction->wx;
 	this->v_globalPos->wy += this->v_direction->wy;
 	this->v_globalPos->wz += this->v_direction->wz;
-/*
-	this->m_movment->clear();
-	this->m_movment->rotate_x( rotations->wx );
-	this->m_movment->rotate_y( rotations->wy );
-	this->m_movment->rotate_z( rotations->wz );
-	(*this->v_direction) = (*this->m_movment) * (*this->v_direction);
+
+/*	//localePosition transformieren
+	Matrix m;
+	m.translate( ls_user->pos.wx, ls_user->pos.wy, ls_user->pos.wz );
+	m.rotate_x( rotations->wx );
+	m.rotate_y( rotations->wy );
+	m.rotate_z( rotations->wz );
+
+
+	vertex v_transformedLocalPos = *this->localPosition;
+	v_transformedLocalPos = m * v_transformedLocalPos;
+
+	vertex v_transformedBoundsOHL = *spielfeld->v_boundsOHL;
+	v_transformedBoundsOHL = m * v_transformedBoundsOHL;
+
+	vertex v_transformedBoundsUHL = *spielfeld->v_boundsUHL;
+	v_transformedBoundsUHL = m * v_transformedBoundsUHL;
 */
+
 	//Y
-/*	if( this->localPosition->wy > spielfeld->v_boundsOHL->wy || this->localPosition->wy < spielfeld->v_boundsUHL->wy )
+	if( this->v_globalPos->wy > spielfeld->v_boundsOHL->wy || this->v_globalPos->wy < spielfeld->v_boundsUHL->wy )
 	{
 		//richtung umdrehen
-		this->v_direction->wy *= (-1);
+//		this->v_direction->wy *= (-1);
 
 		//neue bewegungsmatrix def.
 //		this->m_movment->clear();
 
 		// this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
-		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
+//		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
 	}
-*/
+
 
 	//Z
-/*	if( this->localPosition->wz > spielfeld->v_boundsOHL->wz || this->localPosition->wz < spielfeld->v_boundsUHL->wz )
+	if( this->v_globalPos->wz > spielfeld->v_boundsOHL->wz || this->v_globalPos->wz < spielfeld->v_boundsUHL->wz )
 	{
 		//richtung umdrehen
-		this->v_direction->wz *= (-1);
+//		this->v_direction->wz *= (-1);
 
 		//neue bewegungsmatrix def.
 //		this->m_movment->clear();
 
 		// this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
-		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
+//		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
 	}
-*/
+
+	this->m_movment->clear();
+	this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
+
 	this->update_pos( *this->m_movment );
 }
 
