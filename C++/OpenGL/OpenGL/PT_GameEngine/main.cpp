@@ -100,20 +100,19 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 	while( handle_input() == 0 )
 	{
 		glClear( GL_COLOR_BUFFER_BIT ); //Bildschirm löschen
-
+/*
+		if( input.key_pressed( VK_DOWN ) )
+		{
+			Matrix m;
+			m.rotate_x( -rotMapSpeed );
+			(*ball->v_direction) = m * (*ball->v_direction);
+		}
+*/
+		ball->doRandomMovement( spielfeld, &v_rot );
 
 		m.clear();
-//		m.translate( 0,0,20);
-//		m.rotate_x( 0.01f );
-//		m.rotate_y( 0.01f );
-//		m.rotate_z( 0.01f );
-//		m.translate( 0,0,-20);
 
-					
-//		m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-//		m.rows( user_ls.right, user_ls.up, user_ls.sight );
-
-		/* P1 */
+//////////////////////////// P1 /////////////////////////////////////////////////
 		if( spieler1->isBot )
 		{
 			spieler1->PerfectBotMovement( ball );
@@ -166,7 +165,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			spieler1->update_pos( m );
 		}
 
-		/* P2 */
+/////////////////////////////////////// P2 ///////////////////////////////////////////////////
 		if( spieler2->isBot )
 		{
 			spieler2->PerfectBotMovement( ball );
@@ -213,13 +212,8 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 			spieler2->update_pos( m );
 		}
-		
+////////////////////////////////////////////////////////////////////////
 
-		m.clear();
-		ball->doRandomMovement( spielfeld, user_ls );
-
-		spieler1->check4BallContakt( ball );
-		spieler2->check4BallContakt( ball );
 
 		//prüfen auf punkte:
 		if( ball->localPosition->wx < spielfeld->v_boundsUHL->wx-2 )
@@ -227,29 +221,31 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			spieler2->points++;
 			ball = new Ball();
 
-			Matrix m;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-			//m.rows( user_ls.right, user_ls.up, user_ls.sight );
+//			Matrix m;
+//			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
+//			m.rows( user_ls.right, user_ls.up, user_ls.sight );
 
-			ball->update_pos( m );
-			ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
+//			ball->update_pos( m );
+
+//			ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
 		}
 
 		if( ball->localPosition->wx > spielfeld->v_boundsUVR->wx+2 )
 		{
 			spieler1->points++;
 			ball = new Ball();
-			ball->respawn();
+//			ball->respawn();
 
-			Matrix m;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-			//m.rows( user_ls.right, user_ls.up, user_ls.sight );
+//			Matrix m;
+//			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
+//			m.rows( user_ls.right, user_ls.up, user_ls.sight );
 
-			ball->update_pos( m );
-			ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
+//			ball->update_pos( m );
+
+//			ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
 		}
 
-		/* Sicht aus der Localen Ausrichtung*/
+///////////////////////////////// Sicht aus der Localen Ausrichtung ///////////////////////////////
 		//sicht nach der localen ausrichtung ausrichten
 		if( input.key_pressed( VK_DOWN ) )
 		{
@@ -257,16 +253,20 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 			m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
 			m.rotate_x( -rotMapSpeed );
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
 			v_rot.wx -= rotMapSpeed;
+			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
 		//	user_ls = m * user_ls;
 			
 			spielfeld->update_pos( m );
 			ball->update_pos( m );
-		//	ball->v_direction = m * ball->v_direction;
-
 			spieler1->update_pos( m );
 			spieler2->update_pos( m );
+
+//////////////////////////////////////////////////////////////////////////////
+			m.clear();
+			m.rotate_x( -rotMapSpeed );
+			(*ball->v_direction) = m * (*ball->v_direction);
+/////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_UP ) )
 		{
@@ -280,10 +280,14 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			
 			spielfeld->update_pos( m );
 			ball->update_pos( m );
-		//	ball->v_direction = m * ball->v_direction;
-
 			spieler1->update_pos( m );
 			spieler2->update_pos( m );
+
+//////////////////////////////////////////////////////////////////////////////
+			m.clear();
+			m.rotate_x( +rotMapSpeed );
+			(*ball->v_direction) = m * (*ball->v_direction);
+/////////////////////////////////////////////////////////////////////////////
 		}
 
 		if( input.key_pressed( VK_LEFT ) )
@@ -299,6 +303,11 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			ball->update_pos( m );
 			spieler1->update_pos( m );
 			spieler2->update_pos( m );
+//////////////////////////////////////////////////////////////////////////////
+			m.clear();
+			m.rotate_y( +rotMapSpeed );
+			(*ball->v_direction) = m * (*ball->v_direction);
+/////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_RIGHT ) )
 		{
@@ -314,6 +323,12 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 			spieler1->update_pos( m );
 			spieler2->update_pos( m );
+
+//////////////////////////////////////////////////////////////////////////////
+			m.clear();
+			m.rotate_y( -rotMapSpeed );
+			(*ball->v_direction) = m * (*ball->v_direction);
+/////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_PRIOR ) )
 		{
@@ -328,6 +343,12 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			ball->update_pos( m );
 			spieler1->update_pos( m );
 			spieler2->update_pos( m );
+
+//////////////////////////////////////////////////////////////////////////////
+			m.clear();
+			m.rotate_z( -rotMapSpeed );
+			(*ball->v_direction) = m * (*ball->v_direction);
+/////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_DELETE ) )
 		{
@@ -342,6 +363,11 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			ball->update_pos( m );
 			spieler1->update_pos( m );
 			spieler2->update_pos( m );
+//////////////////////////////////////////////////////////////////////////////
+			m.clear();
+			m.rotate_z( +rotMapSpeed );
+			(*ball->v_direction) = m * (*ball->v_direction);
+/////////////////////////////////////////////////////////////////////////////
 		}
 		
 		if( input.key_pressed( VK_END ) )
@@ -372,15 +398,19 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			spieler2->update_pos( m );
 		}
 
-		ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
+//		ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
 //////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+		spieler1->check4BallContakt( ball );
+		spieler2->check4BallContakt( ball );
 
 		//anzeigen
 		spielfeld->display();
 		spieler1->display();
 		spieler2->display();
 		ball->display();
-
 
 		//GUI:
 		char countPoints[32] = { "XX : XX" };
@@ -408,6 +438,16 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		sprintf( DEBUG_P2, "spieler2->v_globalPos: x:%f y:%f z:%f", spieler2->v_globalPos->wx, spieler2->v_globalPos->wy, spieler2->v_globalPos->wz);
 		chars.write( 0, 60, DEBUG_P2 );
 
+		char DEBUG_ROTATION[128] = { "XX : XX" };
+		sprintf( DEBUG_ROTATION, "v_rot: x:%f y:%f z:%f", v_rot.wx, v_rot.wy, v_rot.wz);
+		chars.write( 0, 80, DEBUG_ROTATION );
+
+		char DEBUG_DIRECTION[128] = { "XX : XX" };
+		sprintf( DEBUG_DIRECTION, "ball->v_direction->: x:%f y:%f z:%f", ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
+		chars.write( 0, 100, DEBUG_DIRECTION );
+
+		ball->DEBUG_drawDirection();
+		
 		screen_interface.swap_buffers(); // buffer leeren ist hier automatisch drin
 //		glFlush(); //buffer leeren
 	}

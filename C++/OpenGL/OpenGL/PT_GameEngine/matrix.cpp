@@ -18,6 +18,33 @@ void Matrix::multiplicate( GLdouble nm[ 16 ] )
   for( x=0 ; x<16 ; x++ ) mx[ x ] = tm[ x ];
 }
 
+void Matrix::rotate( double alpha, vector dir )
+{
+	GLdouble rm[ 16 ];
+
+	if( dir.length() < 0.0001 ) return;
+
+//	vector( t*v.x, t*v.y, t*v.z )
+	float f_length = (1.0 / dir.length());
+
+	dir.x =  f_length * dir.x;
+	dir.y =  f_length * dir.y;
+	dir.z =  f_length * dir.z;
+
+	GLdouble x = dir.x, y = dir.y, z = dir.z;
+
+	const GLdouble pi = 3.1415926535;
+	GLdouble s = sin( (pi * alpha) / 180.0 );
+	GLdouble c = cos( (pi * alpha) / 180.0 );
+
+	rm[ 0 ] = x*x*(1-c)+c;    rm[ 4 ] = x*y*(1-c)-z*s;  rm[ 8  ] = x*z*(1-c)+y*s;  rm[ 12 ] = 0;
+	rm[ 1 ] = x*y*(1-c)+z*s;  rm[ 5 ] = y*y*(1-c)+c;    rm[ 9  ] = y*z*(1-c)-x*s;  rm[ 13 ] = 0;
+	rm[ 2 ] = x*z*(1-c)-y*s;  rm[ 6 ] = y*z*(1-c)+x*s;  rm[ 10 ] = z*z*(1-c)+c;    rm[ 14 ] = 0;
+	rm[ 3 ] = 0;              rm[ 7 ] = 0;              rm[ 11 ] = 0;              rm[ 15 ] = 1;
+
+	multiplicate( rm );
+}
+
 void Matrix::rotate_x( GLdouble alpha )
 {
   GLdouble rm[ 16 ];

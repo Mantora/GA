@@ -12,6 +12,7 @@ class Matrix
     void multiplicate( GLdouble nm[ 16 ] );
 
   public:
+	void rotate( double alpha, vector dir );
     void rotate_x( GLdouble alpha );
     void rotate_y( GLdouble alpha );
     void rotate_z( GLdouble alpha );

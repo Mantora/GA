@@ -67,7 +67,7 @@ Ball::~Ball( void )
 
 }
 
-void Ball::doRandomMovement( Spielfeld* spielfeld, local_system user_ls )
+void Ball::doRandomMovement( Spielfeld* spielfeld, vertex* rotations )
 {
 	//locale position updaten
 	this->localPosition->wx += this->v_direction->wx;
@@ -77,48 +77,40 @@ void Ball::doRandomMovement( Spielfeld* spielfeld, local_system user_ls )
 	this->v_globalPos->wx += this->v_direction->wx;
 	this->v_globalPos->wy += this->v_direction->wy;
 	this->v_globalPos->wz += this->v_direction->wz;
-
-
-/*	//X
-	if( this->localPosition->wx > spielfeld->v_boundsOHR->wx ||
-		this->localPosition->wx < spielfeld->v_boundsOHL->wx )
-	{
-		//richtung umdrehen
-		this->v_direction->wx *= (-1);
-
-		//neue bewegungsmatrix def.
-		this->m_movment->clear();
-		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
-	}
+/*
+	this->m_movment->clear();
+	this->m_movment->rotate_x( rotations->wx );
+	this->m_movment->rotate_y( rotations->wy );
+	this->m_movment->rotate_z( rotations->wz );
+	(*this->v_direction) = (*this->m_movment) * (*this->v_direction);
 */
 	//Y
-	if( this->localPosition->wy > spielfeld->v_boundsOHL->wy ||
-		this->localPosition->wy < spielfeld->v_boundsUHL->wy )
+/*	if( this->localPosition->wy > spielfeld->v_boundsOHL->wy || this->localPosition->wy < spielfeld->v_boundsUHL->wy )
 	{
 		//richtung umdrehen
 		this->v_direction->wy *= (-1);
 
 		//neue bewegungsmatrix def.
-		this->m_movment->clear();
+//		this->m_movment->clear();
 
-//		this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
+		// this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
 		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
 	}
+*/
 
 	//Z
-	if( this->localPosition->wz > spielfeld->v_boundsOHL->wz ||
-		this->localPosition->wz < spielfeld->v_boundsUHL->wz )
+/*	if( this->localPosition->wz > spielfeld->v_boundsOHL->wz || this->localPosition->wz < spielfeld->v_boundsUHL->wz )
 	{
 		//richtung umdrehen
 		this->v_direction->wz *= (-1);
 
 		//neue bewegungsmatrix def.
-		this->m_movment->clear();
+//		this->m_movment->clear();
 
-//		this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
+		// this->m_movment->rows( user_ls.right, user_ls.up, user_ls.sight );
 		this->m_movment->translate( this->v_direction->wx, this->v_direction->wy, this->v_direction->wz );
 	}
-
+*/
 	this->update_pos( *this->m_movment );
 }
 
@@ -164,4 +156,20 @@ void Ball::respawn()
 
 	this->b_hasContactP1 = false;
 	this->b_hasContactP2 = false;
+}
+
+//aus DEBUG gründen
+void Ball::DEBUG_drawDirection()
+{
+	glPushAttrib( GL_CURRENT_BIT );
+	
+	int scaling = 10;
+	
+	glBegin( GL_LINES );
+		glColor3d( 0,1,0 );
+		glVertex3d( 0, 0, -20 );
+		glVertex3d( this->v_direction->wx * scaling, this->v_direction->wy * scaling, this->v_direction->wz * scaling);
+	glEnd();
+
+	glPopAttrib();
 }
