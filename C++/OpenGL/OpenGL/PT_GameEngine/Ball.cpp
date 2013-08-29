@@ -97,10 +97,11 @@ void Ball::doRandomMovement( Spielfeld* spielfeld, vertex* rotations )
 */
 
 	//Y
-	if( this->v_globalPos->wy > spielfeld->v_boundsOHL->wy || this->v_globalPos->wy < spielfeld->v_boundsUHL->wy )
+	if( this->v_globalPos->wy > spielfeld->v_boundsOHL->wy ||
+		this->v_globalPos->wy < spielfeld->v_boundsUVR->wy )
 	{
 		//richtung umdrehen
-//		this->v_direction->wy *= (-1);
+		this->v_direction->wy *= (-1);
 
 		//neue bewegungsmatrix def.
 //		this->m_movment->clear();
@@ -111,10 +112,11 @@ void Ball::doRandomMovement( Spielfeld* spielfeld, vertex* rotations )
 
 
 	//Z
-	if( this->v_globalPos->wz > spielfeld->v_boundsOHL->wz || this->v_globalPos->wz < spielfeld->v_boundsUHL->wz )
+	if( this->v_globalPos->wz < spielfeld->v_boundsOHL->wz ||
+		this->v_globalPos->wz > spielfeld->v_boundsUVR->wz )
 	{
 		//richtung umdrehen
-//		this->v_direction->wz *= (-1);
+		this->v_direction->wz *= (-1);
 
 		//neue bewegungsmatrix def.
 //		this->m_movment->clear();
@@ -178,7 +180,7 @@ void Ball::DEBUG_drawDirection()
 {
 	glPushAttrib( GL_CURRENT_BIT );
 	
-	int scaling = 10;
+	int scaling = 100;
 	
 	glBegin( GL_LINES );
 		glColor3d( 0,1,0 );

@@ -69,5 +69,5 @@ Spielfeld::~Spielfeld( void )
 void Spielfeld::updateBounds( Matrix m )
 {
 	(*this->v_boundsOHL) = m * (*this->v_boundsOHL);
-	(*this->v_boundsUHL) = m * (*this->v_boundsUHL);
+	(*this->v_boundsUVR) = m * (*this->v_boundsUVR);
 }

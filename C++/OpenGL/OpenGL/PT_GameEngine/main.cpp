@@ -99,6 +99,9 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 
 //	glPixelZoom( 2, 2 ); //ändern der schriftgröße von write
 
+	//für Debug:
+	bool isPause = false;
+
 	vertex v_rot(0,0,0);
 	while( handle_input() == 0 )
 	{
@@ -111,7 +114,15 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			(*ball->v_direction) = m * (*ball->v_direction);
 		}
 */
-		ball->doRandomMovement( spielfeld, &v_rot );
+		if( input.key_pressed( VK_SPACE ) )
+		{
+			isPause = !isPause;
+		}
+
+		if( !isPause )
+		{
+			ball->doRandomMovement( spielfeld, &v_rot );
+		}
 
 		m.clear();
 
@@ -269,6 +280,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			m.clear();
 			m.rotate_x( -rotMapSpeed );
 			(*ball->v_direction) = m * (*ball->v_direction);
+			(*ball->v_globalPos) = m * (*ball->v_globalPos);
 			ball->m_movment->rotate_x( -rotMapSpeed );
 			spielfeld->updateBounds( m );
 /////////////////////////////////////////////////////////////////////////////
@@ -292,6 +304,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			m.clear();
 			m.rotate_x( +rotMapSpeed );
 			(*ball->v_direction) = m * (*ball->v_direction);
+			(*ball->v_globalPos) = m * (*ball->v_globalPos);
 			spielfeld->updateBounds( m );
 /////////////////////////////////////////////////////////////////////////////
 		}
@@ -456,7 +469,9 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		sprintf( DEBUG_BOUNDS1, "spielfeld->v_boundsOHL->: x:%f y:%f z:%f", spielfeld->v_boundsOHL->wx, spielfeld->v_boundsOHL->wy, spielfeld->v_boundsOHL->wz);
 		chars.write( 0, 120, DEBUG_BOUNDS1 );
 
-
+		char DEBUG_BOUNDS2[128] = { "XX : XX" };
+		sprintf( DEBUG_BOUNDS2, "spielfeld->v_boundsUVR->: x:%f y:%f z:%f", spielfeld->v_boundsUVR->wx, spielfeld->v_boundsUVR->wy, spielfeld->v_boundsUVR->wz);
+		chars.write( 0, 140, DEBUG_BOUNDS2 );
 
 
 		ball->DEBUG_drawDirection();
