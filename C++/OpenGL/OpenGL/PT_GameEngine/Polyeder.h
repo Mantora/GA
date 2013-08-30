@@ -35,6 +35,8 @@ class Polyeder
 		//funktion zum bewegen
 		void update_pos( Matrix m );
 
-		//anzeigefunktion
+		//anzeigefunktion ursprünglich
 		void display( void );
+		//anzeigefunktion mit Matrix
+		void display( Matrix m );
 };

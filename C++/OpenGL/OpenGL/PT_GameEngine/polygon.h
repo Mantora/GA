@@ -53,8 +53,10 @@ class polygon
 		void setTexture( char* textureName );
 		void setColorIndex( int colorIndex );
 
-		//Anzeigefunktionen
+		//Anzeigefunktionen ursprünglich
 		void display();
+		//Anzeigefunktionen mit Matrix
+		void display( Matrix m );
 
 		//matrix funktionen
 		void addMatrix( Matrix m );

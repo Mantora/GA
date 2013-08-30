@@ -68,7 +68,7 @@ void polygon::setColorIndex( int colorIndex )
 	this->colorIndex = colorIndex;
 }
 
-//Anzeigefunktionen
+//Anzeigefunktionen ursprünglich
 void polygon::display()
 {
 	//vor jeder anzeige, die normalen neu berechen:
@@ -104,6 +104,28 @@ void polygon::display()
 		
 		//position in 3D
 		vertex pos = this->points[ i ];
+		glVertex3d( pos.wx, pos.wy, pos.wz );
+	}
+	glEnd();
+}
+
+//Anzeigefunktionen mit Matrix
+void polygon::display( Matrix m )
+{
+	glBegin( GL_POLYGON );
+
+	// Farbe des Polygons festlegen
+	glColor3d( this->v_RGBcolor->wx, this->v_RGBcolor->wy, this->v_RGBcolor->wz );
+
+	for( long i = 0; i < this->pointsCount; i++ )
+	{
+		//texturCoordinaten in 2d
+//		vertex texCoords = this->textureCoords[ i ];
+//		glTexCoord2d( texCoords.wx, texCoords.wy );
+		
+		//position in 3D
+		vertex pos = this->points[ i ];
+		pos = m * pos;
 		glVertex3d( pos.wx, pos.wy, pos.wz );
 	}
 	glEnd();

@@ -138,7 +138,7 @@ void Ball::contactPlayer1()
 	this->b_hasContactP2 = false;
 
 	this->v_direction->wx *= (-1);
-	this->v_direction->wz *= (-1);
+//	this->v_direction->wz *= (-1);
 
 	//neue bewegungsmatrix def.
 	this->m_movment->clear();
@@ -153,7 +153,7 @@ void Ball::contactPlayer2()
 	this->b_hasContactP2 = true;
 
 	this->v_direction->wx *= (-1);
-	this->v_direction->wz *= (-1);
+//	this->v_direction->wz *= (-1);
 
 	//neue bewegungsmatrix def.
 	this->m_movment->clear();
@@ -167,9 +167,9 @@ void Ball::respawn()
 	//neue richtung bestimmen
 	this->localPosition = new vertex( 0,0,0 );
 	if( this->b_hasContactP1 )
-		this->v_direction = new vertex( -BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
-	else
 		this->v_direction = new vertex( BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
+	else
+		this->v_direction = new vertex( -BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED, BALL_MOVMENT_SPEED );
 
 	this->b_hasContactP1 = false;
 	this->b_hasContactP2 = false;

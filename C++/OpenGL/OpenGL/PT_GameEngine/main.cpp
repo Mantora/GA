@@ -103,6 +103,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 	bool isPause = false;
 
 	vertex v_rot(0,0,0);
+	vertex v_trans(0,0,0);
 	while( handle_input() == 0 )
 	{
 		glClear( GL_COLOR_BUFFER_BIT ); //Bildschirm löschen
@@ -114,6 +115,44 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			(*ball->v_direction) = m * (*ball->v_direction);
 		}
 */
+		if( spieler1->points > 4 || spieler2->points > 4 )
+		{
+			isPause = true;
+
+			char PLAYER_WIN[128] = { 0 };
+			if( spieler1->points > 4 )
+			{
+				sprintf( PLAYER_WIN, "Player 1 WIN !Press 'n' for new game");
+			}
+
+			if( spieler2->points > 4 )
+			{
+				sprintf( PLAYER_WIN, "Player 2 WIN !\nPress 'n' for new game");
+			}
+
+			chars.write( x_res * 0.5f, y_res * 0.5f, PLAYER_WIN );
+			if( input.key_pressed( 'N' ) )
+			{
+				spieler1 = new Spieler1();
+				spieler1->isBot = true;
+
+				spieler2 = new Spieler2();
+				spieler2->isBot = true;
+				// Matrixdefinitionen
+				Matrix m;
+
+				m.translate( f_player1_startX, 0, -20 );
+				spieler1->update_pos( m );
+				spieler1->v_globalPos->wx += f_player1_startX;
+
+				m.translate( f_player2_startX, 0, 0 );
+				spieler2->update_pos( m );
+				spieler2->v_globalPos->wx = (f_player1_startX + f_player2_startX);
+
+				isPause = false;
+			}
+		}
+
 		if( input.key_pressed( VK_SPACE ) )
 		{
 			isPause = !isPause;
@@ -235,201 +274,81 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 			spieler2->points++;
 			ball = new Ball();
 
-//			Matrix m;
-//			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-//			m.rows( user_ls.right, user_ls.up, user_ls.sight );
+			Matrix m;
+			m.translate( 0, 0, -20 );
 
-//			ball->update_pos( m );
-
-//			ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
+			ball->update_pos( m );
 		}
 
 		if( ball->localPosition->wx > spielfeld->v_boundsUVR->wx+2 )
 		{
 			spieler1->points++;
 			ball = new Ball();
-//			ball->respawn();
+			ball->respawn();
 
-//			Matrix m;
-//			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-//			m.rows( user_ls.right, user_ls.up, user_ls.sight );
+			Matrix m;
+			m.translate( 0, 0, -20 );
 
-//			ball->update_pos( m );
-
-//			ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
+			ball->update_pos( m );
 		}
 
-///////////////////////////////// Sicht aus der Localen Ausrichtung ///////////////////////////////
-		//sicht nach der localen ausrichtung ausrichten
+
 		if( input.key_pressed( VK_DOWN ) )
 		{
-			m.clear();
-
-			m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
-			m.rotate_x( -rotMapSpeed );
 			v_rot.wx -= rotMapSpeed;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
-
-//////////////////////////////////////////////////////////////////////////////
-			m.clear();
-			m.rotate_x( -rotMapSpeed );
-			(*ball->v_direction) = m * (*ball->v_direction);
-			(*ball->v_globalPos) = m * (*ball->v_globalPos);
-			ball->m_movment->rotate_x( -rotMapSpeed );
-			spielfeld->updateBounds( m );
-/////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_UP ) )
 		{
-			m.clear();
-
-			m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
-			m.rotate_x( +rotMapSpeed );
 			v_rot.wx += rotMapSpeed;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
-
-//////////////////////////////////////////////////////////////////////////////
-			m.clear();
-			m.rotate_x( +rotMapSpeed );
-			(*ball->v_direction) = m * (*ball->v_direction);
-			(*ball->v_globalPos) = m * (*ball->v_globalPos);
-			spielfeld->updateBounds( m );
-/////////////////////////////////////////////////////////////////////////////
 		}
 
 		if( input.key_pressed( VK_LEFT ) )
 		{
-			m.clear();
-			m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
-			m.rotate_y( +rotMapSpeed );
 			v_rot.wy += rotMapSpeed;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
-//////////////////////////////////////////////////////////////////////////////
-			m.clear();
-			m.rotate_y( +rotMapSpeed );
-			(*ball->v_direction) = m * (*ball->v_direction);
-/////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_RIGHT ) )
 		{
-			m.clear();
-			m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
-			m.rotate_y( -rotMapSpeed );
-			v_rot.wx -= rotMapSpeed;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
-
-//////////////////////////////////////////////////////////////////////////////
-			m.clear();
-			m.rotate_y( -rotMapSpeed );
-			(*ball->v_direction) = m * (*ball->v_direction);
-/////////////////////////////////////////////////////////////////////////////
+			v_rot.wy -= rotMapSpeed;
 		}
+
 		if( input.key_pressed( VK_PRIOR ) )
 		{
-			m.clear();
-			m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
-			m.rotate_z( -rotMapSpeed );
 			v_rot.wz -= rotMapSpeed;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
-
-//////////////////////////////////////////////////////////////////////////////
-			m.clear();
-			m.rotate_z( -rotMapSpeed );
-			(*ball->v_direction) = m * (*ball->v_direction);
-/////////////////////////////////////////////////////////////////////////////
 		}
 		if( input.key_pressed( VK_DELETE ) )
 		{
-			m.clear();
-			m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
-			m.rotate_z( +rotMapSpeed );
 			v_rot.wz += rotMapSpeed;
-			m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
-//////////////////////////////////////////////////////////////////////////////
-			m.clear();
-			m.rotate_z( +rotMapSpeed );
-			(*ball->v_direction) = m * (*ball->v_direction);
-/////////////////////////////////////////////////////////////////////////////
 		}
 		
 		if( input.key_pressed( VK_END ) )
 		{
-			m.clear();
-			m.translate( 0, 0, +rotMapSpeed );
-
-			user_ls.pos.wz -= rotMapSpeed;
-
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
+			v_trans.wz -= rotMapSpeed;
 		}
 		if( input.key_pressed( VK_HOME ) )
 		{
-			m.clear();
-			m.translate( 0, 0, -rotMapSpeed );
-			user_ls.pos.wz += rotMapSpeed;
-
-		//	user_ls = m * user_ls;
-			
-			spielfeld->update_pos( m );
-			ball->update_pos( m );
-			spieler1->update_pos( m );
-			spieler2->update_pos( m );
+			v_trans.wz += rotMapSpeed;
 		}
 
 //		ball->v_direction = DanielRotAll( v_rot.wx,  v_rot.wy,  v_rot.wz, ball->v_direction->wx, ball->v_direction->wy, ball->v_direction->wz);
 //////////////////////////////////////////////////////////////////////////////////////////
 
-
-
 		spieler1->check4BallContakt( ball );
 		spieler2->check4BallContakt( ball );
 
+		//drehung umsetzen´:
+		Matrix m;
+		m.translate( user_ls.pos.wx, user_ls.pos.wy, user_ls.pos.wz );
+		m.rotate_x( v_rot.wx );
+		m.rotate_y( v_rot.wy );
+		m.rotate_z( v_rot.wz );
+		m.translate( -user_ls.pos.wx, -user_ls.pos.wy, -user_ls.pos.wz );
+		m.translate( v_trans.wx, v_trans.wy, v_trans.wz );
+
 		//anzeigen
-		spielfeld->display();
-		spieler1->display();
-		spieler2->display();
-		ball->display();
+		spielfeld->display( m );
+		spieler1->display( m );
+		spieler2->display( m );
+		ball->display( m );
 
 		//GUI:
 		char countPoints[32] = { "XX : XX" };
@@ -440,7 +359,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		sprintf( countBallHits, "%d : %d", spieler1->ballHits, spieler2->ballHits);
 		chars.write( x_res * 0.5f - 14, y_res - 40, countBallHits );
 
-		//DEBUG:
+/*		//DEBUG:
 		char DEBUG_SPIELFELD[128] = { "XX : XX" };
 		sprintf( DEBUG_SPIELFELD, "spielfeld->v_globalPos: x:%f y:%f z:%f", spielfeld->v_globalPos->wx, spielfeld->v_globalPos->wy, spielfeld->v_globalPos->wz);
 		chars.write( 0, 0, DEBUG_SPIELFELD );
@@ -472,9 +391,9 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		char DEBUG_BOUNDS2[128] = { "XX : XX" };
 		sprintf( DEBUG_BOUNDS2, "spielfeld->v_boundsUVR->: x:%f y:%f z:%f", spielfeld->v_boundsUVR->wx, spielfeld->v_boundsUVR->wy, spielfeld->v_boundsUVR->wz);
 		chars.write( 0, 140, DEBUG_BOUNDS2 );
+*/
 
-
-		ball->DEBUG_drawDirection();
+//		ball->DEBUG_drawDirection();
 		
 		screen_interface.swap_buffers(); // buffer leeren ist hier automatisch drin
 //		glFlush(); //buffer leeren

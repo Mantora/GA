@@ -111,12 +111,24 @@ void Polyeder::update_pos( Matrix m )
 	}
 }
 
-//anzeigefunktion
+//anzeigefunktion in ursprünglicher Position
 void Polyeder::display( void )
 {
 	for( int i = 0; i < this->faces; i++)
 	{
 		this->polys[i].display();
+	}
+//	for( long i=0 ; i<6 ; i++ )
+//		ps[ i ].display( vs );
+// polyhedron::vs[] ist das Array, das alle Vertices des Polyeders enthält
+}
+
+//anzeigefunktion in mit Matrix
+void Polyeder::display( Matrix m )
+{
+	for( int i = 0; i < this->faces; i++)
+	{
+		this->polys[i].display( m );
 	}
 //	for( long i=0 ; i<6 ; i++ )
 //		ps[ i ].display( vs );

@@ -6,7 +6,7 @@
 
 #include "Spielfeld.h"
 
-#define BALL_MOVMENT_SPEED 0.003f
+#define BALL_MOVMENT_SPEED 0.01f
 
 class Ball : public Polyeder
 {
