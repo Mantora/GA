@@ -1,17 +1,22 @@
 #ifdef _WIN32
 	#include "Socket_UDP_windows.h"
 
-	Socket_UDP_windows::Socket_UDP_windows(unsigned int port)
+	Socket_UDP_windows::Socket_UDP_windows()
 	{
-		PORT = port;
 		clientAddrLen = sizeof(SOCKADDR_IN);
 	};
 
 	Socket_UDP_windows::~Socket_UDP_windows()
 	{};
 
-	void Socket_UDP_windows::ServerStarten(void)
+	void Socket_UDP_windows::ServerStarten( unsigned int port )
 	{
+		isServer = true;
+		isClient = false;
+
+		PORT = port;
+		clientAddrLen = sizeof(SOCKADDR_IN);
+
 //		system("cls");
 		cout << "Unity Game Server - Copyright © CJ 2011-2013 - Windows Version" << endl;
 		startWinsock();
@@ -20,12 +25,22 @@
 		cout << "Server bereit." << endl << endl;
 	};
 
-	void Socket_UDP_windows::ClientStarten(void)
+	void Socket_UDP_windows::ClientVerbinden( char* cp_IP_Host ,u_short us_Port_Host )
 	{
+		isServer = false;
+		isClient = true;
+
+		clientAddrLen = sizeof(SOCKADDR_IN);
+
 //		system("cls");
 		cout << "Test Client - Copyright © CJ 2011-2013 - Windows Version" << endl;
 		startWinsock();
 		erstelleSocket();
+
+		this->addr_server.sin_family = AF_INET;
+		this->addr_server.sin_port = htons(us_Port_Host);
+		this->addr_server.sin_addr.s_addr = inet_addr(cp_IP_Host);
+
 		cout << "Client bereit." << endl << endl;
 	};
 
@@ -82,6 +97,7 @@
 	DatenPaket* Socket_UDP_windows::empfangen()
 	{
 		rc = recvfrom(s, reinterpret_cast<char*>(buf), 1500, 0, (SOCKADDR*)&client, &clientAddrLen);
+
 		if(rc == SOCKET_ERROR)
 		{
 			cout << "Fehler: recvfrom, fehler code: " << WSAGetLastError() << endl;
@@ -90,19 +106,22 @@
 		{
 			//Offenen Stream vom Client schließen
 			buf[rc] = '\0';
-			cout << "Empfange " << rc << " Bytes von " << inet_ntoa(client.sin_addr) << ":" << client.sin_port ;
+			if( DEBUG )
+			{
+				cout << "Empfange " << rc << " Bytes von " << inet_ntoa(client.sin_addr) << ":" << client.sin_port ;
 
-			//Hilfe: Ausgabe des gesamten strings in Byte und Char
-			//cout << "\tByteansicht: " ;
-			cout << " |" ;
-			for(int i = 0; i < rc; i++)
-				cout << (int)buf[i] << "|";
-			cout << endl;
-/*			cout << "\tCharansicht: \"" ;
-			for(int i = 0; i < rc; i++)
-				cout << buf[i] ;
-			cout << "\"" << endl;
+				//Hilfe: Ausgabe des gesamten strings in Byte und Char
+				//cout << "\tByteansicht: " ;
+				cout << " |" ;
+				for(int i = 0; i < rc; i++)
+					cout << (int)buf[i] << "|";
+				cout << endl;
+/*				cout << "\tCharansicht: \"" ;
+				for(int i = 0; i < rc; i++)
+					cout << buf[i] ;
+				cout << "\"" << endl;
 */
+			}
 		}
 		//Im Datenpaket befindet sich der Sender und die Daten:
 		return new DatenPaket(client, buf);
@@ -111,6 +130,11 @@
 	void Socket_UDP_windows::senden(DatenPaket* dp_senden)
 	{
 		char* carr_zusenden = dp_senden->erzeuge_string();
+
+		if( this->isClient )
+		{
+			dp_senden->Adresse = this->addr_server;
+		}
 
 		//Testausgabe der Länge des zu sendenden Stream (Da Koordinaten '\0' enthalten kann)
 //		cout << "DEBUG: dp_senden->uiAnzahlByte:" << dp_senden->uiAnzahlByte << endl;
@@ -124,12 +148,15 @@
 		}
 		else
 		{
-			cout << inet_ntoa(dp_senden->Adresse.sin_addr) << ":" << dp_senden->Adresse.sin_port <<" gesendet: |" ;
-			//ByteAnsicht
+			if( DEBUG )
+			{
+				cout << inet_ntoa(dp_senden->Adresse.sin_addr) << ":" << dp_senden->Adresse.sin_port <<" gesendet: |" ;
+				//ByteAnsicht
 
-			for(int i = 0; i < rc; i++)
-				cout << (int)carr_zusenden[i] << "|";
-			cout << endl;
+				for(int i = 0; i < rc; i++)
+					cout << (int)carr_zusenden[i] << "|";
+				cout << endl;
+			}
 /*			cout << "\tCharansicht: \"" ;
 			for(int i = 0; i < rc; i++)
 				cout << carr_zusenden[i] ;

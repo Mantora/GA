@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="C:\xampp\mysql\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -165,7 +166,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Koordinaten.cpp"
+				RelativePath=".\MySQLmgr.cpp"
 				>
 			</File>
 			<File
@@ -183,7 +184,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Koordinaten.h"
+				RelativePath=".\MySQLmgr.h"
 				>
 			</File>
 			<File

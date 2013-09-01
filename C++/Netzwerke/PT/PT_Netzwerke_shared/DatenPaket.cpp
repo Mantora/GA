@@ -5,72 +5,62 @@ DatenPaket::DatenPaket()
 
 }
 
-DatenPaket::DatenPaket( SERVER_STATUS status)
+DatenPaket::DatenPaket( PT_NETZWERKE_DATENPAKET_TYP type)
 {
-	this->S_TYP = status;
-	//Ist vom Server
-	this->b_istServer = true;
-//	daten_1 = "";
-//	daten_2 = "";
-	str_chat = NULL;
-	//	cout << "Vorbereitets Datenpaket angelegt" << endl;
+	this->type = type;
+
+	daten_1 = NULL;
+	daten_2 = NULL;
 };
 
 DatenPaket::DatenPaket(sockaddr_in von, unsigned char* datenstream)
 {
-	//Ist vom Client
-	b_istServer = false;
-
 	//Adresse übergeben
 	this->Adresse = von;
 
-	C_TYP = (CLIENT_STATUS)datenstream[0];
-	switch( C_TYP )
+	type = (PT_NETZWERKE_DATENPAKET_TYP)datenstream[0];
+	switch( type )
 	{
-		case CL_LOGIN:
+		case PT_ONLINE:
 		{
-			//Ab Position 1 (012345...) steht der name
-			//Anfangsadresse zuweisen da am ende \n
-			daten_1 = &datenstream[1];
-			//an position 2+strlen(daten_1) das password
-			//dp_empfangen->daten_2 = &buf[2+strlen(dp_empfangen->daten_1)];
+			//leer
 		}
 		break;
 
-		case CL_ONLINE:
+		case PT_LOGIN:
 		{
-			//An Position [1] steht die ID des Clients:
-			ID = datenstream[1];
+			//name
+			int iCountDaten1 = datenstream[1];
+			int iCountDaten2 = datenstream[1+iCountDaten1];
+			daten_1 = &datenstream[2];
+			datenstream[1+iCountDaten1] = 0;
+
+			//password
+			daten_2 = &datenstream[1+1+iCountDaten1];
 		}
 		break;
 
-		case CL_INITIALISIERUNG:
+		case PT_TERMINAL_CLOSE:
 		{
-			//An Position [1] steht die ID des Clients:
-			ID = datenstream[1];
+			uiAnzahlByte = 1+4;
+			int* tmp = (int*)(&datenstream[1]);
+			this->spaceCount = *tmp;
+			//unsigned char* c = (unsigned char*)(&f);
 		}
 		break;
 
-		case CL_LOGOUT:
+		case PT_LOGIN_RESPONS:
 		{
-			//An Position [1] steht die ID des Clients:
-			ID = datenstream[1];
+			uiAnzahlByte = 1;
 		}
 		break;
 
-		case CL_CHAT: 
+		default:
 		{
-			//Ab Position 1 (012) befindet sich die komplette Nachricht
-			str_chat = &datenstream[1];
-		}
-		break;
-
-		case CL_BEWEGUNG:
-		{
-			//ID des bewegten spielers
-			this->ID = datenstream[1];
-			//seine Koordinaten
-			position = new Koordinaten( &datenstream[2] );
+			cout << "Fehler bei \"DatenPaket::DatenPaket(sockaddr_in von, unsigned char* datenstream)\" :" << endl;
+			cout << "Implementation von PT_NETZWERKE_DATENPAKET_TYP(" << this->type << ") fehlt, abbruch." << endl;
+			system("pause");
+			exit(1);
 		}
 		break;
 	}
@@ -78,96 +68,51 @@ DatenPaket::DatenPaket(sockaddr_in von, unsigned char* datenstream)
 
 DatenPaket::~DatenPaket()
 {
-//	cout << "Datenpaket verworfen" << endl;
+
 };
 
 void DatenPaket::anzeigen()
 {	
-	if( this->b_istServer )
+	cout << "Datenpaket anzeigen von Adresse :" << inet_ntoa(Adresse.sin_addr) << ":" << Adresse.sin_port << endl;
+
+	switch( this->type )
 	{
-		cout << "Datenpaket vom Server:" << endl;
-//		cout << "\tAn Adresse " << inet_ntoa(Adresse.sin_addr) << ":" << Adresse.sin_port << endl;
-		cout << "\tS_TYP: ";
-		switch( this->S_TYP )
+		case PT_ONLINE:
 		{
-			case SV_ONLINE: cout << "\tSV_ONLINE" << endl; break;
+			cout << " PT_ONLINE" << endl;
+		}
+		break;
 
-			case SV_LOGIN:
-				cout << "\tSV_LOGIN" << endl;
-				cout << "\t\tID: " << (int)this->daten_1[0] << endl;
-			break;
+		case PT_LOGIN:
+		{
+			cout << " PT_LOGIN" << endl;
+			cout << "  daten_1:" << this->daten_1 << endl;
+			cout << "  daten_2:" << this->daten_2 << endl;
+		}
+		break;
 
-			case SV_CHAT: cout << "\tSV_CHAT" << endl; break;
+		case PT_LOGIN_RESPONS:
+		{
+			cout << " PT_LOGIN_RESPONS" << endl;
+		}
+		break;
 
-			case SV_BEWEGUNG: 
-				cout << "\tSV_BEWEGUNG" << endl;
-				cout << "\t\tID:" << ID << endl;
-				this->position->anzeigen(); 
-			break;
+		case PT_TERMINAL_CLOSE:
+		{
+			cout << " PT_TERMINAL_CLOSE" << endl;
+		}
+		break;
 
-			case SV_INITIALISIERUNG: 
-				cout << "\tSV_INITIALISIERUNG" << endl; 
-				cout << "\t\tAnzahl Benutzer:" << (int)this->daten_1[0] << endl;
-//Bei Initialisierungsdatenpaket Koordinaten aller verbundenen Spieler anzeigen die in daten_1 stehen 
-				cout << "\t\tID des Empfaengers:" << ID << endl;
-				this->position->anzeigen();
-			break;
-
-			case SV_ACTION: cout << "\tSV_ACTION" ;
-				switch( this->BEFEHL )
-				{
-					case CA_NEUER_BENUTZER: 
-						cout << " : CA_NEUER_BENUTZER" << endl;
-						cout << "\t\tID: " << (int)this->daten_1[1] << endl;
-						cout << "\t\tName: " << this->daten_2 << endl;
-						this->position->anzeigen();
-					break;
-
-					case CA_BENUTZER_GEGANGEN:
-						cout << " : CA_BENUTZER_GEGANGEN" << endl;
-						cout << "\t\tName:" << this->daten_2 << endl;
-						cout << "\t\tID:" << this->ID << endl;
-					break;
-
-					case CA_SPIELER_SPAWN: 
-						cout << " : CA_SPIELER_SPAWN" << endl; 
-						this->position->anzeigen(); 
-					break;
-				}
-			break;
+		default:
+		{
+			cout << "Fehler bei \"DatenPaket::anzeigen()\" :" << endl;
+			cout << "Implementation von PT_NETZWERKE_DATENPAKET_TYP(" << this->type << ") fehlt, abbruch." << endl;
+			system("pause");
+			exit(1);
 		}
 	}
-	else
-	{
-		cout << "Datenpaket vom Client mit Adresse :" << inet_ntoa(Adresse.sin_addr) << ":" << Adresse.sin_port << endl;
-		cout << "\tC_TYP: ";
-		switch( this->C_TYP )
-		{
-			case CL_LOGOUT: cout << "\tCL_LOGOUT" << endl; break;
-			case CL_ONLINE: cout << "\tCL_ONLINE" << endl; break;
-			
-			case CL_LOGIN: 
-				cout << "\tCL_LOGIN" << endl;
-				cout << "\tdaten_1:" << daten_1 << endl; 
-			break;
 
-			case CL_CHAT: 
-				cout << "\tCL_CHAT" << endl; 
-				cout << "\tstr_chat: \"" << str_chat << "\"" << endl;
-			break;
-
-			case CL_BEWEGUNG: 
-				cout << "\tCL_BEWEGUNG" << endl; 
-				cout << "\t\tID:" << ID << endl;
-				this->position->anzeigen();
-			break;
-
-			case CL_INITIALISIERUNG:
-				cout << "\tCL_INITIALISIERUNG" << endl;
-				cout << "\t\tID:" << ID << endl;
-			break;
-		}
-	}		
+	cout << endl;
 };
 
 //Funktion zum erzeugen des Strings
@@ -175,154 +120,72 @@ char* DatenPaket::erzeuge_string()
 {
 	//Lokale Variable um strcpy und strcat nutzen zu können:
 	//Erstes zeichen reinkopieren
-	unsigned char tmp[1400] = { this->S_TYP };
+	char tmp[1400] = { this->type };
 
-	switch( this->S_TYP )
+	switch( this->type )
 	{
-		case SV_LOGIN:
+		case PT_INVAILED:
 		{
-			/* Client will sich Anmelden: */
-			// Benutzer bekommt seine neue ID zugeschickt (wichtig für identifizierung)
-			tmp[1] = daten_1[0];
-
-			tmp[2] = '\0';
-			uiAnzahlByte = strlen((char*)tmp)+1;
+			uiAnzahlByte = 1;
 		}
 		break;
 
-		case SV_ONLINE:
+		case PT_ONLINE:
 		{
-			/* Server ist online */
-			// Nichts unternehmen, da tmp[0] = '1';
-			tmp[1] = '\0';
-			uiAnzahlByte = strlen((char*)tmp);
+			uiAnzahlByte = 1;
 		}
 		break;
 
-		case SV_CHAT:
+		case PT_LOGIN:
 		{
-			strncat((char*)tmp, (char*)str_chat, strlen((char*)str_chat)+1);
-			uiAnzahlByte = strlen((char*)tmp);
+			uiAnzahlByte = 1;
+			uiAnzahlByte += strlen( (char*)this->daten_1 )+1;
+			uiAnzahlByte += strlen( (char*)this->daten_2 )+1;
+
+			int iCountDaten1 = strlen( (char*)this->daten_1 )+1;
+			tmp[1] = iCountDaten1;
+			strcat( tmp, (char*)this->daten_1 );
+
+			int iCountDaten2 = strlen( (char*)this->daten_2 )+1;
+			tmp[1+iCountDaten1] = iCountDaten2;
+			strcat( tmp, (char*)this->daten_2 );
+
+			if( DEBUG )
+				cout << tmp << endl;
 		}
 		break;
 
-		case SV_BEWEGUNG:
+		case PT_LOGIN_RESPONS:
 		{
-			//ID des bewegenden Spielers
-			tmp[1] = ID;
-			this->position->codieren( tmp, 2 );
-
-			uiAnzahlByte = 13;
+			uiAnzahlByte = 1;
 		}
 		break;
 
-		case SV_INITIALISIERUNG:
+		case PT_TERMINAL_CLOSE:
 		{
-			/* Nach dem Login wird dieses Paket angefordert: */
-			/* Aufbau:
-			[0]			5
-			[1]			{aktuelle ID}
-			[2]			{i_verbundeneClients}
-			[3..12]		{koordinaten}
-
-			[13]		{ID_Benutzer1}
-			[14..23]	{koordinaten Benutzer1}
-
-			[24]		{ID_Benutzer2}
-			[25..34]	{koordinaten Benutzer2}
-
-			usw.
-			*/
-			//ID des spielers
-			tmp[1] = this->ID;
-			//Anzahl verbindungen
-			tmp[2] = this->daten_1[0]; 
-			//Spawnposition hinzufügen
-			this->position->codieren( tmp, 3 );
-
-			//ID und Koordinaten der bereits verbunden Spieler kopieren:
-			int anzahl = (tmp[2]*10);
-			for(int i = 0; i < anzahl; i++)
+			uiAnzahlByte = 1+4;
+	
+			unsigned char* c = (unsigned char*)(&this->spaceCount);
+			strcat( tmp, (char*)c );
+	
+			//TestAusgabe
+/*			cout << endl;
+			for( int i = 0; i < 5; i++)
 			{
-				tmp[13+i] = this->daten_1[1+i];
+				cout << (int)tmp[i] << "|";
 			}
-
-			//Anzahl der Gesamtbyte berechnen
-			uiAnzahlByte = 13;
-			uiAnzahlByte += ((tmp[2]-1)*11);
+			cout << endl;
+*/		
 		}
 		break;
 
-		case SV_ACTION:
+		default:
 		{
-			//Befehl steht an position 2
-			tmp[1] = BEFEHL;
-			//weitere Unterteilung:
-			switch( BEFEHL )
-			{
-				case CA_NEUER_BENUTZER:
-				{
-					tmp[2] = this->daten_1[0]; //An position 0 steht die anzahl der Verbindungen als byte
-					tmp[3] = this->daten_1[1]; //An position 1 steht die ID des Clients
-					//Spawnkooardinaten
-					this->position->codieren( tmp, 4 ); //von [4] bis [13] Koordinaten
-/*Problem: strcat_s hängt nicht an das ende von tmp[] an, da zwischen drin durch die
-Koordinaten '0' steht und für ihn dort des Array zuende ist
-*/
-//Tempräre Lösung für obigen Problem:
-					for(unsigned int i = 0; i < strlen((char*)this->daten_2); i++)
-					{
-						tmp[14+i] = this->daten_2[i];
-					}
-					//strcat_s(tmp, 32, this->daten_2);
-					/*	Ergebniss: 
-					 *  [0] = 6
-					 *	[1] = CA_NEUER_BENUTZER = 1
-					 *	[2] = anzahl verbindungen zum Server
-					 *  [3...??] = Position
-					 *  [??..x] = name des neuen spielers
-					 */	
-				}
-				break;
-				
-				case CA_BENUTZER_GEGANGEN:
-				{
-					tmp[2] = this->daten_1[0]; //An position 0 steht die anzahl der Verbindungen als byte
-					tmp[3] = this->ID; //An position 1 steht die ID des Clients
-//					strcat_s(tmp, 32, this->daten_2);
-/*Problem: strcat_s hängt nicht an das ende von tmp[] an, da zwischen drin durch die
-Koordinaten '0' steht und für ihn dort des Array zuende ist
-*/
-//Tempräre Lösung für obigen Problem:
-					for(unsigned int i = 0; i < strlen((char*)this->daten_2); i++)
-					{
-						tmp[4+i] = this->daten_2[i];
-					}
-					/*	Ergebniss: 
-					 *  [0] = 6
-					 *	[1] = CA_BENUTZER_GEGANGEN = 2
-					 *	[2] = anzahl verbindungen zum Server
-					 *  [3]...[x] = name des gegangenen spielers
-					 */	
-				}
-				break;
-			}
+			cout << "Fehler bei \"DatenPaket::erzeuge_string()\" :" << endl;
+			cout << "Implementation von PT_NETZWERKE_DATENPAKET_TYP(" << this->type << ") fehlt, abbruch." << endl;
+			system("pause");
+			exit(1);
 		}
-		break;
-	}
-
-	//Bestimmung der länge notwendig, da Koordinaten '\0' beinhalten kann
-	switch( tmp[0] )
-	{
-
-		case SV_ACTION:
-			switch( tmp[1] )
-			{
-				case CA_NEUER_BENUTZER: uiAnzahlByte = (14 + strlen((char*)daten_2)); break;
-				case CA_BENUTZER_GEGANGEN: uiAnzahlByte = (4 + strlen((char*)daten_2)); break;
-			}
-		break;
-//		default: uiAnzahlByte = strlen(tmp); break;
 	}
 
 	//Speicherplatz allokieren für return
