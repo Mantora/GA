@@ -101,7 +101,7 @@ void polygon::display()
 		glTexCoord2d( texCoords.wx, texCoords.wy );
 		
 		//position in 3D
-		vertex pos = this->points[ i ];
+		vertex pos = (this->point+i);
 		glVertex3d( pos.wx, pos.wy, pos.wz );
 	}
 	glEnd();

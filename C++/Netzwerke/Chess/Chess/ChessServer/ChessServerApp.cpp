@@ -35,7 +35,7 @@ bool ChessServerApp::setup()
 {
 	this->connector = new ZeroMqConnector(ZMQ_REP);
 
-	if ( !this->connector->setup() )
+	if( !this->connector->setup() )
 	{
 		std::cout << "failed set up" << std::endl;
 		return false;
@@ -45,7 +45,7 @@ bool ChessServerApp::setup()
 		std::cout << "set up" << std::endl;
 	}
 
-	if ( !this->connector->bind("tcp://*:55555") )
+	if( !this->connector->bind("tcp://*:55555") )
 	{
 		std::cout << "failed bind" << std::endl;
 		return false;
@@ -63,7 +63,7 @@ bool ChessServerApp::setup()
 	}
 	else
 	{
-		this->dbConnector->connect("LARS-LAPTOP", "gauser", "gapass", "ga" );
+		this->dbConnector->connect("127.0.0.1", "root", "2011#myroot!", "titan_dev" );
 
 		std::cout << "connected to MySQL" << std::endl;
 	}
@@ -92,12 +92,10 @@ void ChessServerApp::shutdown()
 
 void ChessServerApp::run()
 {
-	setup();
-
-	while (true)
+	while( true )
 	{
 		RpcBase* rpc;
-		while ( !this->receiveRpc(&rpc) )
+		while( !this->receiveRpc(&rpc) )
 		{
 			//sleep
 		}
@@ -178,14 +176,21 @@ RpcBase* ChessServerApp::handleRpcLogin(RpcLogin* rpc, size_t& outSize)
 	std::string password( rpc->password );
 
 	MySqlResult outResult;
-	std::string query = "SELECT * FROM accounts WHERE name='";
+/*	std::string query = "SELECT * FROM benutzer WHERE name='";
 	query.append( name );
 	query.append( "' AND SHA(CONCAT('salt','" );
 	query.append( password );
 	query.append( "')) = passwordHash;" );
+*/
+	std::string query = "SELECT * FROM benutzer WHERE name='";
+	query.append( name );
+	query.append( "' AND '" );
+	query.append( password );
+	query.append( "' = passwort;" );
 
 	//debugging
 	std::cout << query << std::endl;
+
 	this->dbConnector->sendQuery(query.c_str(), &outResult );
 	if( 1 != outResult.getNumberOfRows() )
 	{

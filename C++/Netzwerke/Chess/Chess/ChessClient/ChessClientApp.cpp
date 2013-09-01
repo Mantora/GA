@@ -19,6 +19,7 @@ ChessClientApp::ChessClientApp(void) : connector(0) , board(0), gamestate(Invali
 
 ChessClientApp::~ChessClientApp(void)
 {
+
 }
 
 void ChessClientApp::run()

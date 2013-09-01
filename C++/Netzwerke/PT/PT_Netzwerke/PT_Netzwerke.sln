@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PT_Netzwerke_Client", "..\PT_Netzwerke_Client\PT_Netzwerke_Client.vcproj", "{28CEC7D0-7B16-41A2-AD0A-7016C00E2584}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7A9BC44-404D-4C71-9116-02FE7268B88D} = {A7A9BC44-404D-4C71-9116-02FE7268B88D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PT_Netzwerke_Server", "..\PT_Netzwerke_Server\PT_Netzwerke_Server.vcproj", "{C7393B6D-2DBC-4655-95B5-A93B13FB7EE8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7A9BC44-404D-4C71-9116-02FE7268B88D} = {A7A9BC44-404D-4C71-9116-02FE7268B88D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PT_Netzwerke_shared", "..\PT_Netzwerke_shared\PT_Netzwerke_shared.vcproj", "{A7A9BC44-404D-4C71-9116-02FE7268B88D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28CEC7D0-7B16-41A2-AD0A-7016C00E2584}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28CEC7D0-7B16-41A2-AD0A-7016C00E2584}.Debug|Win32.Build.0 = Debug|Win32
+		{28CEC7D0-7B16-41A2-AD0A-7016C00E2584}.Release|Win32.ActiveCfg = Release|Win32
+		{28CEC7D0-7B16-41A2-AD0A-7016C00E2584}.Release|Win32.Build.0 = Release|Win32
+		{C7393B6D-2DBC-4655-95B5-A93B13FB7EE8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C7393B6D-2DBC-4655-95B5-A93B13FB7EE8}.Debug|Win32.Build.0 = Debug|Win32
+		{C7393B6D-2DBC-4655-95B5-A93B13FB7EE8}.Release|Win32.ActiveCfg = Release|Win32
+		{C7393B6D-2DBC-4655-95B5-A93B13FB7EE8}.Release|Win32.Build.0 = Release|Win32
+		{A7A9BC44-404D-4C71-9116-02FE7268B88D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A7A9BC44-404D-4C71-9116-02FE7268B88D}.Debug|Win32.Build.0 = Debug|Win32
+		{A7A9BC44-404D-4C71-9116-02FE7268B88D}.Release|Win32.ActiveCfg = Release|Win32
+		{A7A9BC44-404D-4C71-9116-02FE7268B88D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
