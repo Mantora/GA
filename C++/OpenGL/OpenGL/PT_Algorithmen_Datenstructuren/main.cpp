@@ -131,7 +131,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 		if( input.key_pressed('K') ) transZ += 0.01;
 
 		//drehung
-		bool autRotate = true;
+		bool autRotate = false;
 		if( autRotate )
 		{
 			float speed = 0.1f;
