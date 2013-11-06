@@ -21,7 +21,7 @@ int main()
 //	cout << GetMax<float>(10.4f,5.2f) << endl;
 
 	CLinkedList<int>* LL = new CLinkedList<int>();
-	LL->AddToBack( -1 );
+	LL->AddToBack( 100 );
 	CListElement<int>* toInsertBevor_mid = LL->AddToFront( 3 );
 	CListElement<int>* toDelete_mid = LL->AddToFront( 2 );
 	LL->AddToFront( 1 );
@@ -29,6 +29,7 @@ int main()
 	CListElement<int>* toInsertBevor_front = LL->AddToFront( 0 );
 	CListElement<int>* toInsertAfter_end = LL->AddToBack( 5 );
 
+	LL->printASC();
 	cout << "4 = " << LL->GetElementByIndex(4)->m_pxValue << endl;
 
 	cout << "Listenelement mit wert 0 hat adresse " << LL->FindValue(0) << endl;
@@ -61,12 +62,20 @@ int main()
 	LL->DeleteElement( LL->GetLastElement() );
 
 	LL->printASC();
-//	LL->printDESC();
+	LL->printDESC();
 
-	LL->SwapElements( LL->GetElementByIndex(3), LL->GetElementByIndex(2) );
-
+	LL->SwapElements( LL->GetElementByIndex(0), LL->GetElementByIndex(7) );
+//	LL->SwapElements( LL->GetElementByIndex(2), LL->GetElementByIndex(1) );
 	LL->printASC();
 //	LL->printDESC();
+
+	cout << "sort..." << endl;
+	LL->Sort();
+
+	LL->printASC();
+	LL->printDESC();
+
+	LL->CheckIntegrity();
 
 	system("pause");
 	return 0;

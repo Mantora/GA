@@ -29,13 +29,13 @@ template<typename T> class CLinkedList
 #		CListElement*	InsertBefore(CListElement* pBeforeThis, T xValueToInsert);
 #		CListElement*	InsertAfter(CListElement* pAfterThis, T xValueToInsert);
 #		void			DeleteElement(CListElement* pElement);
-		void			SwapElements(CListElement* pE1, CListElement* pE2);				//< Zusatzleistung
+-		void			SwapElements(CListElement* pE1, CListElement* pE2);				//< Zusatzleistung
 #		CListElement*	FindValue(T xValue) const;
 #		CListElement*	GetElementByIndex(int iIndex);
 #		CListElement*	GetFirstElement() const;
 #		CListElement*	GetLastElement() const;
 #		int				GetSize() const;
-		void			Sort();															//< Zusatzleistung
+-		void			Sort();															//< Zusatzleistung
 
 		bool			CheckIntegrity() const;											//< Zusatzleistung
 };
