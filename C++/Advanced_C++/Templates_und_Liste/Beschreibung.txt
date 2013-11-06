@@ -1,0 +1,41 @@
+Aufgabe aus "Part 19/20: Doubly Linked List with Templates"
+
+!Es darf nicht die STL verwendet werden!
+
+Schreibe folgende Klassen so das sie mit int, float, bool und char* funktioniert
+1)
+
+template<typename T> class CListElement
+{
+	public:
+#		T*				m_pxValue;
+#		CListElement*	m_pPrev;
+#		CListElement*	m_pNext;
+};
+
+template<typename T> class CLinkedList
+{
+	private:
+#		CListElement*	m_pFirst;
+#		CListElement*	m_pLast;
+#		int				m_iSize;
+		
+	public:
+#		CLinkedList();
+#		~CLinkedList();
+
+#		CListElement*	AddToFront(T xValue);
+#		CListElement*	AddToBack(T xValue);
+#		CListElement*	InsertBefore(CListElement* pBeforeThis, T xValueToInsert);
+#		CListElement*	InsertAfter(CListElement* pAfterThis, T xValueToInsert);
+#		void			DeleteElement(CListElement* pElement);
+		void			SwapElements(CListElement* pE1, CListElement* pE2);				//< Zusatzleistung
+#		CListElement*	FindValue(T xValue) const;
+#		CListElement*	GetElementByIndex(int iIndex);
+#		CListElement*	GetFirstElement() const;
+#		CListElement*	GetLastElement() const;
+#		int				GetSize() const;
+		void			Sort();															//< Zusatzleistung
+
+		bool			CheckIntegrity() const;											//< Zusatzleistung
+};
