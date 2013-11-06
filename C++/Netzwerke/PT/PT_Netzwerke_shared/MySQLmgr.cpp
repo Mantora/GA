@@ -16,7 +16,7 @@ MySQLmgr::MySQLmgr()
 	    exit(1);
 	}
 
-	if( mysql_real_connect(con, "127.0.0.1", "root", "2011#myroot!", "titan_dev", 0, NULL, 0) == NULL)
+	if( mysql_real_connect(con, "127.0.0.1", "root", "2011#myroot!", "ga_datenbank", 0, NULL, 0) == NULL)
 	{
 		if( DEBUG )
 			printf("MySQLmgr Error %u: %s\n", mysql_errno(con), mysql_error(con));
@@ -42,13 +42,28 @@ int MySQLmgr::Querry( char* cp_mysql_querry )
 	
 	result = mysql_store_result(con);
 
-	this->num_fields = mysql_num_fields(result);
+//	this->num_fields = mysql_num_fields(result);
 //	printf("Anzahl Spalten: %d\n",num_fields);
 
-	this->i_affactedRows = mysql_num_rows( result );
+	this->i_affactedRows = (int)mysql_num_rows( result );
 //	printf("Anzahl Zeilen: %d\n",i_affactedRows);
 
 	return this->i_affactedRows;
+}
+
+int MySQLmgr::getSingleDataFromQuerry( char* cp_mysql_querry )
+{
+	int i_tmp_data = 0;
+
+	mysql_query(con, cp_mysql_querry);
+
+	result = mysql_store_result(con);
+
+	row = mysql_fetch_row( result );
+
+	i_tmp_data = atoi( row[0] );
+
+	return i_tmp_data;
 }
 
 
@@ -62,7 +77,7 @@ void MySQLmgr::querytest( char* cp_mysql_querry)
 	num_fields = mysql_num_fields(result);
 	printf("Anzahl Spalten: %d\n",num_fields);
 
-	i_affactedRows = mysql_num_rows( result );
+	i_affactedRows = (int)mysql_num_rows( result );
 	printf("Anzahl Zeilen: %d\n",i_affactedRows);
 
 	//Datensätze anzeigen

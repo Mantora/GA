@@ -30,6 +30,7 @@ class MySQLmgr
 		~MySQLmgr();
 
 		int Querry( char* cp_mysql_querry );
+		int getSingleDataFromQuerry( char* cp_mysql_querry );
 
 		void querytest( char* cp_mysql_querry );
 };

@@ -42,16 +42,19 @@ DatenPaket::DatenPaket(sockaddr_in von, unsigned char* datenstream)
 
 		case PT_TERMINAL_CLOSE:
 		{
-			uiAnzahlByte = 1+4;
 			int* tmp = (int*)(&datenstream[1]);
 			this->spaceCount = *tmp;
+
+			int* tmp2 = (int*)(&datenstream[1+4]);
+			this->playerID = *tmp2;
 			//unsigned char* c = (unsigned char*)(&f);
 		}
 		break;
 
 		case PT_LOGIN_RESPONS:
 		{
-			uiAnzahlByte = 1;
+			int* tmp = (int*)(&datenstream[1]);
+			this->playerID = *tmp;
 		}
 		break;
 
@@ -94,12 +97,15 @@ void DatenPaket::anzeigen()
 		case PT_LOGIN_RESPONS:
 		{
 			cout << " PT_LOGIN_RESPONS" << endl;
+			cout << "  ID:" << this->playerID;
 		}
 		break;
 
 		case PT_TERMINAL_CLOSE:
 		{
 			cout << " PT_TERMINAL_CLOSE" << endl;
+			cout << "  ID:" << this->playerID;
+			cout << "  spaceCount:" << this->spaceCount;
 		}
 		break;
 
@@ -157,20 +163,29 @@ char* DatenPaket::erzeuge_string()
 
 		case PT_LOGIN_RESPONS:
 		{
-			uiAnzahlByte = 1;
+			uiAnzahlByte = 1+4;
+
+			unsigned char* c = (unsigned char*)(&this->playerID);
+			strcat( tmp, (char*)c );
 		}
 		break;
 
 		case PT_TERMINAL_CLOSE:
 		{
-			uiAnzahlByte = 1+4;
+			uiAnzahlByte = 1+4+4;
 	
 			unsigned char* c = (unsigned char*)(&this->spaceCount);
-			strcat( tmp, (char*)c );
-	
+			for( int i = 0; i < sizeof(int); i++ )
+				tmp[i+1] = c[i];
+
+
+			unsigned char* c2 = (unsigned char*)(&this->playerID);
+			
+			for( int i = 0; i < sizeof(int); i++ )
+				tmp[i+5] = c2[i];
 			//TestAusgabe
 /*			cout << endl;
-			for( int i = 0; i < 5; i++)
+			for( int i = 0; i < uiAnzahlByte; i++)
 			{
 				cout << (int)tmp[i] << "|";
 			}

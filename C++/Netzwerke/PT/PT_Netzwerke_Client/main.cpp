@@ -13,6 +13,7 @@ Socket_UDP_windows* s;
 
 //diese variable speichert die eingabe:
 int i_spaceCount = 0;
+int i_playerID = 0;
 //END GLOBALE VARIABLEN
 
 void handler(int signum)
@@ -29,10 +30,12 @@ void handler(int signum)
 		{
 			DatenPaket* dp_terminal_close = new DatenPaket( PT_TERMINAL_CLOSE );
 			dp_terminal_close->spaceCount = i_spaceCount;
+			dp_terminal_close->playerID = i_playerID;
 			s->senden( dp_terminal_close );
 		}
 		break;
 	}
+	system("pause");
 	exit(1); // sonst würde er unbeeindruckt in das laufende Programm zurückspringen
 }
 
@@ -100,7 +103,9 @@ int main()
 
 		if( dp_empfangen->type == PT_LOGIN_RESPONS )
 		{
-			cout << endl << "Erfolgreich am Server angemeldet" << endl;
+			i_playerID = dp_empfangen->playerID;
+
+			cout << endl << "Erfolgreich am Server angemeldet mit ID " << i_playerID << endl;
 			cout << "Jetzt kannst du Leertaste dücken wie ein Irrer." << endl;
 
 			//erfolgreich angemeldet, irgend eine eingabe zählen

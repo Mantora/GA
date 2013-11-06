@@ -18,12 +18,12 @@ Standart C untersützt keinen Datentyp "byte". Lösung: char(0-255)
 
 using namespace std;
 
-#define DEBUG true
+#define DEBUG false
 
 //enum zur einteilung der Datenpaket für PT
 enum PT_NETZWERKE_DATENPAKET_TYP
 {
-	PT_INVAILED = -1,
+	PT_INVAILED 	= -1,
 
 	PT_ONLINE		= 0 ,	//prüfen, ob server online ist
 	PT_LOGIN			,	//client meldet sich an
@@ -40,6 +40,7 @@ class DatenPaket
 		PT_NETZWERKE_DATENPAKET_TYP type;
 
 		int spaceCount;
+		int playerID;
 		unsigned char* daten_1;
 		unsigned char* daten_2;
 

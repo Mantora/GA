@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define DEBUG false
+#define DEBUG true
 
 int main()
 {
@@ -38,25 +38,31 @@ int main()
 			{
 				cout << "Client hat sich ";
 				//handle login here
-				//...
 
 				MySQLmgr* sql = new MySQLmgr();
 				char sqlQuerry[256] = {0};
-				sprintf( sqlQuerry, "SELECT * FROM benutzer WHERE name = '%s' AND passwort = '%s';", dp_empfangen->daten_1, dp_empfangen->daten_2 );
+				sprintf( sqlQuerry, "SELECT * FROM users WHERE NAME = '%s' AND PASSWORD = SHA('%s');", dp_empfangen->daten_1, dp_empfangen->daten_2 );
+//				sprintf( sqlQuerry, "SELECT * FROM benutzer WHERE name = '%s' AND passwort = '%s';", dp_empfangen->daten_1, dp_empfangen->daten_2 );
 				if( DEBUG )
 					cout << sqlQuerry << endl;
 				int rows = sql->Querry(sqlQuerry);
-				
-				bool loginSuccess = false;
+
 				if( rows == 1 )
-					loginSuccess = true;
-				
-				if( loginSuccess )
 				{
-					cout << "erfolgreich bei mir angemeldet" << endl;
+					char sqlQuerry[256] = {0};
+					sprintf( sqlQuerry, "SELECT ID FROM users WHERE NAME = '%s';" , dp_empfangen->daten_1 );
+					if( DEBUG )
+						cout << sqlQuerry << endl;
+					int userID = sql->getSingleDataFromQuerry( sqlQuerry );
+			
+					cout << "erfolgreich bei mir angemeldet ";
 					DatenPaket* dp_toSend = new DatenPaket( PT_LOGIN_RESPONS );
 					dp_toSend->Adresse = dp_empfangen->Adresse;
+					//ID in daten_1 speichern
+					dp_toSend->playerID = userID;
 					s->senden( dp_toSend );
+
+					cout << "mit id " << userID << endl;
 				}
 				else
 				{
@@ -70,8 +76,17 @@ int main()
 
 			case PT_TERMINAL_CLOSE:
 			{
-				cout << "Client hat sein Terminal geschlossen und " << dp_empfangen->spaceCount << " mal space gedrückt." << endl;
+				cout << "Client mit der ID " << dp_empfangen->playerID  << " hat sein Terminal geschlossen und " << dp_empfangen->spaceCount << " mal space gedrückt." << endl;
+				
 				//eintragen in MySQL Datenbank
+				MySQLmgr* sql = new MySQLmgr();
+				char sqlQuerry[256] = {0};
+				sprintf( sqlQuerry, "INSERT INTO log_CJ(user_id,date,space_count) VALUES(%d,NOW(),%d);", dp_empfangen->playerID, dp_empfangen->spaceCount );
+				
+				if( DEBUG )
+					cout << sqlQuerry << endl;
+
+//				int rows = sql->Querry(sqlQuerry);
 			}
 			break;
 		}
