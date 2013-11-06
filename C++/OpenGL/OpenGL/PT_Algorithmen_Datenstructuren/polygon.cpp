@@ -88,7 +88,7 @@ void polygon::display()
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, this->texture.xsize, this->texture.ysize, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->texture.content ); //Aussehen der Textur festlegen
 
 	// Farbe des Polygons festlegen
-//	glColor3d( this->v_RGBcolor->wx, this->v_RGBcolor->wy, this->v_RGBcolor->wz );
+//	glColor3d( 1, 1, 1 );
 	glColor3d( this->helligkeit, this->helligkeit, this->helligkeit ); //Helligkeitswert finden
 
 	//glBegin( GL_TRIANGLE_FAN );

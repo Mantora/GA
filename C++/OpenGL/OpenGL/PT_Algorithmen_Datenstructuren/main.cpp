@@ -36,7 +36,7 @@ int WINAPI WinMain( HINSTANCE hinst, HINSTANCE pinst, LPSTR cmdl, int cmds )
 	gluPerspective( 30, GLdouble( x_res ) / y_res, 0.1f, 10000.0f );
 	glMatrixMode( GL_MODELVIEW );
 
-	glClearColor( 1, 1, 1, 1 );
+//	glClearColor( 1, 1, 1, 1 );
 	glLineWidth( 2.0f );
 
 
