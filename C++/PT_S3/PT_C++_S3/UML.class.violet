@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_51" class="java.beans.XMLDecoder">
+ <object class="com.horstmann.violet.ClassDiagramGraph">
+  <void method="addNode">
+   <object class="com.horstmann.violet.ClassNode">
+    <void property="attributes">
+     <void property="text">
+      <string>- unsigned long msecs;
+- unsigned short  secs;
+- unsigned short mins;
+- unsigned short hours;
+- unsigned short days;
+- unsigned short months;
+- unsigned short years;</string>
+     </void>
+    </void>
+    <void property="methods">
+     <void property="text">
+      <string>Time( void );
+~Time( void );</string>
+     </void>
+    </void>
+    <void property="name">
+     <void property="text">
+      <string>Time</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double0">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double0"/>
+      <double>139.0</double>
+     </void>
+    </void>
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>y</string>
+     <void method="set">
+      <object idref="Point2D$Double0"/>
+      <double>21.0</double>
+     </void>
+    </void>
+    <void method="setLocation">
+     <double>139.0</double>
+     <double>21.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.ClassNode">
+    <void property="attributes">
+     <void property="text">
+      <string>- int GUID;
+ 
+- string station_name;
+- int journey_time;
+ 
+- Vector&lt;TravelConnection&gt; travel_connections;
+
+- bool visited;</string>
+     </void>
+    </void>
+    <void property="methods">
+     <void property="text">
+      <string>Station( const char* station_name );
+~Station( void );
+ 
++ void addPosibleNextStation( Station* possibleNextStation );
+ 
++ bool isVisited( void );
++ void setVisited( bool b_visited );</string>
+     </void>
+    </void>
+    <void property="name">
+     <void property="text">
+      <string>Station</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double1">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double1"/>
+      <double>109.0</double>
+     </void>
+    </void>
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>y</string>
+     <void method="set">
+      <object idref="Point2D$Double1"/>
+      <double>266.0</double>
+     </void>
+    </void>
+    <void method="setLocation">
+     <double>109.0</double>
+     <double>266.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.ClassNode">
+    <void property="methods">
+     <void property="text">
+      <string>+ static int getNewGUI( void );</string>
+     </void>
+    </void>
+    <void property="name">
+     <void property="text">
+      <string>Utility</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double2">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double2"/>
+      <double>335.0</double>
+     </void>
+    </void>
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>y</string>
+     <void method="set">
+      <object idref="Point2D$Double2"/>
+      <double>53.0</double>
+     </void>
+    </void>
+    <void method="setLocation">
+     <double>335.0</double>
+     <double>53.0</double>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

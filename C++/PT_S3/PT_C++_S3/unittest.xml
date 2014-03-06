@@ -1,0 +1,8 @@
+<unittest>
+  <route start_time="00:15" start_station="S+U Brandenburger Tor" end_station="S+U Hauptbahnhof">
+	  <station duration="0" line="S1" name="S+U Brandenburger Tor" />
+	  <station duration="2" line="S1" name="S+U Friedrichstr." />
+	  <station duration="7" line="S5" name="S+U Friedrichstr." />
+	  <station duration="9" line="S5" name="S+U Hauptbahnhof" />
+  </route>
+</unittest>

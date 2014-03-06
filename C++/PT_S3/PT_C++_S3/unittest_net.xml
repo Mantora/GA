@@ -1,0 +1,28 @@
+<net>
+	<line name="S1">
+		<operation_time start="04:11" end="01:10"/> 
+		<stations>
+			<station journey_time="2">S1_0</station>
+			<station journey_time="3">S1_zu_S8</station>
+			<station journey_time="3">S1_3</station>
+      <station journey_time="3">S1_4</station>
+    </stations>
+	</line>
+  <line name="S2">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="4">S2_0</station>
+      <station journey_time="3">S2_1</station>
+      <station journey_time="8">S1_zu_S2</station>
+    </stations>
+  </line>
+  <line name="S8">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="4">S8_0</station>
+      <station journey_time="3">S1_zu_S8</station>
+      <station journey_time="8">S8_3</station>
+      <station journey_time="3">S8_4</station>
+    </stations>
+  </line>
+</net>

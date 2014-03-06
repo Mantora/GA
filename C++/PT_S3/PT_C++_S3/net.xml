@@ -1,0 +1,389 @@
+<net>
+  <line name="S1">
+	<operation_time start="04:11" end="01:10"/> 
+	<stations>
+		<station journey_time="2">S Oranienburg</station>
+		<station journey_time="3">S Lehnitz</station>
+		<station journey_time="3">S Borgsdorf</station>
+		<station journey_time="3">S Birkenwerder</station>
+		<station journey_time="3">S Hohen Neuendorf</station>
+		<station journey_time="4">S Frohnau</station>
+		<station journey_time="3">S Hermsdorf</station>
+		<station journey_time="2">S Waidmannslust</station>
+		<station journey_time="2">S+U Wittenau</station>
+		<station journey_time="3">S Wilhelmsruh</station>
+		<station journey_time="3">S Schoenholz</station>
+		<station journey_time="2">S Wollankstr.</station>
+		<station journey_time="2">S Bornholmer Str.</station>
+		<station journey_time="1">S+U Gesundbrunnen</station>
+		<station journey_time="3">S Humboldthain</station>
+		<station journey_time="2">S Nordbahnhof</station>
+		<station journey_time="2">S Oranienburger Str.</station>
+		<station journey_time="2">S+U Friedrichstr.</station>
+		<station journey_time="2">S+U Brandenburger Tor</station>
+		<station journey_time="2">S+U Potsdamer Platz</station>
+		<station journey_time="2">S Anhalter Bf</station>
+		<station journey_time="3">S+U Yorckstr.</station>
+		<station journey_time="1">S Julius-Leber-Bruecke</station>
+		<station journey_time="2">S Schoeneberg</station>
+		<station journey_time="4">S Friedenau</station>
+		<station journey_time="1">S Feuerbachstr.</station>
+		<station journey_time="2">S+U Rathaus Steglitz</station>
+		<station journey_time="2">S Botanischer Garten</station>
+		<station journey_time="2">S Lichterfelde West</station>
+		<station journey_time="2">S Sundgauer Str.</station>
+		<station journey_time="2">S Zehlendorf</station>
+		<station journey_time="3">S Mexikoplatz</station>
+		<station journey_time="2">S Schlachtensee</station>
+		<station journey_time="2">S Nikolassee</station>
+		<station journey_time="2">S Wannsee</station>
+		<station journey_time="6">S Griebnitzsee</station>
+		<station journey_time="5">S Babelsberg</station>
+		<station journey_time="3">S Potsdam Hbf</station>
+	</stations> 
+  </line>
+  <line name="S2">
+	<operation_time start="04:05" end="01:16"/> 
+	<stations>
+		<station journey_time="2">S Bernau</station>
+		<station journey_time="3">S Bernau-Friedenstal</station>
+		<station journey_time="3">S Zepernick</station>
+		<station journey_time="2">S Roentgental</station>
+		<station journey_time="4">S Buch</station>
+		<station journey_time="3">S Karow</station>
+		<station journey_time="2">S Blankenburg</station>
+		<station journey_time="3">S Pankow-Heinersdorf</station>
+		<station journey_time="2">S+U Pankow</station>
+		<station journey_time="2">S Bornholmer Str.</station>
+		<station journey_time="2">S+U Gesundbrunnen</station>
+		<station journey_time="2">S Humboldthain</station>
+		<station journey_time="3">S Nordbahnhof</station>
+		<station journey_time="2">S Oranienburger Str.</station>
+		<station journey_time="1">S+U Friedrichstr.</station>
+		<station journey_time="2">S+U Brandenburger Tor</station>
+		<station journey_time="2">S+U Potsdamer Platz</station>
+		<station journey_time="2">S Anhalter Bf</station>
+		<station journey_time="3">S+U Yorckstr.</station>
+		<station journey_time="3">S Suedkreuz</station>
+		<station journey_time="2">S Priesterweg</station>
+		<station journey_time="2">S Attilastr.</station>
+		<station journey_time="4">S Marienfelde</station>
+		<station journey_time="2">S Buckower Chaussee</station>
+		<station journey_time="2">S Schichauweg</station>
+		<station journey_time="2">S Lichtenrade</station>
+		<station journey_time="5">S Mahlow </station>	
+		<station journey_time="3">S Blankenfelde</station>
+	</stations> 
+  </line>
+  <line name="S25">
+	<operation_time start="04:05" end="01:07"/> 
+	<stations>
+		<station journey_time="2">S Hennigsdorf</station>
+		<station journey_time="2">S Heiligensee</station>
+		<station journey_time="3">S Schulzendorf</station>
+		<station journey_time="4">S+U Tegel</station>
+		<station journey_time="3">S Eichborndamm</station>
+		<station journey_time="2">S+U Karl-Bonhoeffer-Nervenklinik</station>
+		<station journey_time="2">S Alt-Reinickendorf</station>
+		<station journey_time="3">S Schoenholz</station>
+		<station journey_time="3">S Wollankstr.</station>
+		<station journey_time="2">S Bornholmer Str.</station>
+		<station journey_time="2">S+U Gesundbrunnen</station>
+		<station journey_time="3">S Humboldthain</station>
+		<station journey_time="2">S Nordbahnhof</station>
+		<station journey_time="2">S Oranienburger Str.</station>
+		<station journey_time="2">S+U Friedrichstr.</station>
+		<station journey_time="2">S+U Brandenburger Tor</station>
+		<station journey_time="2">S+U Potsdamer Platz</station>
+		<station journey_time="2">S Anhalter Bf</station>
+		<station journey_time="3">S+U Yorckstr.</station>
+		<station journey_time="2">S Suedkreuz</station>
+		<station journey_time="3">S Priesterweg</station>
+		<station journey_time="2">S Suedende</station>
+		<station journey_time="2">S Lankwitz</station>
+		<station journey_time="2">S Lichterfelde Ost</station>
+		<station journey_time="2">S Osdorfer Str.</station>
+		<station journey_time="4">S Lichterfelde Sued</station>
+		<station journey_time="3">S Teltow Stadt</station>
+	</stations> 
+  </line>
+  <line name="S3">
+	<operation_time start="03:56" end="01:04"/> 
+	<stations>
+		<station journey_time="1">S Ostkreuz</station>
+		<station journey_time="1">S Rummelsburg</station>
+		<station journey_time="3">S Betriebsbf Rummelsburg</station>
+		<station journey_time="3">S Karlshorst</station>
+		<station journey_time="3">S Wuhlheide</station>
+		<station journey_time="2">S Koepenick</station>
+		<station journey_time="2">S Hirschgarten</station>
+		<station journey_time="3">S Friedrichshagen</station>
+		<station journey_time="4">S Rahnsdorf</station>
+		<station journey_time="3">S Wilhelmshagen</station>	
+		<station journey_time="3">S Erkner</station>
+	</stations> 
+  </line>
+  <line name="S41/S42">
+	<operation_time start="04:15" end="01:25"/> 
+	<stations>
+		<station journey_time="3">S Suedkreuz</station>
+		<station journey_time="2">S Schoeneberg</station>
+		<station journey_time="2">S+U Innsbrucker Platz</station>
+		<station journey_time="2">S+U Bundesplatz</station>
+		<station journey_time="2">S+U Heidelberger Platz</station>
+		<station journey_time="2">S Hohenzollerndamm</station>
+		<station journey_time="2">S Halensee</station>
+		<station journey_time="1">S Westkreuz</station>
+		<station journey_time="2">S+U Messe Nord/ICC</station>
+		<station journey_time="2">S Westend</station>
+		<station journey_time="3">S+U Jungfernheide</station>
+		<station journey_time="3">S Beusselstr.</station>
+		<station journey_time="1">S+U Westhafen</station>
+		<station journey_time="3">S+U Wedding</station>
+		<station journey_time="2">S+U Gesundbrunnen</station>
+		<station journey_time="3">S+U Schoenhauser Allee</station>
+		<station journey_time="2">S Prenzlauer Allee</station>
+		<station journey_time="2">S Greifswalder Str.</station>
+		<station journey_time="2">S Landsberger Allee</station>
+		<station journey_time="2">S Storkower Str.</station>
+		<station journey_time="2">S+U Frankfurter Allee</station>
+		<station journey_time="2">S Ostkreuz</station>
+		<station journey_time="3">S Treptower Park</station>
+		<station journey_time="3">S Sonnenallee</station>
+		<station journey_time="2">S+U Neukoelln</station>
+		<station journey_time="2">S+U Hermannstr.</station>
+		<station journey_time="4">S+U Tempelhof</station>
+		<station journey_time="3">S Suedkreuz</station>
+	</stations> 
+  </line>
+  <line name="S45"> 
+	<operation_time start="05:00" end="23:52" /> 
+	<stations>
+		<station journey_time="3">S Suedkreuz</station>
+		<station journey_time="3">S+U Tempelhof</station>
+		<station journey_time="2">S+U Hermannstr.</station>
+		<station journey_time="3">S+U Neukoelln</station>
+		<station journey_time="2">S Koellnische Heide</station>
+		<station journey_time="3">S Baumschulenweg</station>
+		<station journey_time="2">S Schoeneweide</station>
+		<station journey_time="3">S Betriebsbahnhof Schoeneweide</station>
+		<station journey_time="5">S Adlershof</station>
+		<station journey_time="2">S Gruenbergerallee</station>
+		<station journey_time="3">S Flughafen Schoenefeld</station>
+	</stations> 
+  </line>
+  <line name="S46">
+	<operation_time start="03:59" end="00:19" />
+	<stations>
+		<station journey_time="1">S Westend</station>
+		<station journey_time="2">S+U Messe Nord/ICC</station>
+		<station journey_time="3">S Westkreuz</station>
+		<station journey_time="6">S Halensee</station>
+		<station journey_time="1">S Hohenzollerndamm</station>
+		<station journey_time="3">S+U Heidelberger Platz</station>
+		<station journey_time="2">S+U Bundesplatz</station>
+		<station journey_time="1">S+U Innsbrucker Platz</station>
+		<station journey_time="2">S Schoeneberg</station>  
+		<station journey_time="2">S Suedkreuz</station>
+		<station journey_time="3">S+U Tempelhof</station>
+		<station journey_time="3">S+U Hermannstr.</station>
+		<station journey_time="2">S+U Neukoelln</station>
+		<station journey_time="3">S Koellnische Heide</station>
+		<station journey_time="2">S Baumschulenweg</station>
+		<station journey_time="3">S Schoeneweide</station>
+		<station journey_time="3">S Betriebsbahnhof Schoeneweide</station>
+		<station journey_time="2">S Adlershof</station>
+		<station journey_time="4">S Gruenau</station>
+		<station journey_time="6">S Eichwalde</station>
+		<station journey_time="3">S Zeuthen</station>
+		<station journey_time="4">S Wildau</station>
+		<station journey_time="3">S Koenigs Wusterhausen</station>
+	</stations> 
+  </line>
+  <line name="S47">
+	<operation_time start="05:04" end="19:01" /> 
+	<stations>
+		<station journey_time="1">S+U Hermannstr.</station>
+		<station journey_time="2">S+U Neukoelln</station>
+		<station journey_time="2">S Koellnische Heide</station>
+		<station journey_time="3">S Baumschulenweg</station>
+		<station journey_time="2">S Schoeneweide</station>
+		<station journey_time="4">S Oberspree</station>
+		<station journey_time="3">S Spindlersfeld</station>
+	</stations> 
+  </line>
+  <line name="S5">
+	<operation_time start="03:55" end="01:05"/>
+	<stations>
+		<station journey_time="1">S+U Spandau</station>
+		<station journey_time="2">S Stresow</station>
+		<station journey_time="3">S Pichelsberg</station>
+		<station journey_time="2">S Olympiastadion</station>
+		<station journey_time="3">S Heerstr.</station>
+		<station journey_time="2">S Messe Sued</station>
+		<station journey_time="1">S Westkreuz</station>
+		<station journey_time="3">S+U Charlottenburg</station>
+		<station journey_time="2">S Savignyplatz</station>
+		<station journey_time="2">S+U Zoologischer Garten</station>
+		<station journey_time="3">S Tiergarten</station>
+		<station journey_time="2">S Bellevue</station>
+		<station journey_time="2">S+U Hauptbahnhof</station>
+		<station journey_time="3">S+U Friedrichstr.</station>
+		<station journey_time="2">S Hackescher Markt</station>
+		<station journey_time="2">S+U Alexanderplatz</station>
+		<station journey_time="2">S+U Jannowitzbruecke</station>
+		<station journey_time="2">S Ostbahnhof</station>
+		<station journey_time="3">S+U Warschauer Str.</station>
+		<station journey_time="2">S Ostkreuz</station>
+		<station journey_time="3">S Noeldnerplatz</station>
+		<station journey_time="2">S+U Lichtenberg</station>
+		<station journey_time="3">S Friedrichsfelde Ost</station>
+		<station journey_time="3">S Biesdorf</station>
+		<station journey_time="2">S+U Wuhletal</station>
+		<station journey_time="2">S Kaulsdorf</station>
+		<station journey_time="2">S Mahlsdorf</station>
+		<station journey_time="4">S Birkenstein</station>
+		<station journey_time="2">S Hoppegarten (Mark)</station>
+		<station journey_time="3">S Neuenhagen (b Bln)</station>
+		<station journey_time="5">S Fredersdorf (b Bln)</station>
+		<station journey_time="3">S Petershagen Nord</station>	
+		<station journey_time="4">S Strausberg</station>
+		<station journey_time="4">S Hegermuehle</station>
+		<station journey_time="4">S Strausberg Stadt</station>
+		<station journey_time="2">S Strausberg Nord</station>
+	</stations> 
+  </line>
+  <line name="S7">
+	<operation_time start="04:10" end="01:38" /> 
+	<stations>
+		<station journey_time="2">S Wannsee</station>
+		<station journey_time="2">S Nikolassee</station>
+		<station journey_time="8">S Grunewald</station>
+		<station journey_time="2">S Westkreuz</station>
+		<station journey_time="3">S+U Charlottenburg</station>
+		<station journey_time="2">S Savignyplatz</station>
+		<station journey_time="2">S+U Zoologischer Garten</station>
+		<station journey_time="3">S Tiergarten</station>
+		<station journey_time="2">S Bellevue</station>
+		<station journey_time="2">S+U Hauptbahnhof</station>
+		<station journey_time="3">S+U Friedrichstr.</station>
+		<station journey_time="2">S Hackescher Markt</station>
+		<station journey_time="2">S+U Alexanderplatz</station>
+		<station journey_time="2">S+U Jannowitzbruecke</station>
+		<station journey_time="2">S Ostbahnhof</station>
+		<station journey_time="3">S+U Warschauer Str.</station>
+		<station journey_time="1">S Ostkreuz</station>
+		<station journey_time="3">S Noeldnerplatz</station>
+		<station journey_time="3">S Lichtenberg</station>
+		<station journey_time="2">S Friedrichsfelde Ost</station>
+		<station journey_time="3">S Springpfuhl</station>
+		<station journey_time="2">S Poelchaustr.</station>
+		<station journey_time="2">S Marzahn</station>
+		<station journey_time="2">S Raoul-Wallenberg-Str.s</station>
+		<station journey_time="1">S Mehrower Allee</station>	
+		<station journey_time="3">S Ahrensfelde</station>
+	</stations> 
+  </line>
+  <line name="S75">
+    <operation_time start="04:16" end="01:03" /> 
+	<stations>
+		<station journey_time="2">S Westkreuz</station>
+		<station journey_time="3">S+U Charlottenburg</station>
+		<station journey_time="2">S Savignyplatz</station>
+		<station journey_time="2">S+U Zoologischer Garten</station>
+		<station journey_time="2">S Tiergarten</station>
+		<station journey_time="2">S Bellevue</station>
+		<station journey_time="3">S+U Hauptbahnhof</station>
+		<station journey_time="3">S+U Friedrichstr.</station>
+		<station journey_time="2">S Hackescher Markt</station>
+		<station journey_time="1">S+U Alexanderplatz</station>
+		<station journey_time="3">S+U Jannowitzbruecke</station>
+		<station journey_time="2">S Ostbahnhof</station>
+		<station journey_time="3">S+U Warschauer Str.</station>
+		<station journey_time="1">S Ostkreuz</station>
+		<station journey_time="3">S Noeldnerplatz</station>
+		<station journey_time="3">S+U Lichtenberg</station>
+		<station journey_time="2">S Friedrichsfelde Ost</station>
+		<station journey_time="4">S Springpfuhl</station>
+		<station journey_time="4">S Gehrenseestr.</station>
+		<station journey_time="3">S Hohenschoenhausen</station>	
+		<station journey_time="2">S Wartenberg</station>
+	</stations>
+  </line>
+  <line name="S8">
+    <operation_time start="05:20" end="01:38" /> 
+	<stations>
+		<station journey_time="4">S Birkenwerder</station>
+		<station journey_time="4">S Hohen Neuendorf</station>
+		<station journey_time="2">S Bergfelde</station>
+		<station journey_time="3">S Schoenfliess</station>
+		<station journey_time="8">S Muehlenbeck-Moenchmuehle</station>
+		<station journey_time="3">S Blankenburg</station>
+		<station journey_time="3">S Pankow-Heinersdorf</station>
+		<station journey_time="2">S+U Pankow</station>
+		<station journey_time="3">S Bornholmer Str.</station>
+		<station journey_time="2">S+U Schoenhauser Allee</station>
+		<station journey_time="1">S Prenzlauer Allee</station>
+		<station journey_time="3">S Greifswalder Str.</station>
+		<station journey_time="2">S Landsberger Allee</station>
+		<station journey_time="2">S Storkower Str.</station>
+		<station journey_time="2">S+U Frankfurter Allee</station>
+		<station journey_time="3">S Ostkreuz</station>
+		<station journey_time="3">S Treptower Park</station>
+		<station journey_time="2">S Plaenterwald</station>
+		<station journey_time="5">S Baumschulenweg</station>
+		<station journey_time="3">S Schoeneweide</station>
+		<station journey_time="2">S Betriebsbahnhof Schoeneweide</station>
+		<station journey_time="4">S Adlershof</station>
+		<station journey_time="6">S Gruenau</station>
+	</stations>
+  </line>
+  <line name="S85">
+    <operation_time start="04:10" end="01:38" /> 
+	<stations>
+		<station journey_time="1">S Waidmannslust</station>
+		<station journey_time="2">S+U Wittenau</station>
+		<station journey_time="3">S Wilhelmsruh</station>
+		<station journey_time="3">S Schoenholz</station>
+		<station journey_time="2">S Wollankstr.</station>
+		<station journey_time="1">S Bornholmer Str.</station>
+		<station journey_time="3">S+U Schoenhauser Allee</station>
+		<station journey_time="2">S Prenzlauer Allee</station>
+		<station journey_time="2">S Greifswalder Str.</station>
+		<station journey_time="2">S Landsberger Allee</station>
+		<station journey_time="2">S Storkower Str.</station>
+		<station journey_time="2">S+U Frankfurter Allee</station>
+		<station journey_time="2">S Ostkreuz</station>
+		<station journey_time="3">S Treptower Park</station>
+		<station journey_time="3">S Plaenterwald</station>
+		<station journey_time="3">S Baumschulenweg</station>
+		<station journey_time="2">S Schoeneweide</station>
+		<station journey_time="3">S Betriebsbahnhof Schoeneweide</station>
+		<station journey_time="2">S Adlershof</station>
+		<station journey_time="4">S Gruenau</station>
+	</stations>
+  </line>
+  <line name="S9">
+    <operation_time start="04:10" end="01:38" /> 
+	<stations>
+		<station journey_time="2">S+U Pankow</station>
+		<station journey_time="2">S Bornholmer Str.</station>
+		<station journey_time="3">S+U Schoenhauser Allee</station>
+		<station journey_time="1">S Prenzlauer Allee</station>
+		<station journey_time="2">S Greifswalder Str.</station>
+		<station journey_time="3">S Landsberger Allee</station>
+		<station journey_time="2">S Storkower Str.</station>
+		<station journey_time="2">S+U Frankfurter Allee</station>	
+		<station journey_time="3">S Ostkreuz</station>
+		<station journey_time="1">S Treptower Park</station>
+		<station journey_time="4">S Plaenterwald</station>
+		<station journey_time="2">S Baumschulenweg</station>
+		<station journey_time="2">S Schoeneweide</station>
+		<station journey_time="3">S Betriebsbahnhof Schoeneweide</station>
+		<station journey_time="3">S Adlershof</station>
+		<station journey_time="5">S Altglienicke</station>
+		<station journey_time="2">S Gruenbergerallee</station>
+		<station journey_time="2">S Flughafen Schoenefeld</station>
+	</stations>
+  </line>
+</net>
