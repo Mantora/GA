@@ -29,6 +29,11 @@ void Station::addPosibleNextStation( Station* possibleNextStation )
 	this->possible_next_stations.push_back( possibleNextStation );
 };
 
+void Station::addConnectionToOtherLine( Station* stationToOtherLine )
+{
+	this->connections_to_other_line.push_back( stationToOtherLine );
+};
+
 std::string Station::getStationName( void )
 {
 	return this->station_name;

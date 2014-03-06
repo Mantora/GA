@@ -16,9 +16,11 @@ class Station
 		~Station( void );
 
 		std::vector<Station*> possible_next_stations;
+		std::vector<Station*> connections_to_other_line;
 		int getGUID( void );
 
 		void addPosibleNextStation( Station* possibleNextStation );
+		void addConnectionToOtherLine( Station* stationToOtherLine );
 
 		std::string getStationName( void );
 

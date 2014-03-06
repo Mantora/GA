@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#define DEBUG true
+#define DEBUG false
 
 class Station;
 
@@ -24,6 +24,7 @@ class PF
 		int endStation_GUID;
 
 		std::vector<Station*>::iterator it_stationToCheck;
+		int index_stationsToCheck;
 		std::vector<Station*> stationsToCheck;
 		std::string str_bestConnection;
 

@@ -71,28 +71,12 @@ int main ()
 
 					/* BUILD THE MULTI_LINKED_LIST 4 EACH STATION */
 
-					//check each station if the station whe want to instance already exists
-/*					for( std::vector<Station*>::iterator it_existingStation = stations.begin(); it_existingStation != stations.end(); it_existingStation++ )
-					{
-						if( (*it_existingStation)->getStationName().compare( readed_element.name ) == 0 )
-						{
-							//station already exists
-							(*it_existingStation)->typ = STATION_CROSS;
-							current_station = (*it_existingStation);
-							break;
-						}
-					}
-*/
-					bool b_addNewStation = false;
-
-
 					//check, if current_station is our station whe want to instanciate
 					if( current_station == 0
 						|| current_station->getStationName().compare( readed_element.name ) != 0 )
 					{
 						//store the station as new Station instance
 						current_station = new Station( journey_time, readed_element.name, lineName );
-						b_addNewStation = true;
 					}
 
 
@@ -102,15 +86,13 @@ int main ()
 						//set from prev_station "Real_Next_Station" from current_station
 						prev_station->addPosibleNextStation( current_station );
 						current_station->addPosibleNextStation( prev_station );
+
 						prev_station = 0;
 					
 					}
 
 					//store current station if it is an new instance
-					if( b_addNewStation )
-					{
-						stations.push_back( current_station );
-					}
+					stations.push_back( current_station );
 
 					prev_station = current_station;
 				}
@@ -121,6 +103,28 @@ int main ()
 	}
 	/* END READING XML FILE */
 	if( DEBUG ) cout << stations.size() << " stations loaded." << endl;
+
+	//connect the stations, wich has connections to another LINE
+	std::vector<Station*>::iterator it = stations.begin();
+	for( it = stations.begin(); it != stations.end(); it++ )
+	{
+		std::vector<Station*>::iterator it_sub = it+1;
+		for( it_sub; it_sub != stations.end(); it_sub++ )
+		{
+			if( (*it)->getStationName().compare( (*it_sub)->getStationName() ) == 0 )
+			{
+				//same station name found
+				(*it)->addConnectionToOtherLine( (*it_sub) );
+				(*it)->typ = STATION_CROSS;
+
+				(*it_sub)->addConnectionToOtherLine( (*it) );
+				(*it_sub)->typ = STATION_CROSS;
+			}
+		}
+	}
+
+
+	//Debug the stations on PF:
 	pf->setStations( stations );
 
 	/* BEGINN 4 INPUT: START_STATION END_STATION TIME_ARRIVE*/
@@ -141,23 +145,29 @@ int main ()
 
 		//ORGINAL STATIONS
 		startStation_name = "S+U Jannowitzbruecke";
-		endStation_name = "S+U Friedrichstr.";
+		endStation_name = "S Nordbahnhof";
 
 		//search 4 a specific station:
-		//START & END Stations
+		//START Station
 		for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
 		{
 			if( (*it)->getStationName().compare( startStation_name ) == 0 )
 			{
-				if( DEBUG ) cout << "found " << (*it)->getStationName() << endl;
+				if( DEBUG ) cout << "found " << (*it)->getFormatedStation() << endl;
 				startStation_ID = (*it)->getGUID();
 				startStation_ptr = (*it);
+				break;
 			}
-			else if( (*it)->getStationName().compare( endStation_name ) == 0 )
+		}
+		//END Station
+		for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
+		{
+			if( (*it)->getStationName().compare( endStation_name ) == 0 )
 			{
-				if( DEBUG ) cout << "found " << (*it)->getStationName() << endl;
+				if( DEBUG ) cout << "found " << (*it)->getFormatedStation() << endl;
 				endStation_ID = (*it)->getGUID();
 				endStation_ptr = (*it);
+				break;
 			}
 		}
 
@@ -179,10 +189,11 @@ int main ()
 
 	// START SEARCH 4 BEST CONNECTION
 	Timer t;
-	pf->startSearch( startStation_ptr, endStation_ptr );
+		pf->startSearch( startStation_ptr, endStation_ptr );
+	int pf_ms = t.getMSecSinceStart();
+	cout << "PF needed " << pf_ms << " ms" << endl;
 
-	cout << pf->printBestConnection() << endl;
-	cout << t.getMSecSinceStart() << " ms needed 4 PF" << endl;
+	cout << endl << pf->printBestConnection() << endl << endl;
 
 
 /*	// Testing travel sytem setup:

@@ -8,7 +8,7 @@ using namespace std;
 
 PF::PF()
 {
-
+	this->index_stationsToCheck = 0;
 }
 
 PF::~PF( void )
@@ -19,6 +19,7 @@ PF::~PF( void )
 void PF::setStations( std::vector<Station*> stations )
 {
 	//this->stationsToCheck = stations;
+/*
 	for( std::vector<Station*>::iterator it1 = stations.begin(); it1 != stations.end(); it1++ )
 	{
 
@@ -35,7 +36,7 @@ void PF::setStations( std::vector<Station*> stations )
 			}
 		}	
 	}
-
+*/
 };
 
 void PF::startSearch( Station* station_start, Station* station_end )
@@ -67,8 +68,11 @@ void PF::startSearch( Station* station_start, Station* station_end )
 			if( this->isTargetStation( (*this->it_stationToCheck) ) )
 			{
 				if( DEBUG ) cout << "PF::startSearch: targetStation found " << (*this->it_stationToCheck)->getFormatedStation() << endl;
+				
+				//add last station tostr_route
+				(*this->it_stationToCheck)->str_routeToThisStation += "|arrived at " + (*this->it_stationToCheck)->getFormatedStation();
 
-				this->str_bestConnection += "SIE HABEN IHR ZIEL ERREICHT";
+				this->str_bestConnection = (*this->it_stationToCheck)->str_routeToThisStation;
 				b_endStationFound = true;
 				break;
 			}
@@ -79,9 +83,8 @@ void PF::startSearch( Station* station_start, Station* station_end )
 				if( DEBUG ) cout << "PF::startSearch: found visited Station " << (*this->it_stationToCheck)->getFormatedStation() << " , break !" << endl;
 
 				//remove this station from stationsToCheck
-				this->it_stationToCheck = this->stationsToCheck.erase( this->it_stationToCheck );
-
-				break;
+				this->it_stationToCheck = this->stationsToCheck.erase( this->it_stationToCheck )-1;
+				this->index_stationsToCheck--;
 			}
 			else
 			{
@@ -137,9 +140,10 @@ void PF::startSearch( Station* station_start, Station* station_end )
 				break;
 			}
 
-
+			this->index_stationsToCheck++;
 		}
 
+		this->index_stationsToCheck = 0;
 		if( DEBUG ) cout << i_steps << ") ------------------------------------------------------------------------------------" << endl;
 		i_steps++;
 
@@ -160,17 +164,48 @@ std::string PF::printBestConnection( void )
 
 void PF::initWithStation( Station* stationToUse4Init )
 {
-	int possibleNextStationCount = stationToUse4Init->possible_next_stations.size();
-	if(DEBUG) cout << "PF::initWithStation " << stationToUse4Init->getFormatedStation() << " has " << possibleNextStationCount << " possibleNextStations" << endl;
-	std::vector<Station*>::iterator it_station;
-	for( it_station = stationToUse4Init->possible_next_stations.begin(); it_station != stationToUse4Init->possible_next_stations.end(); it_station++ )
+	int possibleNextStationCount = 0;
+	switch( stationToUse4Init->typ )
 	{
-		(*it_station)->str_routeToThisStation = stationToUse4Init->str_routeToThisStation;
-		if(DEBUG) cout << "PF::initWithStation stationsToCheck.push_back( " << (*it_station)->getFormatedStation() << " )" << endl;
-		this->stationsToCheck.push_back( (*it_station) );
+
+		case STATION_CROSS: //add all Stations from other line
+		{
+			possibleNextStationCount = stationToUse4Init->connections_to_other_line.size();
+			if(DEBUG) cout << "PF::initWithStation " << stationToUse4Init->getFormatedStation() << " is STATION_CROSS has " << possibleNextStationCount << " possibleNextStations" << endl;
+			std::vector<Station*>::iterator it_station;
+			for( it_station = stationToUse4Init->connections_to_other_line.begin(); it_station != stationToUse4Init->connections_to_other_line.end(); it_station++ )
+			{
+				std::vector<Station*>::iterator it_station_sub;
+				for( it_station_sub = (*it_station)->possible_next_stations.begin(); it_station_sub != (*it_station)->possible_next_stations.end(); it_station_sub++ )
+				{
+					(*it_station_sub)->str_routeToThisStation = stationToUse4Init->str_routeToThisStation;
+					if(DEBUG) cout << "PF::initWithStation stationsToCheck.push_back( " << (*it_station_sub)->getFormatedStation() << " )" << endl;
+					this->stationsToCheck.push_back( (*it_station_sub) );
+					(*it_station_sub)->str_routeToThisStation = stationToUse4Init->str_routeToThisStation;
+				}
+
+				//this is a substation of our start_Station, d.h. is visited
+				(*it_station)->setVisited( true );
+			}
+		}
+
+		case STATION_NORMAL: //add all Stations from this line
+		{
+			possibleNextStationCount = stationToUse4Init->possible_next_stations.size();
+			if(DEBUG) cout << "PF::initWithStation " << stationToUse4Init->getFormatedStation() << " is STATION_NORMAL has " << possibleNextStationCount << " possibleNextStations" << endl;
+			std::vector<Station*>::iterator it_station;
+			for( it_station = stationToUse4Init->possible_next_stations.begin(); it_station != stationToUse4Init->possible_next_stations.end(); it_station++ )
+			{
+				(*it_station)->str_routeToThisStation = stationToUse4Init->str_routeToThisStation;
+				if(DEBUG) cout << "PF::initWithStation stationsToCheck.push_back( " << (*it_station)->getFormatedStation() << " )" << endl;
+				this->stationsToCheck.push_back( (*it_station) );
+				(*it_station)->str_routeToThisStation = stationToUse4Init->str_routeToThisStation;
+			}
+		}
+		break;
+
 	}
-
-
+	//our main start_Station is visited to
 	stationToUse4Init->setVisited(true);
 };
 
@@ -178,10 +213,30 @@ void PF::initWithStation( Station* stationToUse4Init )
 void PF::analyseStation( Station* stationToAnalyse )
 {
 	//search each possible_next_stations and add it to stationsToCheck
-	int possibleNextStationCount = stationToAnalyse->possible_next_stations.size();
+	int possibleNextStationCount = stationToAnalyse->connections_to_other_line.size();
 
+
+	//ADD OTHER CROSS_STATIONS
 	if( DEBUG ) cout << "PF::analyseStation: " << stationToAnalyse->getFormatedStation() << " is X-Station with " << possibleNextStationCount << " possibleNextStations: Add unvisited" << endl;
 	std::vector<Station*>::iterator it_station;
+	for( it_station = stationToAnalyse->connections_to_other_line.begin(); it_station != stationToAnalyse->connections_to_other_line.end(); it_station++ )
+	{
+		if( (*it_station)->isVisited() )
+		{
+			
+		}
+		else
+		{
+			if( DEBUG ) cout << "PF::analyseStation: STATION_CROSS stationsToCheck.push_back( " << (*it_station)->getFormatedStation() << " )" << endl;
+			this->stationsToCheck.push_back( (*it_station) );
+
+			//update the route
+			(*it_station)->str_routeToThisStation = stationToAnalyse->str_routeToThisStation;
+			(*it_station)->str_routeToThisStation += "|travel " + stationToAnalyse->getFormatedStation()+"\n";
+		}
+	}
+
+	//ADD OTHER NORMAL_STATIONS
 	for( it_station = stationToAnalyse->possible_next_stations.begin(); it_station != stationToAnalyse->possible_next_stations.end(); it_station++ )
 	{
 		if( (*it_station)->isVisited() )
@@ -190,20 +245,24 @@ void PF::analyseStation( Station* stationToAnalyse )
 		}
 		else
 		{
-			if( DEBUG ) cout << "PF::analyseStation: stationsToCheck.push_back( " << (*it_station)->getFormatedStation() << " )" << endl;
+			if( DEBUG ) cout << "PF::analyseStation: STATION_NORMAL stationsToCheck.push_back( " << (*it_station)->getFormatedStation() << " )" << endl;
 			this->stationsToCheck.push_back( (*it_station) );
+
+					//update the route
+			(*it_station)->str_routeToThisStation = stationToAnalyse->str_routeToThisStation;
+			(*it_station)->str_routeToThisStation += "|travel " + stationToAnalyse->getFormatedStation()+"\n";
 		}
 	}
  
 	if( DEBUG ) cout << possibleNextStationCount << "*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << endl;
-	this->it_stationToCheck = this->stationsToCheck.end()-1;
+	this->it_stationToCheck = this->stationsToCheck.begin() + this->index_stationsToCheck;
 
 };
 
 //function to check, if stationToCheck is our targetStation
 bool PF::isTargetStation( Station* stationToCheck )
 {
-	if( stationToCheck->getGUID() == this->endStation_GUID )
+	if( stationToCheck->getStationName().compare( this->station_end->getStationName() ) == 0 )
 	{
 		return true;
 	}
