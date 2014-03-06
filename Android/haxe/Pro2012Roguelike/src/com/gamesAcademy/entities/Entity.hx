@@ -1,5 +1,6 @@
 package com.gamesAcademy.entities;
 
+import com.gamesAcademy.gameState.*;
 import com.gamesAcademy.entities.*;
 import com.gamesAcademy.helper.Vector2;
 

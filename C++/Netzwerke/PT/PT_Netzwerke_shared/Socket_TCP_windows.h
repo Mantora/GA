@@ -1,16 +1,15 @@
 #ifdef _WIN32
-	#pragma once
-
 	#include <iostream>
 	#include <winsock2.h>
 
 	#include "DatenPaket.h"
+	#include "ThreadData.h"
 
 	using namespace std;
 
 	#define DEBUG false
 
-	class Socket_UDP_windows
+	class Socket_TCP_windows
 	{
 		private:
 			bool isServer;
@@ -21,6 +20,7 @@
 
 			long rc; //recall; anzahl der empfangen Bytes
 			SOCKET s;
+//			SOCKET connectedSocket
 			unsigned char buf[1500];
 			SOCKADDR_IN addr;
 
@@ -28,32 +28,24 @@
 			SOCKADDR_IN addr_server; //Als Client: Das ist ZielServer
 			int clientAddrLen;
 
-			unsigned long totalBytesSend;
-
-			int volumenTimer; // in MSec
 		public:
-			Socket_UDP_windows();
-			~Socket_UDP_windows();
+			Socket_TCP_windows();
+			~Socket_TCP_windows();
 
 			//windows UDP als server starten( an port binden )
 			void ServerStarten( unsigned int port );
 			//windows UDP als client starten (ziel/server als paramter)
-			void ClientVerbinden( char* cp_IP_Host ,u_short us_Port_Host );
+			void ClientVerbinden( char* cp_IP_Host, u_short us_Port_Host );
 
 			//Socket Setup funktionen
 			void startWinsock();
 			void erstelleSocket();
 			void bindeSocket();
 
-			DatenPaket* empfangen();
+			SOCKET wait4Client();
+//			DatenPaket* empfangen( SOCKET connectedSocket );
 
-			void senden(DatenPaket* dp_senden);
-
-			//DEBUG funktion
-			void zeigeVerbindungen();
-			void updateVolumeTimer( int updateRateinMSec );
-			int getTotalBytesSend();
-			int currentVolumenTimer;
-			void resetTotalBytesSend();
+			void senden( SOCKET connectedSocket, DatenPaket* dp_senden );
 	};
+
 #endif

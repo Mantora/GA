@@ -199,7 +199,6 @@ class CLinkedList
 			pE1->m_pxValue = pE2->m_pxValue;
 			pE2->m_pxValue = tmp.m_pxValue;
 
-
 			//besser und cooler: Pointer umbiegen:
 /*			//anderer ansatz: (von http://www.cplusplus.com/forum/beginner/102181/ )
 			if(pE1->m_pPrev) pE1->m_pPrev->m_pNext = pE2;

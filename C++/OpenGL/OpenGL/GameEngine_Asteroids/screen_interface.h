@@ -124,7 +124,7 @@ void hardware_interface::open_window( HINSTANCE hinst, long xr, long yr )
   winclass.hCursor = LoadCursor( NULL, IDC_ARROW );
   winclass.hbrBackground = (HBRUSH) GetStockObject( BLACK_BRUSH );
   winclass.lpszMenuName = NULL;
-  winclass.lpszClassName = (LPCWSTR) "Main Window";
+  winclass.lpszClassName = "Main Window";
   RegisterClass( &winclass );
 
   int x_add = 2 * (GetSystemMetrics( SM_CXBORDER ) + GetSystemMetrics( SM_CXEDGE ));
@@ -140,11 +140,11 @@ void hardware_interface::open_window( HINSTANCE hinst, long xr, long yr )
   MultiByteToWideChar(CP_ACP, 0, logOpen, num, buf, len);
   std::wstring r(buf);
   delete[] buf; 
-  LPCWSTR window_name = r.c_str();
+  LPCSTR window_name = (LPCSTR)r.c_str();
 
   main_window_handle = CreateWindow
   (
-    (LPCWSTR) "Main Window", window_name, WS_CAPTION | WS_POPUPWINDOW | WS_VISIBLE,
+    (LPCSTR) "Main Window", window_name, WS_CAPTION | WS_POPUPWINDOW | WS_VISIBLE,
     0, 0, xr+x_add, yr+y_add, NULL, NULL, hinst, NULL
   );
 
@@ -196,7 +196,7 @@ void exit_error( char *message )
   screen_interface.close_window();
   
   ShowCursor( 1 );
-  MessageBox( NULL, (LPCWSTR)message, (LPCWSTR)"Programmabbruch nach einem schwerwiegenden Fehler", MB_OK );
+  MessageBox( NULL, (LPCSTR)message, (LPCSTR)"Programmabbruch nach einem schwerwiegenden Fehler", MB_OK );
   
   exit( 1 );
 }
@@ -211,7 +211,7 @@ void exit_error( char *message, char *title )
   MultiByteToWideChar(CP_ACP, 0, message, num, buf, len);
   std::wstring r(buf);
   delete[] buf; 
-  LPCWSTR message_lpcwstr = r.c_str();
+  LPCSTR message_lpcwstr = (LPCSTR)r.c_str();
 
   num = lstrlenA( title ) + 1;
   len = MultiByteToWideChar(CP_ACP, 0, title, num, 0, 0);
@@ -219,7 +219,7 @@ void exit_error( char *message, char *title )
   MultiByteToWideChar(CP_ACP, 0, title, num, buf, len);
   std::wstring s(buf);
   delete[] buf; 
-  LPCWSTR title_lpcwstr = s.c_str();
+  LPCSTR title_lpcwstr = (LPCSTR)s.c_str();
 
   ShowCursor( 1 );
   MessageBox( NULL, message_lpcwstr, title_lpcwstr, MB_OK );
@@ -251,7 +251,7 @@ void message( char *title, char *message )
   MultiByteToWideChar(CP_ACP, 0, message, num, buf, len);
   std::wstring r(buf);
   delete[] buf; 
-  LPCWSTR message_lpcwstr = r.c_str();
+  LPCSTR message_lpcwstr = (LPCSTR)r.c_str();
 
   num = lstrlenA( title ) + 1;
   len = MultiByteToWideChar(CP_ACP, 0, title, num, 0, 0);
@@ -259,7 +259,7 @@ void message( char *title, char *message )
   MultiByteToWideChar(CP_ACP, 0, title, num, buf, len);
   std::wstring s(buf);
   delete[] buf; 
-  LPCWSTR title_lpcwstr = s.c_str();
+  LPCSTR title_lpcwstr = (LPCSTR)s.c_str();
 
   MessageBox( NULL, message_lpcwstr, title_lpcwstr, MB_OK ); 
 }

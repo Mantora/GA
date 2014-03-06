@@ -1,20 +1,16 @@
 #ifdef _WIN32
-	#include "Socket_UDP_windows.h"
+	#include "Socket_TCP_windows.h"
 
-	Socket_UDP_windows::Socket_UDP_windows()
+	Socket_TCP_windows::Socket_TCP_windows()
 	{
 		clientAddrLen = sizeof(SOCKADDR_IN);
-		this->volumenTimer = 1000;
-		this->currentVolumenTimer = this->volumenTimer;
 	};
 
-	Socket_UDP_windows::~Socket_UDP_windows()
+	Socket_TCP_windows::~Socket_TCP_windows()
 	{};
 
-	void Socket_UDP_windows::ServerStarten( unsigned int port )
+	void Socket_TCP_windows::ServerStarten( unsigned int port )
 	{
-		this->resetTotalBytesSend();
-
 		isServer = true;
 		isClient = false;
 
@@ -26,6 +22,7 @@
 		startWinsock();
 		erstelleSocket();
 		bindeSocket();
+/*------------------------------------------------------------------------------------------------------------------------*/
 
 		int iOptVal = 0;
 		int iOptLen = sizeof (int);
@@ -48,14 +45,23 @@
 		{
 			cout << "Set SO_SNDTIMEO: " << iOptVal << endl;
 		}
-
+/*------------------------------------------------------------------------------------------------------------------------*/
 		cout << "Server bereit." << endl << endl;
+
+		rc = listen( this->s, 10 );
+		if(rc == SOCKET_ERROR)
+		{
+			cout << "Fehler: listen(), fehler code: " << WSAGetLastError() << endl;
+			exit(-1);
+		}
+		else
+		{
+			cout << "Socket ist im listen Modus...." << endl;
+		}
 	};
 
-	void Socket_UDP_windows::ClientVerbinden( char* cp_IP_Host ,u_short us_Port_Host )
+	void Socket_TCP_windows::ClientVerbinden( char* cp_IP_Host ,u_short us_Port_Host )
 	{
-		this->resetTotalBytesSend();
-
 		isServer = false;
 		isClient = true;
 
@@ -73,7 +79,7 @@
 		cout << "Client bereit." << endl << endl;
 	};
 
-	void Socket_UDP_windows::startWinsock(void)
+	void Socket_TCP_windows::startWinsock(void)
 	{
 		//WSAStartup() ist notwendig um Sockets zu benutzen
 		WSADATA wsa;
@@ -90,10 +96,10 @@
 		}
 	};
 
-	void Socket_UDP_windows::erstelleSocket()
+	void Socket_TCP_windows::erstelleSocket()
 	{
 		//UDP Socket erstellen --> SOCK_DGRAM = UDP
-		s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+		s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if(s == INVALID_SOCKET)
 		{
 			cout << "Fehler: Der Socket konnte nicht erstellt werden, fehler code: " << WSAGetLastError() << endl;
@@ -104,17 +110,18 @@
 		}
 	}
 
-	void Socket_UDP_windows::bindeSocket()
+	void Socket_TCP_windows::bindeSocket()
 	{
+		memset(&addr, 0, sizeof(SOCKADDR_IN) );
+
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(PORT);
 		addr.sin_addr.s_addr = ADDR_ANY;
 
 		rc = bind(s, (SOCKADDR*)&addr, sizeof(SOCKADDR_IN));
-
 		if(rc == SOCKET_ERROR)
 		{
-			cout << "Fehler: bind, fehler code: " << WSAGetLastError() << endl;
+			cout << "Fehler: bind(), fehler code: " << WSAGetLastError() << endl;
 			exit(-1);
 		}
 		else
@@ -123,9 +130,26 @@
 		}
 	};
 
-	DatenPaket* Socket_UDP_windows::empfangen()
+	SOCKET Socket_TCP_windows::wait4Client()
 	{
-		rc = recvfrom(s, reinterpret_cast<char*>(buf), 1500, 0, (SOCKADDR*)&client, &clientAddrLen);
+		SOCKET connectedSocket = accept( this->s,(SOCKADDR*)&client, &clientAddrLen );
+		if(connectedSocket==INVALID_SOCKET)
+		{
+			cout << "Fehler: accept, fehler code: " << WSAGetLastError() << endl;
+			exit(-1);
+		}
+		else
+		{
+			cout << "Neue Verbindung wurde akzeptiert von " << (int)connectedSocket << endl;
+			return connectedSocket;
+		}
+
+	}
+/*
+	DatenPaket* Socket_TCP_windows::empfangen( SOCKET connectedSocket )
+	{
+		//rc = recvfrom(s, reinterpret_cast<char*>(buf), 1500, 0, (SOCKADDR*)&client, &clientAddrLen);
+		rc = recv( connectedSocket, reinterpret_cast<char*>(buf), 1400, 0 );
 
 		if(rc == SOCKET_ERROR)
 		{
@@ -136,91 +160,36 @@
 		else
 		{
 			//Offenen Stream vom Client schließen
-			buf[rc] = '\0';
-			if( DEBUG )
-			{
-				cout << "Empfange " << rc << " Bytes von " << inet_ntoa(client.sin_addr) << ":" << client.sin_port ;
+			//buf[rc] = '\0';
+			cout << "Empfange " << rc << " Bytes" << endl;// von " << inet_ntoa(client.sin_addr) << ":" << client.sin_port ;
 
-				//Hilfe: Ausgabe des gesamten strings in Byte und Char
-				//cout << "\tByteansicht: " ;
-				cout << " |" ;
-				for(int i = 0; i < rc; i++)
-					cout << (int)buf[i] << "|";
-				cout << endl;
-/*				cout << "\tCharansicht: \"" ;
-				for(int i = 0; i < rc; i++)
-					cout << buf[i] ;
-				cout << "\"" << endl;
-*/
-			}
 		}
 		//Im Datenpaket befindet sich der Sender und die Daten:
 		return new DatenPaket(client, buf, rc);
 	};
-
-	void Socket_UDP_windows::senden(DatenPaket* dp_senden)
+*/
+	void Socket_TCP_windows::senden( SOCKET connectedSocket, DatenPaket* dp_senden )
 	{
 		char* carr_zusenden = (char*)dp_senden->buffer;
-
-		if( this->isClient )
-		{
-			dp_senden->Adresse = this->addr_server;
-		}
 
 		//Testausgabe der Länge des zu sendenden Stream (Da Koordinaten '\0' enthalten kann)
 //		cout << "DEBUG: dp_senden->uiAnzahlByte:" << dp_senden->uiAnzahlByte << endl;
 
-		rc = sendto(s, carr_zusenden, dp_senden->uiAnzahlByte, 0, (sockaddr*)&(dp_senden->Adresse), sizeof(sockaddr_in) ); 
-		//rc = send( s, carr_zusenden, dp_senden->uiAnzahlByte, 0);
+//		rc = sendto(s, carr_zusenden, dp_senden->uiAnzahlByte, 0, (SOCKADDR*)&(dp_senden->Adresse), sizeof(SOCKADDR_IN) );
+		rc = send( connectedSocket, carr_zusenden, dp_senden->uiAnzahlByte, 0);
 
 		if(rc == SOCKET_ERROR)
 		{
 			//Irgend ein Fehler ist beim Senden aufgetreten, aus sicherheitsgründen wird die Verbindunge beendet:
-			cout << "Fehler sendto() an " << inet_ntoa(dp_senden->Adresse.sin_addr) << ":" << dp_senden->Adresse.sin_port << " code: " << WSAGetLastError() << endl;
+			cout << "Fehler sendto() " << endl;//an " << inet_ntoa(dp_senden.sin_addr) << ":" << client.sin_port << " code: " << WSAGetLastError() << endl;
 			system("pause");
 			exit(1);
 		}
 		else
 		{
-			this->totalBytesSend += rc;
-			if( DEBUG )
-			{
-				cout << inet_ntoa(dp_senden->Adresse.sin_addr) << ": " << dp_senden->Adresse.sin_port <<" gesendet: |" ;
-				//ByteAnsicht
-
-				for(int i = 0; i < rc; i++)
-					cout << (int)carr_zusenden[i] << "|";
-				cout << endl;
-			}
-/*			cout << "\tCharansicht: \"" ;
-			for(int i = 0; i < rc; i++)
-				cout << carr_zusenden[i] ;
-			cout << "\"" << endl;
-*/
 			//Speicherplatz des gesendeten carr_zusenden freigeben
 			free(carr_zusenden);
 		}
-	};
-
-	int Socket_UDP_windows::getTotalBytesSend()
-	{
-		return this->totalBytesSend;
-	};
-
-	void Socket_UDP_windows::resetTotalBytesSend()
-	{
-		this->totalBytesSend = 0;
-	};
-
-	void Socket_UDP_windows::updateVolumeTimer( int updateRateinMSec )
-	{
-		this->currentVolumenTimer -= updateRateinMSec;
-
-		if( this->currentVolumenTimer <= 0 )
-		{
-			cout << "Bytes send: " << this->getTotalBytesSend() << endl;
-			this->resetTotalBytesSend();
-			this->currentVolumenTimer = this->volumenTimer;
-		}
+//		Sleep(5);
 	};
 #endif

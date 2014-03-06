@@ -29,11 +29,13 @@ class GameState
 	
 	public function new() 
 	{
+		enemies = new Array<Enemy>();
 		//... get map infos
 	}
 	
 	public function RecieveInput(vec:Vector2)
 	{
+		if (Player1 == null) Player1 = new Player(vec, vec);
 		if (Player1.Update(vec))
 		{
 			for (i in 0... enemies.length)

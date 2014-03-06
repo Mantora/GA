@@ -1,5 +1,6 @@
 package ;
 
+import com.gamesAcademy.input.PlayerInput;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
@@ -27,6 +28,7 @@ class Main extends Sprite
 		inited = true;
 
 		// (your code here)
+		var playerInput = new PlayerInput(stage);
 		
 		// Stage:
 		// stage.stageWidth x stage.stageHeight @ stage.dpiScale

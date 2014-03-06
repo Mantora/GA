@@ -16,41 +16,8 @@ int i_spaceCount = 0;
 int i_playerID = 0;
 //END GLOBALE VARIABLEN
 
-void handler(int signum)
-{
-	cout << "GUI: STRG-C -> shutdown" << endl;
-	switch(signum)
-	{
-		case 2:
-		case 6:
-		case 15:
-		case 21:
-		case 22:
-		default: 
-		{
-			DatenPaket* dp_terminal_close = new DatenPaket( PT_TERMINAL_CLOSE );
-			dp_terminal_close->spaceCount = i_spaceCount;
-			dp_terminal_close->playerID = i_playerID;
-			s->senden( dp_terminal_close );
-		}
-		break;
-	}
-	system("pause");
-	exit(1); // sonst würde er unbeeindruckt in das laufende Programm zurückspringen
-}
-
 int main()
 {
-	/*Abfangen der Signale bei STRG+C*/
-	#ifdef _WIN32 //Windows Header
-		signal(SIGBREAK, handler);
-		signal(SIGABRT_COMPAT, handler);
-	#endif
-	signal(SIGINT, handler);
-	signal(SIGABRT, handler);
-	signal(SIGTERM, handler);
-
-
 	cout << "Client startet ... " << endl;
 
 	s = new Socket_UDP_windows();
@@ -93,6 +60,8 @@ int main()
 
 		//Datenpaket senden
 		s->senden( dp_toSend );
+
+		exit(1);
 	}
 
 

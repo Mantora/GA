@@ -2,6 +2,7 @@ package com.gamesAcademy.entities;
 
 import com.gamesAcademy.entities.*;
 import com.gamesAcademy.helper.*;
+import com.gamesAcademy.gameState.*;
 
 /**
  * ...
@@ -40,6 +41,7 @@ class Player extends Actor
 		if (health <= 0)
 		{
 			//call gamestate
+			GameState.getGameState().PlayerDied();
 		}
 	}
 	

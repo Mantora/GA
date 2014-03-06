@@ -170,6 +170,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Socket_TCP_windows.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Socket_UDP_windows.cpp"
 				>
 			</File>
@@ -188,7 +192,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Socket_TCP_windows.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Socket_UDP_windows.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ThreadData.h"
 				>
 			</File>
 		</Filter>
