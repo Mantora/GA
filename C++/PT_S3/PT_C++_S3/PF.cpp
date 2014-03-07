@@ -20,13 +20,13 @@ PF::~PF( void )
 void PF::startSearch( Station* station_start, Station* station_end )
 {
 	this->station_start = station_start;
-	this->station_start->str_routeToThisStation = "Start at "+station_start->getFormatedStation()+"\n";
+//	this->station_start->str_routeToThisStation = "Start at "+station_start->getFormatedStation()+"\n";
 	this->station_end = station_end;
 
 	this->startStation_GUID = station_start->getGUID();
 
 	//init the return string
-	this->str_bestConnection = "From " + station_start->getFormatedStation() + " to " + station_end->getFormatedStation() + "\n";
+//	this->str_bestConnection = "From " + station_start->getFormatedStation() + " to " + station_end->getFormatedStation() + "\n";
 
 	//station_start is first point to check
 	this->analyseStation( station_start );
@@ -80,10 +80,12 @@ void PF::analyseStation( Station* stationToAnalyse )
 //function to check, if stationToCheck is our targetStation
 bool PF::isTargetStation( Station* stationToCheck )
 {
-	stationToCheck->setVisited( true );
+	if(DEBUG) cout << "PF::isTargetStation( " << stationToCheck->getFormatedStation() << " )" << endl;
 
+	stationToCheck->setVisited( true );
 	if( stationToCheck->getStationName().compare( this->station_end->getStationName() ) == 0 )
 	{
+		if(DEBUG) cout << "PF::isTargetStation : FOUND !" << endl;
 		return true;
 	}
 
@@ -118,7 +120,8 @@ void PF::addAllStationsFrom( Station* baseStation )
 	for( it = baseStation->possible_next_stations.begin(); it != baseStation->possible_next_stations.end(); it++ )
 	{
 		//only add unvisted Stations
-		if( !(*it)->isVisited() )
+		if( !(*it)->isVisited() 
+		&& !this->isStationInVector( (*it) ) )
 			this->stationsToCheck.push_back( (*it) );
 	}
 
@@ -128,7 +131,8 @@ void PF::addAllStationsFrom( Station* baseStation )
 		std::vector<Station*>::iterator it2;
 		for( it2 = (*it)->possible_next_stations.begin(); it2 != (*it)->possible_next_stations.end(); it2++ )
 		{
-			if( !(*it2)->isVisited() )
+			if( !(*it2)->isVisited() 
+			&& !this->isStationInVector( (*it2) ) )
 				this->stationsToCheck.push_back( (*it2) );
 		}
 	}
@@ -168,4 +172,16 @@ void PF::updateCurrentStationsToCheck( void )
 	}
 
 	if( DEBUG ) cout << "DEBUG" << endl;
+};
+
+bool PF::isStationInVector( Station* s )
+{
+	std::vector<Station*>::iterator it;
+	for( it = this->stationsToCheck.begin(); it != this->stationsToCheck.end(); it++ )
+	{
+		//only add unvisted Stations
+		if( (*it)->GUID == s->GUID )
+			return true;
+	}
+	return false;
 };

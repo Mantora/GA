@@ -140,8 +140,8 @@ int main ()
 //		endStation_name = "S2_0";
 
 		//ORGINAL STATIONS
-		startStation_name = "S+U Friedrichstr.";
-		endStation_name = "S Oranienburg";
+		startStation_name = "S+U Jannowitzbruecke";
+		endStation_name = "S+U Tegel";
 
 		//search 4 a specific station:
 		//START Station

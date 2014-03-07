@@ -9,7 +9,7 @@ class Station;
 class PF
 {
 	public:
-		PF();;
+		PF();
 		~PF( void );
 
 		void startSearch( Station* station_start, Station* station_end );
@@ -33,4 +33,5 @@ class PF
 		void addAllStationsFrom( Station* baseStation );
 		bool isTargetStationInVector( void );
 		void updateCurrentStationsToCheck( void );
+		bool isStationInVector( Station* s );
 };
