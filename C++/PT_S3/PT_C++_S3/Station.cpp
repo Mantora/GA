@@ -25,6 +25,10 @@ void Station::setOperationTime( std::string start, std::string end )
 {
 	this->operation_time_start = CustomTime(start);
 	this->operation_time_end = CustomTime(end);
+
+	//24h fix if start > end
+	if( this->operation_time_end.currentTime < this->operation_time_start.currentTime )
+		this->operation_time_end.add( 24*60 );
 };
 
 int Station::getGUID( void )

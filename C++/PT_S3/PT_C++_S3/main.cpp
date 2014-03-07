@@ -164,7 +164,7 @@ int main ()
 		//ORGINAL STATIONS
 		startStation_name = "S+U Jannowitzbruecke";
 		endStation_name = "S+U Tegel";
-		ct_travelStart = CustomTime( "22:00" );
+		ct_travelStart = CustomTime( "01:00" );
 
 
 		//search 4 a specific station:
@@ -192,13 +192,13 @@ int main ()
 			}
 		}
 
-		if( pf->endStation_GUIDs.size() == 0 )
+		if( startStation_ptr == 0 )
 		{
 			cout << "StartStation not found !" << endl;
 			cout << "Please reinput the Name." << endl;
 		}
 
-		if( endStation_ID == 0 )
+		if( pf->endStation_GUIDs.size() == 0 )
 		{
 			cout << "EndStation not found !" << endl;
 			cout << "Please reinput the Name." << endl;
@@ -210,7 +210,7 @@ int main ()
 
 	// START SEARCH 4 BEST CONNECTION
 	Timer t;
-		pf->startSearch( startStation_ptr, endStation_ptr );
+		pf->startSearch( startStation_ptr, endStation_ptr, ct_travelStart );
 	int pf_ms = t.getMSecSinceStart();
 	cout << endl << "PERFORMANCE: PF needed " << pf_ms << " ms for " << pf->i_CalculationSteps << " calculationSteps to find target." << endl;
 

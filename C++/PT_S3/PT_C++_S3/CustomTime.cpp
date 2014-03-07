@@ -12,6 +12,11 @@ CustomTime::CustomTime( CustomTime& other )
 	this->currentTime = other.currentTime;
 }
 
+CustomTime::CustomTime( int minutes )
+{
+	this->currentTime = minutes;
+};
+
 CustomTime::CustomTime( std::string customTimeAsString )
 {
 	std::string str_h = customTimeAsString.substr( 0, 2 );
@@ -55,10 +60,17 @@ std::string CustomTime::toString( void )
 {
 	std::stringstream ss;
 
-	int h = currentTime/60;
-	int min = (currentTime - (60*h) );
+	int tmp = currentTime;
 
-	ss << h << ":" << min << "h";
+	int h = tmp / 60;
+	int min = (tmp - (60*h) );
+
+	//some formating
+	if( h < 10 )ss << "0" << h;
+	else		ss << h;
+
+	if( min < 10 )  ss << ":0" << min << "h";
+	else			ss << ":" << min << "h";
 
 	return ss.str();
 };

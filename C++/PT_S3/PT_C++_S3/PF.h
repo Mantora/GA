@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
+#include "Config.h"
 
-#define DEBUG false
-#define DEBUG_TIME false
+#include "CustomTime.h"
 
 class Station;
 
@@ -13,11 +13,12 @@ class PF
 		PF();
 		~PF( void );
 
-		void startSearch( Station* station_start, Station* station_end );
+		void startSearch( Station* station_start, Station* station_end, CustomTime& ct_startTravel );
 		std::string printBestConnection( void );
 //	private:
 		Station* station_start;
 		Station* station_end;
+		CustomTime ct_startTravel;
 
 		int startStation_GUID;
 		std::vector<int> endStation_GUIDs;
@@ -39,4 +40,5 @@ class PF
 		bool isTargetStationInVector( void );
 		void updateCurrentStationsToCheck( void );
 		bool isStationInVector( Station* s );
+		void checkOperationTime( Station* currentStation, Station* prefStation ); //<- current Time comes from this
 };

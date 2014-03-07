@@ -6,6 +6,7 @@ class CustomTime
 {
 	public:
 		CustomTime( void );
+		CustomTime( int minutes );
 		CustomTime( CustomTime& other );
 		CustomTime( std::string customTimeAsString );
 		CustomTime( std::string str_h, std::string str_min );
