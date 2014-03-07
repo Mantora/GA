@@ -12,6 +12,8 @@ Station::Station( int journey_time, std::string station_name, std::string line_n
 
 	this->GUID = Utility::getNewGUID();
 	this->typ = STATION_NORMAL;
+
+	this->route_time = CustomTime();
 }
 
 Station::~Station( void )

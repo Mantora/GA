@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "CustomTime.h"
+
 enum STATION_TYP
 {
 	STATION_NORMAL, // same line
@@ -38,6 +40,7 @@ class Station
 		int GUID; // GlobalUnicIDentification 
 
 		int journey_time;
+		CustomTime route_time;
 		std::string station_name;
 		std::string line_name;
 

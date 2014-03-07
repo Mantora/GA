@@ -24,16 +24,25 @@ PF::~PF( void )
 void PF::startSearch( Station* station_start, Station* station_end )
 {
 	this->station_start = station_start;
-	this->station_start->str_routeToThisStation = "Start at "+station_start->getFormatedStation()+"\n";
+	this->station_start->str_routeToThisStation = "You are at " + station_start->getFormatedStation() + "\n";
 	this->station_end = station_end;
 
 	this->startStation_GUID = station_start->getGUID();
 
 	//init the return string
-	this->str_bestConnection = "From " + station_start->getFormatedStation() + " to " + station_end->getFormatedStation() + " :\n";
+	this->str_bestConnection = "Route from \"" + station_start->getStationName() + "\" to \"" + station_end->getStationName() + "\" :\n";
 
 	//station_start is first point to check
-	this->analyseStation( station_start );
+	//ANALOG "this->analyseStation":
+	if( this->isTargetStation( station_start ) )
+	{
+		this->b_endStationFound = true;
+		return;
+	}
+	else
+	{
+		this->init_addAllStationsFrom( station_start );
+	}
 
 	//BEGINN SEARCH
 	if( DEBUG ) cout << endl << "Beginn at " << station_start->getFormatedStation() << endl;
@@ -82,12 +91,18 @@ bool PF::isTargetStation( Station* stationToCheck )
 	if(DEBUG) cout << "PF::isTargetStation( " << stationToCheck->getFormatedStation() << " )" << endl;
 
 	stationToCheck->setVisited( true );
-	if( stationToCheck->getStationName().compare( this->station_end->getStationName() ) == 0 )
+	if( stationToCheck->GUID == this->station_end->GUID )
 	{
 		if(DEBUG) cout << "PF::isTargetStation : FOUND !" << endl;
 		return true;
 	}
 
+/*	if( stationToCheck->getStationName().compare( this->station_end->getStationName() ) == 0 )
+	{
+		if(DEBUG) cout << "PF::isTargetStation : FOUND !" << endl;
+		return true;
+	}
+*/
 /*	if( this->station_end->GUID == stationToCheck->GUID )
 		return true;
 	else
@@ -111,6 +126,42 @@ bool PF::isTargetStation( Station* stationToCheck )
 	return false;
 };
 
+void PF::init_addAllStationsFrom( Station* startingStation )
+{
+	//STATION_NORMAL
+	std::vector<Station*>::iterator it;
+	for( it = startingStation->possible_next_stations.begin(); it != startingStation->possible_next_stations.end(); it++ )
+	{
+		//only add unvisted Stations
+		if( !(*it)->isVisited() 
+		&& !this->isStationInVector( (*it) ) )
+		{
+			this->stationsToCheck.push_back( (*it) );
+			(*it)->str_routeToThisStation = startingStation->str_routeToThisStation + "take " + (*it)->line_name + " towards " + (*it)->getStationName() + "\n";
+			(*it)->route_time.add(startingStation->journey_time);
+
+			if( DEBUG_TIME ) cout << startingStation->getFormatedStation() << " DEBUG_TIME:" << startingStation->journey_time << endl;
+		}
+	}
+
+	//CROSS_STATION
+	for( it = startingStation->connections_to_other_line.begin(); it != startingStation->connections_to_other_line.end(); it++ )
+	{
+		std::vector<Station*>::iterator it2;
+		for( it2 = (*it)->possible_next_stations.begin(); it2 != (*it)->possible_next_stations.end(); it2++ )
+		{
+			if( !(*it2)->isVisited() 
+			&& !this->isStationInVector( (*it2) ) )
+			{
+				this->stationsToCheck.push_back( (*it2) );
+				(*it2)->str_routeToThisStation = startingStation->str_routeToThisStation + "take " + (*it2)->line_name + " towards " + (*it2)->getStationName() + "\n";
+				(*it2)->route_time.add(startingStation->journey_time);
+
+				if( DEBUG_TIME ) cout << startingStation->getFormatedStation() << " DEBUG_TIME:" << startingStation->journey_time << endl;
+			}
+		}
+	}
+};
 
 void PF::addAllStationsFrom( Station* baseStation )
 {
@@ -123,7 +174,10 @@ void PF::addAllStationsFrom( Station* baseStation )
 		&& !this->isStationInVector( (*it) ) )
 		{
 			this->stationsToCheck.push_back( (*it) );
-			(*it)->str_routeToThisStation = baseStation->str_routeToThisStation + "over " + (*it)->getFormatedStation() + "\n";
+			(*it)->str_routeToThisStation = baseStation->str_routeToThisStation + " to " + (*it)->getFormatedStation() + "\n";
+			(*it)->route_time.add( baseStation->route_time.currentTime + baseStation->journey_time );
+
+			if( DEBUG_TIME ) cout << baseStation->getFormatedStation() << " DEBUG_TIME:" << baseStation->journey_time << endl;
 		}
 	}
 
@@ -137,7 +191,10 @@ void PF::addAllStationsFrom( Station* baseStation )
 			&& !this->isStationInVector( (*it2) ) )
 			{
 				this->stationsToCheck.push_back( (*it2) );
-				(*it2)->str_routeToThisStation = baseStation->str_routeToThisStation + "take " + (*it2)->getFormatedStation() + "\n";
+				(*it2)->str_routeToThisStation = baseStation->str_routeToThisStation + "switch to " + (*it2)->line_name + " towards " + (*it2)->getStationName() + "\n";
+				(*it2)->route_time.add( baseStation->route_time.currentTime + baseStation->journey_time );
+
+				if( DEBUG_TIME ) cout << baseStation->getFormatedStation() << " DEBUG_TIME:" << baseStation->journey_time << endl;
 			}
 		}
 	}
@@ -150,7 +207,7 @@ bool PF::isTargetStationInVector( void )
 	{
 		if( this->isTargetStation( (*it) ) )
 		{
-			this->str_bestConnection = (*it)->str_routeToThisStation;
+			this->str_bestConnection += (*it)->str_routeToThisStation + "Time to need for this route : " + (*it)->route_time.toString();
 			return true;
 		}
 	}

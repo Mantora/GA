@@ -3,6 +3,7 @@
 #include <vector>
 
 #define DEBUG false
+#define DEBUG_TIME false
 
 class Station;
 
@@ -33,6 +34,7 @@ class PF
 		//funktions 4 pathfinding
 		void analyseStation( Station* stationToAnalyse );
 		bool isTargetStation( Station* stationToCheck );
+		void init_addAllStationsFrom( Station* startingStation ); //extra init function 
 		void addAllStationsFrom( Station* baseStation );
 		bool isTargetStationInVector( void );
 		void updateCurrentStationsToCheck( void );
