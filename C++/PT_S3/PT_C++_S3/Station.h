@@ -16,6 +16,7 @@ class Station
 	public:
 		Station( int journey_time, std::string station_name, std::string line_name );
 		~Station( void );
+		void setOperationTime( std::string start, std::string end );
 
 		std::vector<Station*> possible_next_stations;
 		std::vector<Station*> connections_to_other_line;
@@ -40,10 +41,13 @@ class Station
 		int GUID; // GlobalUnicIDentification 
 
 		int journey_time;
+
 		CustomTime route_time;
+
 		std::string station_name;
 		std::string line_name;
-
+		CustomTime operation_time_start;
+		CustomTime operation_time_end;
 
 		bool visited;
 };

@@ -5,6 +5,7 @@
 
 #include "PF.h" // <- PathFinding class 4 Stations
 #include "Timer.h"
+#include "CustomTime.h"
 
 
 int main ()
@@ -46,7 +47,24 @@ int main ()
 
 //			cout << "lineName: " << readed_element.value << endl;
 			readed_element = xml_reader.getNext();
+			
+/**************************** START reading operation_time ****************************/
+			while( readed_element.typ != XML_ELEMENT_TYP_ATTRIBUT
+				|| readed_element.name.compare( "start" ) != 0 )
+			{
+				readed_element = xml_reader.getNext();
+			}
+			string str_operationTime_start( readed_element.value );
 
+			while( readed_element.typ != XML_ELEMENT_TYP_ATTRIBUT
+				|| readed_element.name.compare( "end" ) != 0 )
+			{
+				readed_element = xml_reader.getNext();
+			}
+			string str_operationTime_end( readed_element.value );
+/**************************** END reading operation_time ****************************/
+
+			//reading each station
 			while( readed_element.typ != XML_ELEMENT_TYP_END_ELEMENT 
 				|| readed_element.name.compare( "stations" ) != 0 )
 			{
@@ -77,6 +95,7 @@ int main ()
 					{
 						//store the station as new Station instance
 						current_station = new Station( journey_time, readed_element.name, lineName );
+						current_station->setOperationTime( str_operationTime_start, str_operationTime_end );
 					}
 
 
@@ -132,6 +151,9 @@ int main ()
 	int endStation_ID = 0;
 	Station* endStation_ptr = 0;
 
+	CustomTime ct_travelStart;
+
+
 	while( startStation_ID == 0 && endStation_ID == 0 )
 	{
 		cout << "TO IMPLEMENT: change startStation_name and endStation_name to be user input" << endl;
@@ -142,6 +164,8 @@ int main ()
 		//ORGINAL STATIONS
 		startStation_name = "S+U Jannowitzbruecke";
 		endStation_name = "S+U Tegel";
+		ct_travelStart = CustomTime( "22:00" );
+
 
 		//search 4 a specific station:
 		//START Station

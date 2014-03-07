@@ -21,6 +21,12 @@ Station::~Station( void )
 
 }
 
+void Station::setOperationTime( std::string start, std::string end )
+{
+	this->operation_time_start = CustomTime(start);
+	this->operation_time_end = CustomTime(end);
+};
+
 int Station::getGUID( void )
 {
 	return this->GUID;

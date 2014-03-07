@@ -1,11 +1,47 @@
 #include "CustomTime.h"
 
-CustomTime::CustomTime(void)
+#include <iostream>
+
+CustomTime::CustomTime( void )
 {
 	this->currentTime = 0;
 }
 
-CustomTime::~CustomTime(void)
+CustomTime::CustomTime( CustomTime& other )
+{
+	this->currentTime = other.currentTime;
+}
+
+CustomTime::CustomTime( std::string customTimeAsString )
+{
+	std::string str_h = customTimeAsString.substr( 0, 2 );
+	std::string str_min = customTimeAsString.substr( 3, 5 );
+
+	int h = atoi(str_h.c_str());
+	int min = atoi(str_min.c_str());
+
+	if( h > 24 || h < 0 ) std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( std::string customTimeAsString:" << customTimeAsString << " )" << std::endl;
+	if( min > 59 || min < 0 ) std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( std::string customTimeAsString:" << customTimeAsString << " )" << std::endl;
+
+	this->currentTime = ( 60 * h );
+	this->currentTime += min;
+};
+
+CustomTime::CustomTime( std::string str_h, std::string str_min )
+{
+	int h = atoi(str_h.c_str());
+	int min = atoi(str_min.c_str());
+	std::cout << "str_h:" << h << std::endl;
+	std::cout << "str_min:" << min << std::endl;
+
+	if( h > 24 || h < 0 ) std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( str_h:" << h << ", str_min:" << min << " )" << std::endl;
+	if( min > 59 || min < 0 ) std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( str_h:" << h << ", str_min:" << min << " )" << std::endl;
+
+	this->currentTime = ( 60 * h );
+	this->currentTime += min;
+};
+
+CustomTime::~CustomTime( void )
 {
 
 }
@@ -25,4 +61,14 @@ std::string CustomTime::toString( void )
 	ss << h << ":" << min << "h";
 
 	return ss.str();
+};
+
+int CustomTime::combare( CustomTime& other )
+{
+	if( this->currentTime > other.currentTime )
+		return 1;	//1 if this is greater
+	else if( this->currentTime < other.currentTime )
+		return -1;	//-1 if other is greater
+	else// if( this->currentTime == other.currentTime )
+		return 0;	//0 on equal
 };
