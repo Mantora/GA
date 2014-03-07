@@ -123,10 +123,6 @@ int main ()
 		}
 	}
 
-
-	//Debug the stations on PF:
-	pf->setStations( stations );
-
 	/* BEGINN 4 INPUT: START_STATION END_STATION TIME_ARRIVE*/
 	std::string startStation_name;
 	int startStation_ID = 0;
@@ -144,8 +140,8 @@ int main ()
 //		endStation_name = "S2_0";
 
 		//ORGINAL STATIONS
-		startStation_name = "S+U Jannowitzbruecke";
-		endStation_name = "S Nordbahnhof";
+		startStation_name = "S+U Friedrichstr.";
+		endStation_name = "S Oranienburg";
 
 		//search 4 a specific station:
 		//START Station
@@ -165,13 +161,14 @@ int main ()
 			if( (*it)->getStationName().compare( endStation_name ) == 0 )
 			{
 				if( DEBUG ) cout << "found " << (*it)->getFormatedStation() << endl;
-				endStation_ID = (*it)->getGUID();
+				int possibleEndGUID = (*it)->getGUID();
+				pf->endStation_GUIDs.push_back( possibleEndGUID );
+				
 				endStation_ptr = (*it);
-				break;
 			}
 		}
 
-		if( startStation_ID == 0 )
+		if( pf->endStation_GUIDs.size() == 0 )
 		{
 			cout << "StartStation not found !" << endl;
 			cout << "Please reinput the Name." << endl;
