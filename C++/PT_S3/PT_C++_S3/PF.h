@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#define DEBUG true
+#define DEBUG false
 
 class Station;
 
@@ -26,6 +26,9 @@ class PF
 		int index_stationsToCheck;
 		std::vector<Station*> stationsToCheck;
 		std::string str_bestConnection;
+
+		//DEBUG variables
+		int i_CalculationSteps;
 
 		//funktions 4 pathfinding
 		void analyseStation( Station* stationToAnalyse );

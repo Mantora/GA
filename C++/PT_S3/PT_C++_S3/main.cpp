@@ -140,8 +140,8 @@ int main ()
 //		endStation_name = "S2_0";
 
 		//ORGINAL STATIONS
-		startStation_name = "S+U Jannowitzbruecke";
-		endStation_name = "S+U Tegel";
+		startStation_name = "S+U Gesundbrunnen";
+		endStation_name = "S+U Spandau";
 
 		//search 4 a specific station:
 		//START Station
@@ -188,7 +188,7 @@ int main ()
 	Timer t;
 		pf->startSearch( startStation_ptr, endStation_ptr );
 	int pf_ms = t.getMSecSinceStart();
-	cout << "PF needed " << pf_ms << " ms" << endl;
+	cout << endl << "PERFORMANCE: PF needed " << pf_ms << " ms for " << pf->i_CalculationSteps << " calculationSteps to find target." << endl;
 
 	cout << endl << pf->printBestConnection() << endl << endl;
 
