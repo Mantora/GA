@@ -18,7 +18,28 @@ Station::Station( int journey_time, std::string station_name, std::string line_n
 
 Station::~Station( void )
 {
+/*	std::vector<Station*>::iterator it;
+	for( it = this->possible_next_stations.begin(); it != this->possible_next_stations.end(); it )
+	{
+		Station* tmp = (*it);
 
+		it = this->possible_next_stations.erase( it );
+
+		delete tmp;
+	}
+
+	for( it = this->connections_to_other_line.begin(); it != this->connections_to_other_line.end(); it )
+	{
+		Station* tmp = (*it);
+
+		it = this->connections_to_other_line.erase( it );
+
+		delete tmp;
+	}
+*/
+
+//	this->possible_next_stations.clear();
+//	this->connections_to_other_line.clear();
 }
 
 void Station::setOperationTime( std::string start, std::string end )

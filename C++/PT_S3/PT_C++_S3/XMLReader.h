@@ -1,5 +1,12 @@
 #pragma once
-
+/***************************************************************************
+This class represent very simple XMLReader
+usage:
+1) filename on constructor
+2) XMLReader::getNext( void ); returns an XML_element you can check 4 
+XML_ELEMENT_TYP and to get "name" of the typ or "value" 4 value of 
+the XML_element and do whatever you want
+***************************************************************************/
 #include <iostream>
 #include <cstdlib>
 #include <string>

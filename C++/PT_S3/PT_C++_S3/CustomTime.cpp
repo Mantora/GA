@@ -16,22 +16,40 @@ CustomTime::CustomTime( int minutes )
 {
 	this->currentTime = minutes;
 };
-
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CustomTime::CustomTime( std::string customTimeAsString )
 {
+	int i_str_length = customTimeAsString.length();
+	if( i_str_length != 5 )
+	{
+		std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( std::string customTimeAsString:" << customTimeAsString << " )" << std::endl;
+		this->currentTime = 0;
+		return;
+	}
+
 	std::string str_h = customTimeAsString.substr( 0, 2 );
 	std::string str_min = customTimeAsString.substr( 3, 5 );
 
 	int h = atoi(str_h.c_str());
 	int min = atoi(str_min.c_str());
 
-	if( h > 24 || h < 0 ) std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( std::string customTimeAsString:" << customTimeAsString << " )" << std::endl;
-	if( min > 59 || min < 0 ) std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( std::string customTimeAsString:" << customTimeAsString << " )" << std::endl;
-
 	this->currentTime = ( 60 * h );
 	this->currentTime += min;
-};
 
+	if( h > 24 || h < 0 )
+	{
+		std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( std::string customTimeAsString:" << customTimeAsString << " )" << std::endl;
+		this->currentTime = 0;
+	}
+
+	if( min > 59 || min < 0 ) 
+	{
+		std::cout << "TO IMPLEMENT: exception handling on  CustomTime::CustomTime( std::string customTimeAsString:" << customTimeAsString << " )" << std::endl;
+		this->currentTime = 0;
+	}
+
+};
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CustomTime::CustomTime( std::string str_h, std::string str_min )
 {
 	int h = atoi(str_h.c_str());
@@ -50,13 +68,15 @@ CustomTime::~CustomTime( void )
 {
 
 }
-
-void CustomTime::add( int minutesToAdd )
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void 
+CustomTime::add( int minutesToAdd )
 {
 	this->currentTime += minutesToAdd;
 };
-
-std::string CustomTime::toString( void )
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+std::string 
+CustomTime::toString( void )
 {
 	std::stringstream ss;
 
@@ -74,8 +94,9 @@ std::string CustomTime::toString( void )
 
 	return ss.str();
 };
-
-int CustomTime::combare( CustomTime& other )
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+int 
+CustomTime::combare( CustomTime& other )
 {
 	if( this->currentTime > other.currentTime )
 		return 1;	//1 if this is greater

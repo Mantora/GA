@@ -1,5 +1,15 @@
 #pragma once
 
+/***************************************************************************
+This class represent a Station and hold spezific information
+such as the LINE_NAME this station belongs
+
+All Stations are "double linked lists" and know there
+normalTrainConnections (this->possible_next_stations)
+and there connectionsToOtherLines (this->connections_to_other_line)
+to use "raindrop" technique
+***************************************************************************/
+
 #include <string>
 #include <vector>
 
@@ -36,8 +46,8 @@ class Station
 
 		std::string str_routeToThisStation;
 
-//	private:
-		//Performance Boost: nicht string station_name immer wieder vergleich sondern nur zur Identifizierung und dann über GUID
+//	private://<- no time 4 get/set
+		//Performance Boost: nicht string station_name immer wieder vergleich sondern nur zur Identifizierung und dann über GUID (int schneller als std::string)
 		int GUID; // GlobalUnicIDentification 
 
 		int journey_time;

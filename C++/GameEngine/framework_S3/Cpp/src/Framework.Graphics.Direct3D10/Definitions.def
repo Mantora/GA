@@ -1,0 +1,4 @@
+LIBRARY "Framework.Graphics.Direct3D10.dll"
+EXPORTS
+  CreateGraphics
+

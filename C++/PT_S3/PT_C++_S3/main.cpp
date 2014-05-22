@@ -3,13 +3,20 @@
 #include "XMLReader.h"
 #include "Station.h"
 
-#include "PF.h" // <- PathFinding class 4 Stations
+#include "PF.h" // <- PathFinding class 4 StationPathFinding
 #include "Timer.h"
 #include "CustomTime.h"
 
+/************************************************************************************/
+/* TODO: rape math- and physik exam 4 no time: This Projekt is made within 24 hours */
+/************************************************************************************/
 
 int main ()
 {
+	//set a awesome  name
+	system( "title S3 programming challenge 07.03.2014 - 11:22 Uhr " );
+	cout << "Praxistest C++: Pathfindung Stations geladen aus xml Datei" << endl << endl;
+
 	std::vector<Station*> stations;
 	//prepare variables
 	PF* pf = new PF();
@@ -121,7 +128,7 @@ int main ()
 		}
 	}
 	/* END READING XML FILE */
-	if( DEBUG ) cout << stations.size() << " stations loaded." << endl;
+	if( DEBUG_STATIONS ) cout << stations.size() << " stations loaded." << endl;
 
 	//connect the stations, wich has connections to another LINE
 	std::vector<Station*>::iterator it = stations.begin();
@@ -156,54 +163,123 @@ int main ()
 
 	while( startStation_ID == 0 && endStation_ID == 0 )
 	{
-		cout << "TO IMPLEMENT: change startStation_name and endStation_name to be user input" << endl;
 		//DEBUG STATIONS:
 //		startStation_name = "S1_0";
 //		endStation_name = "S2_0";
 
 		//ORGINAL STATIONS
-		startStation_name = "S+U Jannowitzbruecke";
-		endStation_name = "S+U Tegel";
-		ct_travelStart = CustomTime( "01:00" );
+		#ifdef _DEBUG
+			//on VS set the variables in code 4 better working flow
 
+			startStation_name = "S+U Jannowitzbruecke";
+			endStation_name = "S+U Tegel";
+			ct_travelStart = CustomTime( "03:02" ); //<- must hh:mm for debug or unknown behaviour occur
+
+			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
+			{
+				if( (*it)->getStationName().compare( startStation_name ) == 0 )
+				{
+					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
+					startStation_ID = (*it)->getGUID();
+					startStation_ptr = (*it);
+					break;
+				}
+			}
+
+			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
+			{
+				if( (*it)->getStationName().compare( endStation_name ) == 0 )
+				{
+					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
+					int possibleEndGUID = (*it)->getGUID();
+					pf->endStation_GUIDs.push_back( possibleEndGUID );
+					
+					endStation_ptr = (*it);
+				}
+			}
+		#endif
 
 		//search 4 a specific station:
 		//START Station
-		for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
+		while( startStation_ptr == 0 )
 		{
-			if( (*it)->getStationName().compare( startStation_name ) == 0 )
+			if( startStation_ptr == 0 )
 			{
-				if( DEBUG ) cout << "found " << (*it)->getFormatedStation() << endl;
-				startStation_ID = (*it)->getGUID();
-				startStation_ptr = (*it);
-				break;
+				cout << "Input your starting Station: ";
+				char carr_startStationName[128] = {0};
+				cin.getline( carr_startStationName, 128);
+				startStation_name = std::string(carr_startStationName);
+			}
+
+			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
+			{
+				if( (*it)->getStationName().compare( startStation_name ) == 0 )
+				{
+					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
+					startStation_ID = (*it)->getGUID();
+					startStation_ptr = (*it);
+					break;
+				}
+			}
+
+			if( startStation_ptr == 0 )
+			{
+				cout << "StartStation not found !" << endl;
+				cout << "Please reinput the Name." << endl;
 			}
 		}
+
 		//END Station
-		for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
+		while( pf->endStation_GUIDs.size() == 0 )
 		{
-			if( (*it)->getStationName().compare( endStation_name ) == 0 )
+			if( pf->endStation_GUIDs.size() == 0 )
 			{
-				if( DEBUG ) cout << "found " << (*it)->getFormatedStation() << endl;
-				int possibleEndGUID = (*it)->getGUID();
-				pf->endStation_GUIDs.push_back( possibleEndGUID );
-				
-				endStation_ptr = (*it);
+				cout << "Input your end Station: ";
+				char carr_endStationName[128] = {0};
+				cin.getline( carr_endStationName, 128);		
+				endStation_name = std::string(carr_endStationName);
+			}
+
+			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
+			{
+				if( (*it)->getStationName().compare( endStation_name ) == 0 )
+				{
+					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
+					int possibleEndGUID = (*it)->getGUID();
+					pf->endStation_GUIDs.push_back( possibleEndGUID );
+					
+					endStation_ptr = (*it);
+				}
+			}	
+
+			if( pf->endStation_GUIDs.size() == 0 )
+			{
+				cout << "EndStation not found !" << endl;
+				cout << "Please reinput the Name." << endl;
 			}
 		}
 
-		if( startStation_ptr == 0 )
+		//STARTING TIME
+		while( ct_travelStart.currentTime == 0 )
 		{
-			cout << "StartStation not found !" << endl;
-			cout << "Please reinput the Name." << endl;
+			if( ct_travelStart.currentTime == 0 )
+			{
+				cout << "Input your Starting Time (hh:mm): ";
+				
+				std::string str_startingTime;
+				cin >> str_startingTime;
+
+				ct_travelStart = CustomTime( str_startingTime );
+			}
+
+			if( ct_travelStart.currentTime == 0 )
+			{
+				cout << "Time has wrong format, plz input something like \"08:05\" or \"15:25\"" << endl;
+			}
 		}
 
-		if( pf->endStation_GUIDs.size() == 0 )
-		{
-			cout << "EndStation not found !" << endl;
-			cout << "Please reinput the Name." << endl;
-		}
 	}
+
 
 //	cout << "endStation_ID:" << endStation_ID << endl;
 //	cout << "startStation_ID:" << startStation_ID << endl;
@@ -244,6 +320,17 @@ int main ()
 
 	cout << "stations.size():" << stations.size() << endl;
 */
+	
+	//cleanup:
+	for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it )
+	{
+		Station* tmp = (*it);
+
+		it = stations.erase( it );
+
+		delete tmp;
+	}
+
 	system( "pause" );
 	return 0;
 }

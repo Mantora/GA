@@ -1,0 +1,3 @@
+LIBRARY "Framework.Graphics.Viper.dll"
+EXPORTS
+  CreateGraphics

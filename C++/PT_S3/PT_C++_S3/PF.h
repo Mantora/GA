@@ -1,5 +1,11 @@
 #pragma once
 
+/***************************************************************************
+Main class 4 pathfindung (PF) for Stations
+
+feel free to do your worst
+***************************************************************************/
+
 #include <vector>
 #include "Config.h"
 
@@ -15,7 +21,7 @@ class PF
 
 		void startSearch( Station* station_start, Station* station_end, CustomTime& ct_startTravel );
 		std::string printBestConnection( void );
-//	private:
+//	private: //<- no time 4 get/set
 		Station* station_start;
 		Station* station_end;
 		CustomTime ct_startTravel;

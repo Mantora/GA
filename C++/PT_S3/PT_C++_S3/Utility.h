@@ -1,5 +1,10 @@
 #pragma once
 
+/***************************************************************************
+This class represent very simple utility class to generate and reset 
+GUIDs (Global Unic IDentifyer)
+***************************************************************************/
+
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>
 

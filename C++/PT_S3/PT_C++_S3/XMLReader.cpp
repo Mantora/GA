@@ -1,5 +1,7 @@
 #include "XMLReader.h"
 
+#include "Config.h"
+
 XMLReader::XMLReader( const char* filename )
 {
 	this->current_line = 0;
@@ -18,6 +20,8 @@ XMLReader::getNext( void )
 {
 	//erstes zurückgeben
 	XML_element tmp = this->xmlElements_in_readed_line[0];
+
+	if( DEBUG_XML ) cout << "DEBUG_XML: " << "tmp.typ: " << tmp.typ << " tmp.name:" << tmp.name << " tmp.value:" << tmp.value << endl;
 
 	//erstes aus der liste entfernen
 	std::vector<XML_element>::iterator it = this->xmlElements_in_readed_line.begin();

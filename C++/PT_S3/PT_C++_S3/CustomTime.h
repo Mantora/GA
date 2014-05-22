@@ -1,5 +1,14 @@
 #pragma once
 
+/***************************************************************************
+This class holds time related informations
+Internal working with "minutes"
+
+Some construktors 4 this specific projekt
+
+TODO: Exception handling 4 wrong construktor arguments
+***************************************************************************/
+
 #include <sstream>
 
 class CustomTime
@@ -17,7 +26,7 @@ class CustomTime
 
 		int combare( CustomTime& other );
 
-//	private:
-		int currentTime;
+//	private://<- no time 4 get/set
+		int currentTime; //<- minutes
 
 };

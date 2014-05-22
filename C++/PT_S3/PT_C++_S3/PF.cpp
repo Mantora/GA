@@ -18,7 +18,8 @@ PF::PF()
 
 PF::~PF( void )
 {
-
+	this->stationsToCheck.clear();
+	this->endStation_GUIDs.clear();
 }
 
 void PF::startSearch( Station* station_start, Station* station_end, CustomTime& ct_startTravel )
@@ -32,13 +33,15 @@ void PF::startSearch( Station* station_start, Station* station_end, CustomTime& 
 	this->ct_startTravel = ct_startTravel;
 
 	//init the return string
-	this->str_bestConnection = "Route from \"" + station_start->getStationName() + "\" to \"" + station_end->getStationName() + "\" :\n";
+	this->str_bestConnection = "Route from \"" + station_start->getStationName() + "\" to \"" + station_end->getStationName() + "\" at " + this->ct_startTravel.toString() + ":\n";
 
 	//station_start is first point to check
 	//ANALOG "this->analyseStation":
 	if( this->isTargetStation( station_start ) )
 	{
 		this->b_endStationFound = true;
+		this->str_bestConnection += "You are at " + station_start->getStationName() + " !\n";
+		this->str_bestConnection += "Nothing to do, end.";
 		return;
 	}
 	else
@@ -47,7 +50,7 @@ void PF::startSearch( Station* station_start, Station* station_end, CustomTime& 
 	}
 
 	//BEGINN SEARCH
-	if( DEBUG ) cout << endl << "Beginn at " << station_start->getFormatedStation() << endl;
+	if( DEBUG_STATIONS ) cout << endl << "Beginn at " << station_start->getFormatedStation() << endl;
 
 	while( !this->b_endStationFound )
 	{
@@ -90,12 +93,12 @@ void PF::analyseStation( Station* stationToAnalyse )
 //function to check, if stationToCheck is our targetStation
 bool PF::isTargetStation( Station* stationToCheck )
 {
-	if(DEBUG) cout << "PF::isTargetStation( " << stationToCheck->getFormatedStation() << " )" << endl;
+	if(DEBUG_STATIONS) cout << "PF::isTargetStation( " << stationToCheck->getFormatedStation() << " )" << endl;
 
 	stationToCheck->setVisited( true );
 	if( stationToCheck->GUID == this->station_end->GUID )
 	{
-		if(DEBUG) cout << "PF::isTargetStation : FOUND !" << endl;
+		if(DEBUG_STATIONS) cout << "PF::isTargetStation : FOUND !" << endl;
 		return true;
 	}
 
@@ -140,7 +143,7 @@ void PF::init_addAllStationsFrom( Station* startingStation )
 		{
 			this->stationsToCheck.push_back( (*it) );
 			(*it)->str_routeToThisStation = startingStation->str_routeToThisStation + "take " + (*it)->line_name + " towards " + (*it)->getStationName() + "\n";
-			(*it)->route_time.add(startingStation->journey_time);
+//			(*it)->route_time.add(startingStation->journey_time);
 
 			if( DEBUG_TIME ) cout << startingStation->getFormatedStation() << " DEBUG_TIME:" << startingStation->journey_time << endl;
 		}
@@ -157,7 +160,7 @@ void PF::init_addAllStationsFrom( Station* startingStation )
 			{
 				this->stationsToCheck.push_back( (*it2) );
 				(*it2)->str_routeToThisStation = startingStation->str_routeToThisStation + "take " + (*it2)->line_name + " towards " + (*it2)->getStationName() + "\n";
-				(*it2)->route_time.add(startingStation->journey_time);
+//				(*it2)->route_time.add(startingStation->journey_time);
 
 				if( DEBUG_TIME ) cout << startingStation->getFormatedStation() << " DEBUG_TIME:" << startingStation->journey_time << endl;
 			}
@@ -252,6 +255,7 @@ void PF::checkOperationTime( Station* currentStation, Station* prefStation )
 {
 	//theoretical realtime = startTravelTime + totalRouteTime + prefStationJourneyTime
 	CustomTime ct_real( this->ct_startTravel.currentTime + prefStation->route_time.currentTime + prefStation->journey_time );
+	if( DEBUG_TIME ) cout << "DEBUG_TIME: From " << prefStation->getFormatedStation() << " to " << currentStation->getFormatedStation() << endl;
 	if( DEBUG_TIME ) cout << "ct_real.toString():" << ct_real.toString() << endl;
 	if( DEBUG_TIME ) cout << "currentStation->operation_time_start.toString():" << currentStation->operation_time_start.toString() << endl;
 	if( DEBUG_TIME ) cout << "currentStation->operation_time_end.toString():" << currentStation->operation_time_end.toString() << endl;
@@ -262,14 +266,12 @@ void PF::checkOperationTime( Station* currentStation, Station* prefStation )
 	if( b_normal || b_nextDay )
 	{
 		if( DEBUG_TIME )cout << "DEBUG DU KANNST FAHREN: +" << ADDITIONL_MINUTES_TO_BOARDING << "min" << endl;	
-		currentStation->route_time.add( prefStation->route_time.currentTime + prefStation->journey_time + ADDITIONL_MINUTES_TO_BOARDING );
-
+		currentStation->route_time.add( prefStation->route_time.currentTime + currentStation->journey_time + ADDITIONL_MINUTES_TO_BOARDING );
 	}
 	else
 	{
 		if( DEBUG_TIME )cout << "DEBUG DU MUSST LAUFEN: *" << MULTIPLAYER_IF_LINE_IS_OUT_OPERATION_TIME << endl;
-		currentStation->route_time.add( prefStation->route_time.currentTime + (prefStation->journey_time * MULTIPLAYER_IF_LINE_IS_OUT_OPERATION_TIME) );
-
+		currentStation->route_time.add( prefStation->route_time.currentTime + (currentStation->journey_time * MULTIPLAYER_IF_LINE_IS_OUT_OPERATION_TIME) );
 	}
 
 	if( DEBUG_TIME ) cout << endl;
