@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head> </head>
+	<body>
+		<p><b>Example 1:</b> canvas</p>
+		<canvas id="myCanvas_1" width="400" height="400">
+			No canvas support.
+		</canvas>
+		
+		<script type="text/javascript">
+			window.onload = draw();
+			
+			function draw()
+			{
+				// ref on http://www.w3schools.com/tags/ref_canvas.asp
+				var canvas = document.getElementById("myCanvas_1");
+				
+				var ctx = canvas.getContext("2d");
+				ctx.fillStyle = "rgb(255,0,0)";
+				ctx.fillRect( 30, 30, 400, 30 );
+				
+				ctx.fillStyle = "#000000";
+				ctx.fillRect( 120, 30, 30, 60 );
+				
+				ctx.fillStyle = "#00ff00";
+				ctx.beginPath();
+					ctx.moveTo( 0, 0 );
+					ctx.lineTo( 100, 0 );
+					ctx.lineTo( 50, 100 );
+				ctx.fill();
+				
+				ctx.strokeStyle = "#0000ff";
+				ctx.beginPath();
+					ctx.moveTo( 200, 0 );
+					ctx.lineTo( 300, 0 );
+					ctx.lineTo( 250, 100 );
+					ctx.lineTo( 200, 0 );
+				ctx.stroke();
+				
+				ctx.fillStyle = "#00ffff";
+				ctx.beginPath();
+					ctx.arc( 90, 60, 20, 0, 1.25*Math.PI );
+				ctx.fill();
+				
+				ctx.fillStyle = "#000000";
+				ctx.font = "30px Arial";
+				ctx.fillText( "Irgend ein Text mit max 200", 50, 150, 200 );
+			}
+		</script>
+	</body>
+</html>

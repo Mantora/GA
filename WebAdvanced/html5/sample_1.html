@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+		video {
+			position: relative;
+			width: 200px;
+			height: 112px;
+			border: 1px solid black;
+			border-radius: 200px 50px 200px 50px;
+			box-shadow: #244788 10px 10px 10px;
+			transform: rotate(10deg) translate(15px, 10px);
+		}
+
+		.video-container{
+			display: inline-block;
+			text-align: center;
+		}
+
+		p{
+			font: 14px Arial;
+		}
+
+		.menu > li > ul{
+			display:none;
+		}
+
+		.menu > li:hover > ul{
+			display:block;
+		}
+	  
+		a{ background-image: url("my-image.png"); }
+		a:hover{  }
+	  
+		.faq > div{
+			display:none;
+		}
+		.faq > div:target{
+			display:block;
+		}
+
+		#content{ 
+			display:table; 
+			border: 1px solid black; 
+		}
+		.sidebar{ 
+			display:table-cell; 
+			width:50px; 
+			border: 1px solid green; 
+		}
+		.main{ 
+			display:table-cell;
+		}
+    </style>
+  </head>
+  <body>
+  <p><b>Example 1:</b> playing videos in browser</p>
+    <div class="video-container">
+      <p>.mp4</p>
+      <video poster="http://www.html5rocks.com/en/tutorials/video/basics/star.png" controls>
+        <source src="http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
+      </video>
+    </div>
+    <div class="video-container">
+      <p>.webm</p>
+      <video poster="http://www.html5rocks.com/en/tutorials/video/basics/star.png" controls>
+        <source src="http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.webm" type='video/webm; codecs="vp8, vorbis"' />
+      </video>
+    </div>
+    <div class="video-container">
+      <p>.ogv</p>
+      <video poster="http://www.html5rocks.com/en/tutorials/video/basics/star.png" controls>
+        <source src="http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.ogv" type='video/ogg; codecs="theora, vorbis"' />
+      </video>
+    </div>
+	<p><b>Example 2:</b> Menu</p>
+	<ul class="menu">
+		<li><a href="/a/">Menu</a>
+			<ul>
+				<li><a href="/a/a">Sub-menu A</a></li>
+				<li><a href="/a/b">Sub-menu B</a></li>
+				<li><a href="/a/c">Sub-menu C</a></li>
+			</ul>
+		</li>
+	</ul>
+	<p><b>Example 3:</b> ROllovers</p>
+	
+	<p><b>Example 4a:</b> Dependet Content</p>
+	<div class="faq">
+		<a href="#a1">How much wood could ... ?</a>
+		<a href="#a2">Who sells seashells ... ?</a>
+		<!-- [...] -->
+		<div id="a1">
+			The ammount of wood that a woodchuck ...
+		</div>
+	</div>
+	
+	<p><b>Example 4b:</b>Sidebar</p>
+	<div id="content">
+		<div class="sidebar">Sidebar Content</div>
+		<div class="main">Main Content</div>
+	</div>
+  </body>
+</html>
