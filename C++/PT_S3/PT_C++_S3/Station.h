@@ -52,7 +52,7 @@ class Station
 
 		int journey_time;
 
-		CustomTime route_time;
+		CustomTime route_time; // zeit bis zu dieser station
 
 		std::string station_name;
 		std::string line_name;

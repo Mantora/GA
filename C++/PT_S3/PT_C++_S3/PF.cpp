@@ -54,6 +54,9 @@ void PF::startSearch( Station* station_start, Station* station_end, CustomTime& 
 
 	while( !this->b_endStationFound )
 	{
+		if( this->i_CalculationSteps == 8 ) 
+			cout << "debug" << endl;
+
 		//no target_Station found,
 		this->i_CalculationSteps++;
 		if( isTargetStationInVector() )
@@ -96,19 +99,13 @@ bool PF::isTargetStation( Station* stationToCheck )
 	if(DEBUG_STATIONS) cout << "PF::isTargetStation( " << stationToCheck->getFormatedStation() << " )" << endl;
 
 	stationToCheck->setVisited( true );
-	if( stationToCheck->GUID == this->station_end->GUID )
+/*	if( stationToCheck->GUID == this->station_end->GUID )
 	{
 		if(DEBUG_STATIONS) cout << "PF::isTargetStation : FOUND !" << endl;
 		return true;
 	}
-
-/*	if( stationToCheck->getStationName().compare( this->station_end->getStationName() ) == 0 )
-	{
-		if(DEBUG) cout << "PF::isTargetStation : FOUND !" << endl;
-		return true;
-	}
 */
-/*	if( this->station_end->GUID == stationToCheck->GUID )
+	if( this->station_end->GUID == stationToCheck->GUID )
 		return true;
 	else
 	{
@@ -127,7 +124,7 @@ bool PF::isTargetStation( Station* stationToCheck )
 			}
 		}
 	}
-*/
+
 	return false;
 };
 
@@ -143,7 +140,7 @@ void PF::init_addAllStationsFrom( Station* startingStation )
 		{
 			this->stationsToCheck.push_back( (*it) );
 			(*it)->str_routeToThisStation = startingStation->str_routeToThisStation + "take " + (*it)->line_name + " towards " + (*it)->getStationName() + "\n";
-//			(*it)->route_time.add(startingStation->journey_time);
+			(*it)->route_time.add( startingStation->route_time.currentTime+startingStation->journey_time );
 
 			if( DEBUG_TIME ) cout << startingStation->getFormatedStation() << " DEBUG_TIME:" << startingStation->journey_time << endl;
 		}
@@ -179,8 +176,11 @@ void PF::addAllStationsFrom( Station* baseStation )
 		&& !this->isStationInVector( (*it) ) )
 		{
 			this->stationsToCheck.push_back( (*it) );
+			// add current route_time
+			(*it)->route_time = baseStation->route_time;
+			(*it)->route_time.add( (*it)->journey_time );
 			(*it)->str_routeToThisStation = baseStation->str_routeToThisStation + " to " + (*it)->getFormatedStation() + "\n";
-			this->checkOperationTime( (*it), baseStation );
+//			this->checkOperationTime( (*it), baseStation );
 		}
 	}
 
@@ -194,8 +194,10 @@ void PF::addAllStationsFrom( Station* baseStation )
 			&& !this->isStationInVector( (*it2) ) )
 			{
 				this->stationsToCheck.push_back( (*it2) );
+				// add current route_time
+				(*it)->route_time = baseStation->route_time;
 				(*it2)->str_routeToThisStation = baseStation->str_routeToThisStation + "switch to " + (*it2)->line_name + " towards " + (*it2)->getStationName() + "\n";
-				this->checkOperationTime( (*it2), baseStation );
+//				this->checkOperationTime( (*it2), baseStation );
 			}
 		}
 	}

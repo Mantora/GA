@@ -7,15 +7,11 @@
 #include "Timer.h"
 #include "CustomTime.h"
 
-/************************************************************************************/
-/* TODO: rape math- and physik exam 4 no time: This Projekt is made within 24 hours */
-/************************************************************************************/
-
 int main ()
 {
 	//set a awesome  name
 	system( "title S3 programming challenge 07.03.2014 - 11:22 Uhr " );
-	cout << "Praxistest C++: Pathfindung Stations geladen aus xml Datei" << endl << endl;
+	cout << "Praxistest C++: Pathfinding Stations geladen aus xml Datei" << endl << endl;
 
 	std::vector<Station*> stations;
 	//prepare variables
@@ -28,7 +24,8 @@ int main ()
 	Station* cross_station = 0;
 
 	/* BEGINN READING XML FILE */
-	XMLReader xml_reader( "net.xml" );
+//	XMLReader xml_reader( "net.xml" );
+	XMLReader xml_reader( "unittest_net.xml" );
 
 	XML_element readed_element;
 
@@ -149,6 +146,8 @@ int main ()
 		}
 	}
 
+	/* BEGINN 4 DECLARE STATION START/END */
+
 	/* BEGINN 4 INPUT: START_STATION END_STATION TIME_ARRIVE*/
 	std::string startStation_name;
 	int startStation_ID = 0;
@@ -171,9 +170,9 @@ int main ()
 		#ifdef _DEBUG
 			//on VS set the variables in code 4 better working flow
 
-			startStation_name = "S+U Jannowitzbruecke";
-			endStation_name = "S+U Tegel";
-			ct_travelStart = CustomTime( "03:02" ); //<- must hh:mm for debug or unknown behaviour occur
+			startStation_name = "S Henningsdorf";
+			endStation_name = "S Tegel";
+			ct_travelStart = CustomTime( "12:00" ); //<- must hh:mm for debug or unknown behaviour occur
 
 			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
 			{
@@ -199,6 +198,9 @@ int main ()
 			}
 		#endif
 
+			cout << endl;
+
+		#ifndef _DEBUG
 		//search 4 a specific station:
 		//START Station
 		while( startStation_ptr == 0 )
@@ -277,16 +279,16 @@ int main ()
 				cout << "Time has wrong format, plz input something like \"08:05\" or \"15:25\"" << endl;
 			}
 		}
-
+#endif
 	}
-
+	
 
 //	cout << "endStation_ID:" << endStation_ID << endl;
 //	cout << "startStation_ID:" << startStation_ID << endl;
 
 	// START SEARCH 4 BEST CONNECTION
 	Timer t;
-		pf->startSearch( startStation_ptr, endStation_ptr, ct_travelStart );
+	pf->startSearch( startStation_ptr, endStation_ptr, ct_travelStart );
 	int pf_ms = t.getMSecSinceStart();
 	cout << endl << "PERFORMANCE: PF needed " << pf_ms << " ms for " << pf->i_CalculationSteps << " calculationSteps to find target." << endl;
 

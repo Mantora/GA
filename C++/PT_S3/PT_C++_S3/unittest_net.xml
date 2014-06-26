@@ -1,12 +1,73 @@
 <net>
   <line name="S1">
-	<operation_time start="04:11" end="01:10"/> 
-	<stations>
-		<station journey_time="1">S+U Jannowitzbruecke</station>
-		<station journey_time="2">S Lehnitz</station>
-		<station journey_time="3">S Borgsdorf</station>
-		<station journey_time="4">S Birkenwerder</station>
-		<station journey_time="5">S+U Tegel</station>
-	</stations> 
+    <operation_time start="04:11" end="01:10"/> 
+    <stations>
+      <station journey_time="2">S Oranienburg</station>
+      <station journey_time="3">S Lehnitz</station>
+      <station journey_time="3">S Borgsdorf</station>
+      <station journey_time="3">S Birkenwerder</station>
+      <station journey_time="3">S Hohen Neuendorf</station>
+      <station journey_time="4">S Frohnau</station>
+      <station journey_time="3">S Hermsdorf</station>
+      <station journey_time="2">S Waidmannslust</station>
+      <station journey_time="2">S+U Wittenau</station>
+      <station journey_time="3">S Wilhelmsruh</station>
+      <station journey_time="3">S Schoenholz</station>
+    </stations> 
+  </line>
+  <line name="S8">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="4">S Birkenwerder</station>
+      <station journey_time="4">S Hohen Neuendorf</station>
+      <station journey_time="2">S Bergfelde</station>
+      <station journey_time="2">S Schönfließ</station>
+    </stations>
+  </line>
+  <line name="S85">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="4">S Waidmannslust</station>
+      <station journey_time="2">S+U Wittenau</station>
+      <station journey_time="4">S Wilhelmsruh</station>
+      <station journey_time="2">S Schönholz</station>
+    </stations>
+  </line>
+  <line name="U8">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="4">S+U Wittenau</station>
+      <station journey_time="4">U Waidmannslust</station>
+      <station journey_time="4">U Rathaus Reinickendorf</station>
+      <station journey_time="4">S+U Karl-Bonhoeffer-Nervenklinik</station>
+      <station journey_time="2">U Lindauer Allee</station>
+      <station journey_time="3">U Paracelsus-Bad</station>
+      <station journey_time="2">U Residenzstr.</station>
+      <station journey_time="5">U Franz-Neumann-Platz</station>
+    </stations>
+  </line>
+  <line name="S25">
+    <operation_time start="04:11" end="01:10"/>
+    <stations>
+      <station journey_time="2">S Henningsdorf</station>
+      <station journey_time="3">S Heiligensee</station>
+      <station journey_time="3">S Schulzendorf</station>
+      <station journey_time="3">S Tegel</station>
+      <station journey_time="3">S Eichborndamm</station>
+      <station journey_time="4">S+U Karl-Bonhoeffer-Nervenklinik</station>
+      <station journey_time="3">S Alt-Reinickendorf</station>
+      <station journey_time="2">S Schönholz</station>
+    </stations>
+  </line>
+  <line name="U6">
+    <operation_time start="04:11" end="01:10"/>
+    <stations>
+      <station journey_time="2">U Alt-Tegel</station>
+      <station journey_time="3">U Borsigwerke</station>
+      <station journey_time="4">U Holzhauser Str.</station>
+      <station journey_time="3">U Otisstr.</station>
+      <station journey_time="3">U Scharnweberstr.</station>
+      <station journey_time="3">U Kurt-Schmacher-Platz</station>
+    </stations>
   </line>
 </net>
