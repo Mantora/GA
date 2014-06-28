@@ -1,0 +1,22 @@
+<net>
+  <line name="L">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="99">START</station>
+      <station journey_time="1">S 1</station>
+      <station journey_time="1">S 2</station>
+      <station journey_time="1">S 3</station>
+      <station journey_time="2">END</station>
+    </stations>
+  </line>
+  <line name="R">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="99">START</station>
+      <station journey_time="1">S 1</station>
+      <station journey_time="2">S 2</station>
+      <station journey_time="2">S 3</station>
+      <station journey_time="1">END</station>
+    </stations>
+  </line>
+</net>

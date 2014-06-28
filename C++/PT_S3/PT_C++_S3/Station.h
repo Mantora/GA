@@ -30,15 +30,9 @@ class Station
 
 		std::vector<Station*> possible_next_stations;
 		std::vector<Station*> connections_to_other_line;
-		int getGUID( void );
 
 		void addPosibleNextStation( Station* possibleNextStation );
 		void addConnectionToOtherLine( Station* stationToOtherLine );
-
-		std::string getStationName( void );
-
-		bool isVisited( void );
-		void setVisited( bool b_visited );
 
 		std::string getFormatedStation( void );
 
@@ -52,12 +46,12 @@ class Station
 
 		int journey_time;
 
-		CustomTime route_time; // zeit bis zu dieser station
-
 		std::string station_name;
 		std::string line_name;
 		CustomTime operation_time_start;
 		CustomTime operation_time_end;
 
 		bool visited;
+		bool travelingOn;
+		int pathfindingOrder;
 };

@@ -247,7 +247,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\unittest_doubleline_simpel.xml"
+				>
+			</File>
+			<File
 				RelativePath=".\unittest_net.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\unittest_net_doubleline.xml"
 				>
 			</File>
 		</Filter>

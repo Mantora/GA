@@ -3,7 +3,7 @@
     <operation_time start="04:11" end="01:10"/> 
     <stations>
       <station journey_time="99">START</station>
-      <station journey_time="2">M 1</station>
+      <station journey_time="8">M 1</station>
       <station journey_time="1">M 2</station>
       <station journey_time="2">M 3</station>
       <station journey_time="1">M 4</station>
@@ -26,6 +26,17 @@
       <station journey_time="2">R 1</station>
       <station journey_time="2">R 2</station>
       <station journey_time="2">R 3</station>
+      <station journey_time="2">END</station>
+    </stations>
+  </line>
+  <line name="R2">
+    <operation_time start="05:20" end="01:38" />
+    <stations>
+      <station journey_time="99">START</station>
+      <station journey_time="2">R 1</station>
+      <station journey_time="2">R 2</station>
+      <station journey_time="1">R 3</station>
+      <station journey_time="1">R 4</station>
       <station journey_time="2">END</station>
     </stations>
   </line>

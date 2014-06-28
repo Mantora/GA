@@ -26,6 +26,8 @@ int main ()
 	/* BEGINN READING XML FILE */
 //	XMLReader xml_reader( "net.xml" );
 	XMLReader xml_reader( "unittest_net.xml" );
+//	XMLReader xml_reader( "unittest_net_doubleline.xml" );
+//	XMLReader xml_reader( "unittest_doubleline_simpel.xml" );
 
 	XML_element readed_element;
 
@@ -95,7 +97,7 @@ int main ()
 
 					//check, if current_station is our station whe want to instanciate
 					if( current_station == 0
-						|| current_station->getStationName().compare( readed_element.name ) != 0 )
+						|| current_station->station_name.compare( readed_element.name ) != 0 )
 					{
 						//store the station as new Station instance
 						current_station = new Station( journey_time, readed_element.name, lineName );
@@ -134,7 +136,7 @@ int main ()
 		std::vector<Station*>::iterator it_sub = it+1;
 		for( it_sub; it_sub != stations.end(); it_sub++ )
 		{
-			if( (*it)->getStationName().compare( (*it_sub)->getStationName() ) == 0 )
+			if( (*it)->station_name.compare( (*it_sub)->station_name ) == 0 )
 			{
 				//same station name found
 				(*it)->addConnectionToOtherLine( (*it_sub) );
@@ -170,16 +172,20 @@ int main ()
 		#ifdef _DEBUG
 			//on VS set the variables in code 4 better working flow
 
-			startStation_name = "S Henningsdorf";
-			endStation_name = "S Tegel";
+//			startStation_name = "S+U Jannowitzbruecke";
+//			endStation_name = "S+U Tegel";
+
+			startStation_name = "START";
+			endStation_name = "END";
+
 			ct_travelStart = CustomTime( "12:00" ); //<- must hh:mm for debug or unknown behaviour occur
 
 			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
 			{
-				if( (*it)->getStationName().compare( startStation_name ) == 0 )
+				if( (*it)->station_name.compare( startStation_name ) == 0 )
 				{
 					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
-					startStation_ID = (*it)->getGUID();
+					startStation_ID = (*it)->GUID;
 					startStation_ptr = (*it);
 					break;
 				}
@@ -187,11 +193,11 @@ int main ()
 
 			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
 			{
-				if( (*it)->getStationName().compare( endStation_name ) == 0 )
+				if( (*it)->station_name.compare( endStation_name ) == 0 )
 				{
 					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
-					int possibleEndGUID = (*it)->getGUID();
-					pf->endStation_GUIDs.push_back( possibleEndGUID );
+					int possibleEndGUID = (*it)->GUID;
+//					pf->endStation_GUIDs.push_back( possibleEndGUID );
 					
 					endStation_ptr = (*it);
 				}
@@ -286,13 +292,13 @@ int main ()
 //	cout << "endStation_ID:" << endStation_ID << endl;
 //	cout << "startStation_ID:" << startStation_ID << endl;
 
+	pf->stations = stations;
+
 	// START SEARCH 4 BEST CONNECTION
 	Timer t;
 	pf->startSearch( startStation_ptr, endStation_ptr, ct_travelStart );
 	int pf_ms = t.getMSecSinceStart();
-	cout << endl << "PERFORMANCE: PF needed " << pf_ms << " ms for " << pf->i_CalculationSteps << " calculationSteps to find target." << endl;
-
-	cout << endl << pf->printBestConnection() << endl << endl;
+	cout << endl << "PERFORMANCE: PF needed " << pf_ms << " ms for xxx calculationSteps to find target." << endl;
 
 
 /*	// Testing travel sytem setup:

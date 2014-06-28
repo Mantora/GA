@@ -19,32 +19,26 @@ class PF
 		PF();
 		~PF( void );
 
+		Station* s_start;
+		Station* s_end;
+		CustomTime ct_start;
+
+		// steuervariable, ob das ziel gefunden wurde
+		bool stop;
+
+		//variable für die anzahl der schritte
+		int calculationSteps;
+
+		//variable to hold the hole station data
+		std::vector<Station*> stations;
+
+		//variable to hold the stations 4 analyse
+		std::vector<Station*> stationsToAnalyse;
+		std::vector<Station*> stationsToAnalyseNext;
+
 		void startSearch( Station* station_start, Station* station_end, CustomTime& ct_startTravel );
-		std::string printBestConnection( void );
-//	private: //<- no time 4 get/set
-		Station* station_start;
-		Station* station_end;
-		CustomTime ct_startTravel;
 
-		int startStation_GUID;
-		std::vector<int> endStation_GUIDs;
-
-		bool b_endStationFound;
-		std::vector<Station*>::iterator it_stationToCheck;
-		int index_stationsToCheck;
-		std::vector<Station*> stationsToCheck;
-		std::string str_bestConnection;
-
-		//DEBUG variables
-		int i_CalculationSteps;
-
-		//funktions 4 pathfinding
-		void analyseStation( Station* stationToAnalyse );
-		bool isTargetStation( Station* stationToCheck );
-		void init_addAllStationsFrom( Station* startingStation ); //extra init function 
-		void addAllStationsFrom( Station* baseStation );
-		bool isTargetStationInVector( void );
-		void updateCurrentStationsToCheck( void );
-		bool isStationInVector( Station* s );
-		void checkOperationTime( Station* currentStation, Station* prefStation ); //<- current Time comes from this
+		// funktion zum untersuchen einer Station
+		void analyseStation( Station* s );
+		void finalStationFound( Station* s );
 };

@@ -9,7 +9,7 @@ modify core variables such as ADDITIONL_MINUTES_TO_BOARDING
 ***************************************************************************/
 
 //DEBUG VARIABLES
-#define DEBUG_STATIONS false
+#define DEBUG_STATIONS true
 #define DEBUG_TIME false
 #define DEBUG_XML false
 

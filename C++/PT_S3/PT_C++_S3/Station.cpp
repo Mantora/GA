@@ -9,11 +9,12 @@ Station::Station( int journey_time, std::string station_name, std::string line_n
 	this->line_name = line_name;
 
 	this->visited = false;
+	this->travelingOn = false;
 
 	this->GUID = Utility::getNewGUID();
 	this->typ = STATION_NORMAL;
 
-	this->route_time = CustomTime();
+	this->pathfindingOrder = 0;
 }
 
 Station::~Station( void )
@@ -50,37 +51,17 @@ void Station::setOperationTime( std::string start, std::string end )
 	//24h fix if start > end
 	if( this->operation_time_end.currentTime < this->operation_time_start.currentTime )
 		this->operation_time_end.add( 24*60 );
-};
-
-int Station::getGUID( void )
-{
-	return this->GUID;
-};
+}
 
 void Station::addPosibleNextStation( Station* possibleNextStation )
 {
 	this->possible_next_stations.push_back( possibleNextStation );
-};
+}
 
 void Station::addConnectionToOtherLine( Station* stationToOtherLine )
 {
 	this->connections_to_other_line.push_back( stationToOtherLine );
-};
-
-std::string Station::getStationName( void )
-{
-	return this->station_name;
-};
-
-bool Station::isVisited( void )
-{
-	return this->visited;
-};
-
-void Station::setVisited( bool b_visited )
-{
-	this->visited = b_visited;
-};
+}
 
 std::string Station::getFormatedStation( void )
 {
@@ -88,4 +69,4 @@ std::string Station::getFormatedStation( void )
 	str_return += "(" + this->line_name + ") " + station_name;
 
 	return str_return;
-};
+}
