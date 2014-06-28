@@ -25,9 +25,9 @@ int main ()
 
 	/* BEGINN READING XML FILE */
 //	XMLReader xml_reader( "net.xml" );
-	XMLReader xml_reader( "unittest_net.xml" );
+//	XMLReader xml_reader( "unittest_net.xml" );
 //	XMLReader xml_reader( "unittest_net_doubleline.xml" );
-//	XMLReader xml_reader( "unittest_doubleline_simpel.xml" );
+	XMLReader xml_reader( "unittest_doubleline_simpel.xml" );
 
 	XML_element readed_element;
 

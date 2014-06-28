@@ -1,5 +1,5 @@
 #include "PF.h"
-
+#include "Utility.h"
 #include <iostream>
 
 #include "Station.h"
@@ -24,13 +24,14 @@ PF::~PF( void )
 
 void PF::startSearch( Station* station_start, Station* station_end, CustomTime& ct_startTravel )
 {
+	Utility::resetGUIDs();
+
 	this->s_start = station_start;
 	this->s_end = station_end;
 	this->ct_start = ct_startTravel;
 
 	// da du hier startest, hast du die startStation schon besucht
 	station_start->visited = true;
-	station_start->pathfindingOrder = 1;
 	station_start->journey_time = 0;
 	// die journey Time alle CROSS STATIONs auf 0 setzten: Wir sind ja schon da
 	for( std::vector<Station*>::iterator it = station_start->connections_to_other_line.begin(); it != station_start->connections_to_other_line.end(); it )
@@ -142,7 +143,8 @@ void PF::analyseStation( Station* s )
 					if( !(*it2)->visited 
 						&& (*it2)->pathfindingOrder == 0 )
 					{
-(*it2)->pathfindingOrder = this->calculationSteps;
+//(*it2)->pathfindingOrder = this->calculationSteps;
+(*it2)->pathfindingOrder = Utility::getNewGUID();
 						if( DEBUG_STATIONS ) cout << "  STATION_CROSS analyseStation: " << (*it2)->getFormatedStation() << " #" << (*it2)->pathfindingOrder << endl;
 						this->stationsToAnalyseNext.push_back( (*it2) );
 					}
@@ -166,7 +168,8 @@ void PF::analyseStation( Station* s )
 				if( !(*iter)->visited
 					&& (*iter)->pathfindingOrder == 0 )
 				{
-(*iter)->pathfindingOrder = this->calculationSteps;
+//(*iter)->pathfindingOrder = this->calculationSteps;
+(*iter)->pathfindingOrder = Utility::getNewGUID();
 					if( DEBUG_STATIONS ) cout << "  STATION_NORMAL analyseStation: " << (*iter)->getFormatedStation() << " #" << (*iter)->pathfindingOrder << endl;
 					this->stationsToAnalyseNext.push_back( (*iter) );
 				}
@@ -180,10 +183,16 @@ void PF::analyseStation( Station* s )
 
 void PF::finalStationFound( Station* s )
 {
+	//DEBUG
+	for( std::vector<Station*>::iterator it = this->stations.begin(); it != this->stations.end(); it++ )
+	{
+		cout << (*it)->getFormatedStation() << " PForder=" << (*it)->pathfindingOrder << endl;
+	}
+
 	this->stop = true;
 	s->visited = false;
 	cout << "End Station Found: " << s->getFormatedStation() << " after " << this->calculationSteps << " steps." << endl;
-	system("pause");
+//	system("pause");
 
 	cout << "Reihenfolge:" << endl;
 
@@ -194,11 +203,14 @@ void PF::finalStationFound( Station* s )
 	std::vector<Station*> finalRoute = std::vector<Station*>();
 	// letzte Station merken
 	finalRoute.push_back( s );
+	Station* nextFinalStation = 0; // s nur damit wir einen pathfindingOrder zum vergleichen haben
 
 	reverseSearch.push_back( s );
 
 	for( std::vector<Station*>::iterator it = reverseSearch.begin(); it != reverseSearch.end(); it )
 	{
+		nextFinalStation = 0;
+untersuche reihenfolge der pathfindingOrder beim vector bauen der endgültigen verbindung
 		switch( (*it)->typ )
 		{
 			case STATION_CROSS:
@@ -210,13 +222,12 @@ void PF::finalStationFound( Station* s )
 						break;
 
 					if( (*it2)->journey_time == 0 && (*it2)->visited == true
-						&& (*it2)->pathfindingOrder < (*it)->pathfindingOrder )
+						&& (*it2)->pathfindingOrder > finalRoute.back()->pathfindingOrder )
 					{
-						reverseSearch.push_back( (*it2) );
+						nextFinalStation = (*it2);
+						reverseSearch_2.push_back( (*it2) );
 
-						//nächste Station merken
-						finalRoute.push_back( (*it2) );
-
+						// besucht auf falsch setzten damit diese station nicht mehrfach vorkommt
 						(*it2)->visited = false;
 					}
 
@@ -233,12 +244,10 @@ void PF::finalStationFound( Station* s )
 						break;
 
 					if( (*it2)->journey_time == 0 && (*it2)->visited == true
-						&& (*it2)->pathfindingOrder < (*it)->pathfindingOrder  )
+						&& (*it2)->pathfindingOrder < finalRoute.back()->pathfindingOrder )
 					{
+						nextFinalStation = (*it2);
 						reverseSearch_2.push_back( (*it2) );
-
-						//nächste Station merken
-						finalRoute.push_back( (*it2) );
 
 						// besucht auf falsch setzten damit diese station nicht mehrfach vorkommt
 						(*it2)->visited = false;
@@ -254,6 +263,9 @@ void PF::finalStationFound( Station* s )
 		reverseSearch_2 = std::vector<Station*>();
 
 		it = reverseSearch.begin();
+
+		if( nextFinalStation != 0 )
+			finalRoute.push_back( nextFinalStation );
 	}
 
 	//erste Station merken

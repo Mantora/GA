@@ -38,8 +38,6 @@ class Station
 
 		STATION_TYP typ;
 
-		std::string str_routeToThisStation;
-
 //	private://<- no time 4 get/set
 		//Performance Boost: nicht string station_name immer wieder vergleich sondern nur zur Identifizierung und dann über GUID (int schneller als std::string)
 		int GUID; // GlobalUnicIDentification 
@@ -52,6 +50,5 @@ class Station
 		CustomTime operation_time_end;
 
 		bool visited;
-		bool travelingOn;
 		int pathfindingOrder;
 };

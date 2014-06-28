@@ -9,7 +9,6 @@ Station::Station( int journey_time, std::string station_name, std::string line_n
 	this->line_name = line_name;
 
 	this->visited = false;
-	this->travelingOn = false;
 
 	this->GUID = Utility::getNewGUID();
 	this->typ = STATION_NORMAL;
