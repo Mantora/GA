@@ -49,6 +49,7 @@ class Station
 		CustomTime operation_time_start;
 		CustomTime operation_time_end;
 
+		bool analysed;
 		bool visited;
 		int pathfindingOrder;
 };

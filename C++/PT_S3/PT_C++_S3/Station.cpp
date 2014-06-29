@@ -8,6 +8,7 @@ Station::Station( int journey_time, std::string station_name, std::string line_n
 	this->station_name = station_name;
 	this->line_name = line_name;
 
+	this->analysed = false;
 	this->visited = false;
 
 	this->GUID = Utility::getNewGUID();

@@ -41,4 +41,7 @@ class PF
 		// funktion zum untersuchen einer Station
 		void analyseStation( Station* s );
 		void finalStationFound( Station* s );
+
+		bool isFinalStation( Station* s );
+		bool isStartStation( Station* s );
 };
