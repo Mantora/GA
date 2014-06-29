@@ -95,25 +95,53 @@ void PF::analyseStation( Station* s )
 		this->finalStationFound( s );
 		return;
 	}
-	// teste ob verbindung zur anderen Liene in dieser Station unser Ziel ist
-	for( std::vector<Station*>::iterator it = s->connections_to_other_line.begin(); it != s->connections_to_other_line.end(); it++ )
+
+	switch( s->typ )
 	{
-		if( (*it)->GUID == this->s_end->GUID )
+		case STATION_CROSS:
 		{
-			if( DEBUG_STATIONS ) cout << "finalStationFound as connection to other line from " << s->getFormatedStation() << endl;
-			this->finalStationFound( (*it) );
-			return;
+			// teste ob verbindung zur anderen Liene in dieser Station unser Ziel ist
+			for( std::vector<Station*>::iterator it = s->connections_to_other_line.begin(); it != s->connections_to_other_line.end(); it++ )
+			{
+				if( (*it)->GUID == this->s_end->GUID )
+				{
+					if( DEBUG_STATIONS ) cout << "finalStationFound as connection to other line from " << s->getFormatedStation() << endl;
+					this->finalStationFound( s );
+					return;
+				}
+			}
+
+			// alle verbindungen zu einer anderen Linie ansehen
+			for( std::vector<Station*>::iterator it = s->connections_to_other_line.begin(); it != s->connections_to_other_line.end(); it++ )
+			{
+				for( std::vector<Station*>::iterator it2 = (*it)->possible_next_stations.begin(); it2 != (*it)->possible_next_stations.end(); it2++ )
+				{
+					if( !(*it)->visited && !(*it)->analysed )
+					{
+						if( DEBUG_STATIONS ) cout << "  STATION_CROSS stationsToAnalyseNext: " << (*it2)->getFormatedStation() << endl;
+						(*it2)->analysed = true;
+						this->stationsToAnalyseNext.push_back( (*it2) );
+					}
+				}
+			}
 		}
+//		break;
+		case STATION_NORMAL:
+		{
+			// alle verbindungen zu dieser Linie ansehen
+			for( std::vector<Station*>::iterator it = s->possible_next_stations.begin(); it != s->possible_next_stations.end(); it++ )
+			{
+				if( !(*it)->visited && !(*it)->analysed )
+				{
+					if( DEBUG_STATIONS ) cout << "  STATION_NORMAL stationsToAnalyseNext: " << (*it)->getFormatedStation() << endl;
+					(*it)->analysed = true;
+					this->stationsToAnalyseNext.push_back( (*it) );
+				}
+			}
+		}
+		break;
 	}
 
-	// alle verbindungen zu einer anderen Linie ansehen
-	for( std::vector<Station*>::iterator it = s->connections_to_other_line.begin(); it != s->connections_to_other_line.end(); it++ )
-	{
-		for( std::vector<Station*>::iterator it2 = (*it)->possible_next_stations.begin(); it2 != (*it)->possible_next_stations.end(); it2++ )
-		{
-			this->stationsToAnalyseNext.push_back( (*it2) );
-		}
-	}
 }
 
 void PF::finalStationFound( Station* s )
@@ -157,10 +185,6 @@ void PF::finalStationFound( Station* s )
 					if( stop )
 						break;
 
-					//DEBUG
-					if( (*it2)->pathfindingOrder == 3 ) 
-						cout << endl;
-
 					// keine station beachten, die einen höheren pfOrder haben als die momentane Station
 					if( (*it2)->pathfindingOrder > (*it)->pathfindingOrder )
 						break;
@@ -203,6 +227,12 @@ void PF::finalStationFound( Station* s )
 				{
 					if( stop )
 						break;
+
+	//DEBUG
+	if( (*it2)->station_name.compare( "START" ) == 0 && (*it2)->line_name.compare("M") == 0) 
+		cout << endl;
+
+
 					
 					// wenn wir wieder am anfang sind, beenden
 					if( isStartStation( (*it2) ) )
@@ -286,8 +316,7 @@ bool PF::isStartStation( Station* s )
 					return true;
 			}
 		}
-		break;
-
+//		break;
 		case STATION_NORMAL:
 		{
 			if( s->GUID == this->s_start->GUID )

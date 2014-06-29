@@ -65,8 +65,8 @@ void Station::addConnectionToOtherLine( Station* stationToOtherLine )
 
 std::string Station::getFormatedStation( void )
 {
-	string str_return;
-	str_return += "(" + this->line_name + ") " + station_name;
+	ostringstream oss;
+	oss << "(" << this->line_name << ") " << station_name << " analysed=" << analysed;
 
-	return str_return;
+	return oss.str();
 }
