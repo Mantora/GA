@@ -29,14 +29,18 @@ class PF
 		//variable für die anzahl der schritte
 		int calculationSteps;
 
-		//variable to hold the hole station data
+		//variable to hold the hole station datas
 		std::vector<Station*> stations;
+		void setDatas( std::vector<Station*> stationDatas );
+
+		// 4 return
+		std::vector<Station*> routeData;
 
 		//variable to hold the stations 4 analyse
 		std::vector<Station*> stationsToAnalyse;
 		std::vector<Station*> stationsToAnalyseNext;
 
-		void startSearch( Station* station_start, Station* station_end, CustomTime& ct_startTravel );
+		std::vector<Station*> startSearch( Station* station_start, Station* station_end, CustomTime& ct_startTravel );
 
 		// funktion zum untersuchen einer Station
 		void analyseStation( Station* s );
@@ -44,4 +48,7 @@ class PF
 
 		bool isFinalStation( Station* s );
 		bool isStartStation( Station* s );
+
+	private:
+		void cleanup();
 };

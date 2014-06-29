@@ -10,8 +10,8 @@
 int main ()
 {
 	//set a awesome  name
-	system( "title S3 programming challenge 07.03.2014 - 11:22 Uhr " );
-	cout << "Praxistest C++: Pathfinding Stations geladen aus xml Datei" << endl << endl;
+	system( "title PT PR320 - Advanced C++" );
+	cout << "Praxistest C++: Pathfinding Stations geladen aus xml Datei" << endl;
 
 	std::vector<Station*> stations;
 	//prepare variables
@@ -24,9 +24,9 @@ int main ()
 	Station* cross_station = 0;
 
 	/* BEGINN READING XML FILE */
-//	XMLReader xml_reader( "net.xml" );
+	XMLReader xml_reader( "net.xml" );
 //	XMLReader xml_reader( "unittest_net.xml" );
-	XMLReader xml_reader( "unittest_net_doubleline.xml" );
+//	XMLReader xml_reader( "unittest_net_doubleline.xml" );
 //	XMLReader xml_reader( "unittest_doubleline_simpel.xml" );
 
 	XML_element readed_element;
@@ -126,6 +126,7 @@ int main ()
 			}
 		}
 	}
+
 	/* END READING XML FILE */
 	if( DEBUG_STATIONS ) cout << stations.size() << " stations loaded." << endl;
 
@@ -148,9 +149,7 @@ int main ()
 		}
 	}
 
-	/* BEGINN 4 DECLARE STATION START/END */
-
-	/* BEGINN 4 INPUT: START_STATION END_STATION TIME_ARRIVE*/
+	/* BEGINN 4 INPUT: START_STATION END_STATION TIME_ARRIVE */
 	std::string startStation_name;
 	int startStation_ID = 0;
 	Station* startStation_ptr = 0;
@@ -161,22 +160,18 @@ int main ()
 
 	CustomTime ct_travelStart;
 
-
 	while( startStation_ID == 0 && endStation_ID == 0 )
 	{
-		//DEBUG STATIONS:
-//		startStation_name = "S1_0";
-//		endStation_name = "S2_0";
-
 		//ORGINAL STATIONS
 		#ifdef _DEBUG
 			//on VS set the variables in code 4 better working flow
 
-//			startStation_name = "S+U Jannowitzbruecke";
-//			endStation_name = "S+U Tegel";
+			startStation_name = "S Hennigsdorf";
+			endStation_name = "S+U Hauptbahnhof";
 
-			startStation_name = "START";
-			endStation_name = "END";
+			// 4 use on unittest.xml:
+//			startStation_name = "START";
+//			endStation_name = "END";
 
 			ct_travelStart = CustomTime( "12:00" ); //<- must hh:mm for debug or unknown behaviour occur
 
@@ -292,53 +287,38 @@ int main ()
 //	cout << "endStation_ID:" << endStation_ID << endl;
 //	cout << "startStation_ID:" << startStation_ID << endl;
 
+	// set the datas to PF
 	pf->stations = stations;
 
 	// START SEARCH 4 BEST CONNECTION
 	Timer t;
-	pf->startSearch( startStation_ptr, endStation_ptr, ct_travelStart );
+	std::vector<Station*> route = pf->startSearch( startStation_ptr, endStation_ptr, ct_travelStart );
 	int pf_ms = t.getMSecSinceStart();
-	cout << endl << "PERFORMANCE: PF needed " << pf_ms << " ms for xxx calculationSteps to find target." << endl;
 
 
-/*	// Testing travel sytem setup:
-	//prepare variables
-	Station* prev_station = 0;
-	Station* current_station = 0;
-	Station* next_station = 0;
+	cout << endl;
+	cout << "PERFORMANCE: PF needed " << pf_ms << " ms to find target." << endl;
 
-	//ADD STATIONS
-	//start station
-	current_station = new Station( 1, "Station 1" );
-	stations.push_back( current_station );
-
-	//station with pref_ and next_ possible Station
-	prev_station = current_station;
-	current_station = new Station( 2, "Station 2" );
-	current_station->addPosibleNextStation( prev_station );
-	next_station = new Station( 3, "Station 3" );
-	current_station->addPosibleNextStation( next_station );
-	stations.push_back( current_station );
-
-	//end station
-	prev_station = current_station;
-	current_station = next_station;
-	current_station->addPosibleNextStation( prev_station );
-	stations.push_back( current_station );
-
-	cout << "stations.size():" << stations.size() << endl;
-*/
-	
-	//cleanup:
-	for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it )
+	cout << "Route from: " << startStation_ptr->getFormatedStation() << endl;
+	cout << "to: " << endStation_ptr->getFormatedStation() <<  endl;
+	cout << "------------------------------------------" << endl;
+	for( std::vector<Station*>::iterator it = route.begin(); it != route.end(); it++ )
 	{
-		Station* tmp = (*it);
-
-		it = stations.erase( it );
-
-		delete tmp;
+		cout << (*it)->getFormatedStation() << endl;
 	}
 
-	system( "pause" );
+
+	if( DEBUG_CLEANUP) cout << "stations.size():" << stations.size() << endl;
+	if( DEBUG_CLEANUP) cout << "pf->stations.size():" << pf->stations.size() << endl;
+
+	//cleanup:
+	stations.clear();
+	delete pf;
+
+	if( DEBUG_CLEANUP)cout << "stations.size():" << stations.size() << endl;
+	if( DEBUG_CLEANUP)cout << "pf->stations.size():" << pf->stations.size() << endl;
+
+	cout << endl;
+	system("pause");
 	return 0;
 }
