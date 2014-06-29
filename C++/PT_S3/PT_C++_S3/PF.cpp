@@ -48,7 +48,7 @@ void PF::startSearch( Station* station_start, Station* station_end, CustomTime& 
 	while( !this->stop )
 	{
 		this->calculationSteps++;
-		cout << this->calculationSteps << "#" << endl;
+		if( DEBUG_STATIONS ) cout << this->calculationSteps << "#" << endl;
 
 		// alle stationen analysieren, die da sind:
 		for( std::vector<Station*>::iterator it = this->stationsToAnalyse.begin(); it != this->stationsToAnalyse.end(); it++ )
@@ -66,6 +66,9 @@ void PF::startSearch( Station* station_start, Station* station_end, CustomTime& 
 
 void PF::analyseStation( Station* s )
 {
+	if( this->stop )
+		return;
+
 	if( DEBUG_STATIONS ) cout << "analyseStation: " << s->getFormatedStation() << endl;
 
 	if( s->visited )
@@ -118,15 +121,15 @@ void PF::finalStationFound( Station* s )
 	//DEBUG
 	for( std::vector<Station*>::iterator it = this->stations.begin(); it != this->stations.end(); it++ )
 	{
-		cout << (*it)->getFormatedStation() << " PForder=" << (*it)->pathfindingOrder << endl;
+		if( DEBUG_STATIONS ) cout << (*it)->getFormatedStation() << " PForder=" << (*it)->pathfindingOrder << endl;
 	}
 
 	this->stop = true;
 	s->visited = false;
-	cout << "End Station Found: " << s->getFormatedStation() << " after " << this->calculationSteps << " steps." << endl;
+	if( DEBUG_STATIONS ) cout << "End Station Found: " << s->getFormatedStation() << " after " << this->calculationSteps << " steps." << endl;
 //	system("pause");
 
-	cout << "Reihenfolge:" << endl;
+	if( DEBUG_STATIONS ) cout << "Reihenfolge:" << endl;
 
 	std::vector<Station*> reverseSearch = std::vector<Station*>();
 	std::vector<Station*> reverseSearch_2 = std::vector<Station*>();
@@ -149,7 +152,6 @@ void PF::finalStationFound( Station* s )
 		{
 			case STATION_CROSS:
 			{
-				cout << "STATION_CROSS" << endl;
 				for( std::vector<Station*>::iterator it2 = (*it)->connections_to_other_line.begin(); it2 != (*it)->connections_to_other_line.end(); it2++ )
 				{
 					if( stop )
@@ -159,6 +161,7 @@ void PF::finalStationFound( Station* s )
 					if( (*it2)->pathfindingOrder == 3 ) 
 						cout << endl;
 
+					// keine station beachten, die einen höheren pfOrder haben als die momentane Station
 					if( (*it2)->pathfindingOrder > (*it)->pathfindingOrder )
 						break;
 
@@ -196,7 +199,6 @@ void PF::finalStationFound( Station* s )
 				if( stop )
 					break;
 
-				cout << "STATION_NORMAL" << endl;
 				for( std::vector<Station*>::iterator it2 = (*it)->possible_next_stations.begin(); it2 != (*it)->possible_next_stations.end(); it2++ )
 				{
 					if( stop )
@@ -204,7 +206,11 @@ void PF::finalStationFound( Station* s )
 					
 					// wenn wir wieder am anfang sind, beenden
 					if( isStartStation( (*it2) ) )
+					{
+						nextFinalStation = (*it2);
+						stop = true;
 						break;
+					}
 
 					if( (*it2)->journey_time == 0 && (*it2)->visited == true
 						&& (*it2)->pathfindingOrder < nextFinalStation->pathfindingOrder )
@@ -235,7 +241,7 @@ void PF::finalStationFound( Station* s )
 	for( std::vector<Station*>::iterator it = finalRoute.end(); it != finalRoute.begin(); it )
 	{
 		it--;
-		cout << (*it)->getFormatedStation() << endl;
+		if( DEBUG_STATIONS ) cout << (*it)->getFormatedStation() << endl;
 	}
 	
 //	system("pause");
@@ -263,6 +269,8 @@ bool PF::isFinalStation( Station* s )
 		}
 		break;
 	}
+
+	return false;
 }
 
 // durchsucht auch alle connections_to_other_line s
@@ -287,4 +295,6 @@ bool PF::isStartStation( Station* s )
 		}
 		break;
 	}
+
+	return false;
 }
