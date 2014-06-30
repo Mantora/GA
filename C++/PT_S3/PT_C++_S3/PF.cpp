@@ -45,11 +45,11 @@ std::vector<Station*> PF::startSearch( Station* station_start, Station* station_
 	// da du hier startest, hast du die startStation schon besucht
 	station_start->analysed = true;
 
-	station_start->journey_time = 0;
+	station_start->journey_time_pf = 0;
 	// die journey Time alle CROSS STATIONs auf 0 setzten: Wir sind ja schon da
 	for( std::vector<Station*>::iterator it = station_start->connections_to_other_line.begin(); it != station_start->connections_to_other_line.end(); it )
 	{
-		(*it)->journey_time = 0;
+		(*it)->journey_time_pf = 0;
 		this->stationsToAnalyse.push_back( (*it) );
 		it++;
 	}
@@ -92,10 +92,10 @@ void PF::analyseStation( Station* s )
 		return;
 	}
 
-	if( s->journey_time > 0 )
+	if( s->journey_time_pf > 0 )
 	{
-		if( DEBUG_STATIONS ) cout << " traveling to " << s->getFormatedStation() << " r=" << s->journey_time << endl;
-		s->journey_time--;
+		if( DEBUG_STATIONS ) cout << " traveling to " << s->getFormatedStation() << " r=" << s->journey_time_pf << endl;
+		s->journey_time_pf--;
 		this->stationsToAnalyseNext.push_back( s );
 		return;
 	}
@@ -104,6 +104,9 @@ void PF::analyseStation( Station* s )
 		s->visited = true;
 		s->pathfindingOrder = this->calculationSteps;
 		if( DEBUG_STATIONS ) cout << " pf=" << s->pathfindingOrder << endl;
+
+		// zeit bis hier hin
+		s->AddRouteTimeToAllStations( s->journey_time + ADDITIONL_MINUTES_TO_BOARDING );
 	}
 
 	if( this->isFinalStation(s) )
@@ -122,7 +125,7 @@ void PF::analyseStation( Station* s )
 (*it)->pathfindingOrder = this->calculationSteps;
 (*it)->analysed = true;
 (*it)->visited = true;
-(*it)->journey_time = 0;
+(*it)->journey_time_pf = 0;
 				for( std::vector<Station*>::iterator it2 = (*it)->possible_next_stations.begin(); it2 != (*it)->possible_next_stations.end(); it2++ )
 				{
 					if( !(*it2)->analysed )

@@ -35,6 +35,7 @@ class Station
 		void addConnectionToOtherLine( Station* stationToOtherLine );
 
 		std::string getFormatedStation( void );
+		std::string getFormatedStation4Route( void );
 
 		STATION_TYP typ;
 
@@ -43,11 +44,15 @@ class Station
 		int GUID; // GlobalUnicIDentification 
 
 		int journey_time;
+		int journey_time_pf;
 
 		std::string station_name;
 		std::string line_name;
 		CustomTime operation_time_start;
 		CustomTime operation_time_end;
+
+		CustomTime routeTimeToThisStation;
+		void AddRouteTimeToAllStations( int additionalMinutes );
 
 		bool analysed;
 		bool visited;

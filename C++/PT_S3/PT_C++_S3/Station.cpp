@@ -4,7 +4,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Station::Station( int journey_time, std::string station_name, std::string line_name)
 {
-	this->journey_time = journey_time;
+	this->journey_time = this->journey_time_pf = journey_time;
 	this->station_name = station_name;
 	this->line_name = line_name;
 
@@ -15,6 +15,7 @@ Station::Station( int journey_time, std::string station_name, std::string line_n
 	this->typ = STATION_NORMAL;
 
 	this->pathfindingOrder = 0;
+	this->routeTimeToThisStation = CustomTime();
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Station::~Station( void )
@@ -49,6 +50,22 @@ Station::addConnectionToOtherLine( Station* stationToOtherLine )
 std::string Station::getFormatedStation( void )
 {
 	ostringstream oss;
-	oss << "(" << this->line_name << ") " << station_name << this->operation_time_start.toString() << " - " << this->operation_time_end.toString();
+	oss << "(" << this->line_name << ") " << station_name << " " << this->operation_time_start.toString() << " - " << this->operation_time_end.toString();
 	return oss.str();
+}
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+std::string Station::getFormatedStation4Route( void )
+{
+	ostringstream oss;
+	oss << "(" << this->line_name << ") " << station_name << " " << this->routeTimeToThisStation.toString();
+	return oss.str();
+}
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+void Station::AddRouteTimeToAllStations( int additionalMinutes )
+{
+	this->routeTimeToThisStation.add( additionalMinutes );
+	for( std::vector<Station*>::iterator it = this->connections_to_other_line.begin(); it != this->connections_to_other_line.end(); it++ )
+	{
+		(*it)->routeTimeToThisStation.add( additionalMinutes );
+	}
 }

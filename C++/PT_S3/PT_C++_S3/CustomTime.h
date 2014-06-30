@@ -26,7 +26,5 @@ class CustomTime
 
 		int combare( CustomTime& other );
 
-//	private://<- no time 4 get/set
 		int currentTime; //<- minutes
-
 };

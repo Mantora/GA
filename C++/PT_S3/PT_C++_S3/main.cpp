@@ -304,7 +304,7 @@ int main ()
 	cout << "------------------------------------------" << endl;
 	for( std::vector<Station*>::iterator it = route.begin(); it != route.end(); it++ )
 	{
-		cout << (*it)->getFormatedStation() << endl;
+		cout << (*it)->getFormatedStation4Route() << endl;
 	}
 
 
