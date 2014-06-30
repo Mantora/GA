@@ -96,8 +96,10 @@ CustomTime::toString( void )
 }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int 
-CustomTime::combare( CustomTime& other )
+CustomTime::compare( CustomTime& other )
 {
+	std::cout << "WARNING: int CustomTime::compare( CustomTime& other ) IS IN DEVELOPMENT STATE!" << std::endl;
+
 	if( this->currentTime > other.currentTime )
 		return 1;	//1 if this is greater
 	else if( this->currentTime < other.currentTime )

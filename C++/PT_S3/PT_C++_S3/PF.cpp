@@ -105,8 +105,14 @@ void PF::analyseStation( Station* s )
 		s->pathfindingOrder = this->calculationSteps;
 		if( DEBUG_STATIONS ) cout << " pf=" << s->pathfindingOrder << endl;
 
-		// zeit bis hier hin
-		s->AddRouteTimeToAllStations( s->journey_time + ADDITIONL_MINUTES_TO_BOARDING );
+		// zeit bis hier hin:
+		// beim startbahnhof keine Umsteigzeig berechnen
+		if( s->pathfindingOrder == 1 )
+			s->AddRouteTimeToAllStations( s->journey_time );
+		else
+			s->AddRouteTimeToAllStations( s->journey_time + ADDITIONL_MINUTES_TO_BOARDING );
+
+		s->SetTotalRouteTimeToAllStations( s->routeTimeToThisStation.currentTime + s->totalRouteTime.currentTime );
 	}
 
 	if( this->isFinalStation(s) )
@@ -122,16 +128,25 @@ void PF::analyseStation( Station* s )
 			// alle verbindungen zu einer anderen Linie ansehen
 			for( std::vector<Station*>::iterator it = s->connections_to_other_line.begin(); it != s->connections_to_other_line.end(); it++ )
 			{
-(*it)->pathfindingOrder = this->calculationSteps;
-(*it)->analysed = true;
-(*it)->visited = true;
-(*it)->journey_time_pf = 0;
+				//wir sind jetzt hier, markieren:
+				(*it)->pathfindingOrder = this->calculationSteps;
+				(*it)->analysed = true;
+				(*it)->visited = true;
+				(*it)->journey_time_pf = 0;
+
+				//davon die Linien Verbindungen
 				for( std::vector<Station*>::iterator it2 = (*it)->possible_next_stations.begin(); it2 != (*it)->possible_next_stations.end(); it2++ )
 				{
 					if( !(*it2)->analysed )
 					{
 						if( DEBUG_STATIONS ) cout << " add from STATION_CROSS: " << (*it2)->getFormatedStation() << endl;
 						(*it2)->analysed = true;
+						
+						// prüfen, ob zu dieser Station gefahren werden kann, oder man laufen muss
+						(*it2)->SetTotalRouteTimeToAllStations( s->totalRouteTime.currentTime );
+						if( DEBUG_TIME ) cout << "   s->totalRouteTime from " << s->getFormatedStation() << " = " << s->totalRouteTime.toString() << endl;
+						this->calculateJourneyTime( (*it2), (*it2)->totalRouteTime.currentTime + this->ct_start.currentTime ); 
+
 						this->stationsToAnalyseNext.push_back( (*it2) );
 					}
 				}
@@ -148,6 +163,12 @@ void PF::analyseStation( Station* s )
 				{
 					if( DEBUG_STATIONS ) cout << " add from STATION_NORMAL: " << (*it)->getFormatedStation() << endl;
 					(*it)->analysed = true;
+
+					// prüfen, ob zu dieser Station gefahren werden kann, oder man laufen muss
+					(*it)->SetTotalRouteTimeToAllStations( s->totalRouteTime.currentTime );
+					if( DEBUG_TIME ) cout << "   s->totalRouteTime from " << s->getFormatedStation() << " = " << s->totalRouteTime.toString() << endl;
+					this->calculateJourneyTime( (*it), (*it)->totalRouteTime.currentTime + this->ct_start.currentTime); 
+
 					this->stationsToAnalyseNext.push_back( (*it) );
 				}
 			}
@@ -232,14 +253,23 @@ void PF::finalStationFound( Station* s )
 	}
 
 	finalRoute.push_back( this->s_start );
-		
+	
+	CustomTime ct_totalRouteTime;
+
 	for( std::vector<Station*>::iterator it = finalRoute.end(); it != finalRoute.begin(); it )
 	{
 		it--;
 		if( DEBUG_STATIONS ) cout << (*it)->getFormatedStation() << endl;
 		this->routeData.push_back( (*it) );
+		ct_totalRouteTime.add( (*it)->routeTimeToThisStation.currentTime );
+
+		// Zeit bis zu dieser Station:
+		(*it)->routeTimeToThisStation.currentTime = ct_totalRouteTime.currentTime;
+
+cout << "totalRouteTime=" << (*it)->totalRouteTime.toString() << endl;
 	}
 
+	if( DEBUG_TIME ) cout << "ct_totalRouteTime.currentTime=" << ct_totalRouteTime.toString() << endl;
 	if( DEBUG_STATIONS ) system("pause");
 }
 
@@ -307,4 +337,38 @@ bool PF::isStartStation( Station* s )
 	}
 
 	return false;
+}
+
+void PF::calculateJourneyTime( Station* s, int ct_current )
+{
+	// s->routeTimeToThisStation ? wird in analyseStation gesetzt, wenn man da ist
+	// s->journey_time
+	// s->journey_time_pf
+
+	// müssen wir laufen?
+
+//	if( DEBUG_TIME ) 
+//		cout << "ct_current=" << ct_current << " > s->operation_time_end.currentTime=" << s->operation_time_end.currentTime << " : ";
+
+	bool none24 = (ct_current > s->operation_time_end.currentTime) 
+		&& (ct_current < s->operation_time_start.currentTime);
+
+	if( none24 )
+	{
+		//laufen
+		if( DEBUG_TIME ) cout << "LAUFEN: old journey_time=" << s->journey_time;
+
+		s->journey_time *= MULTIPLAYER_IF_LINE_IS_OUT_OPERATION_TIME;
+		s->journey_time_pf = s->journey_time;
+
+		if( DEBUG_TIME ) cout << " new journey_time=" << s->journey_time << endl;
+	}
+	else
+	{
+		// nicht laufen
+		if( DEBUG_TIME ) cout << "FAHREN" << endl;
+	}
+
+if( DEBUG_TIME ) cout << ct_current << ">" << s->operation_time_end.currentTime << " || " << ct_current << "<" << s->operation_time_start.currentTime << " : ";
+
 }

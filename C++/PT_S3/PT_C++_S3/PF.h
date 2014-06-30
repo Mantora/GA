@@ -3,7 +3,7 @@
 /***************************************************************************
 Main class 4 pathfindung (PF) for Stations
 
-feel free to do your worst
+benutzt "Wassertropfen" Methode
 ***************************************************************************/
 
 #include <vector>
@@ -29,14 +29,14 @@ class PF
 		//variable für die anzahl der schritte
 		int calculationSteps;
 
-		//variable to hold the hole station datas
+		//variable zum speichern der gesamten Station daten
 		std::vector<Station*> stations;
 		void setDatas( std::vector<Station*> stationDatas );
 
 		// 4 return
 		std::vector<Station*> routeData;
 
-		//variable to hold the stations 4 analyse
+		//variable für Stations zur analyse
 		std::vector<Station*> stationsToAnalyse;
 		std::vector<Station*> stationsToAnalyseNext;
 
@@ -48,6 +48,9 @@ class PF
 
 		bool isFinalStation( Station* s );
 		bool isStartStation( Station* s );
+
+		// funktion zum berechnen der benötigen zeit bis zu der Station ( fahren oder laufen )
+		void calculateJourneyTime( Station* s, int ct_current );
 
 	private:
 		void cleanup();

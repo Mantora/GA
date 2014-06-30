@@ -4,10 +4,9 @@
 This class represent a Station and hold spezific information
 such as the LINE_NAME this station belongs
 
-All Stations are "double linked lists" and know there
-normalTrainConnections (this->possible_next_stations)
-and there connectionsToOtherLines (this->connections_to_other_line)
-to use "raindrop" technique
+Alle Stationen sind doppelt verkette listen und kennen:
+- Ihre Linienverbindung (this->possible_next_stations)
+- Ihre Verbindungen zu einer anderen Linie
 ***************************************************************************/
 
 #include <string>
@@ -17,8 +16,8 @@ to use "raindrop" technique
 
 enum STATION_TYP
 {
-	STATION_NORMAL, // same line
-	STATION_CROSS	// connection to different line
+	STATION_NORMAL, // selbe Linie
+	STATION_CROSS	// verbindung zu einer anderen Linie
 };
 
 class Station
@@ -39,7 +38,6 @@ class Station
 
 		STATION_TYP typ;
 
-//	private://<- no time 4 get/set
 		//Performance Boost: nicht string station_name immer wieder vergleich sondern nur zur Identifizierung und dann über GUID (int schneller als std::string)
 		int GUID; // GlobalUnicIDentification 
 
@@ -57,4 +55,8 @@ class Station
 		bool analysed;
 		bool visited;
 		int pathfindingOrder;
+
+		CustomTime totalRouteTime;
+		void SetTotalRouteTimeToAllStations( int minutes ); 
+		void AddTotalRouteTimeToAllStations( int additionalMinutes );
 };

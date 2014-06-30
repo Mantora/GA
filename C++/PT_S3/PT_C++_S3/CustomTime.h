@@ -24,7 +24,7 @@ class CustomTime
 		void add( int minutesToAdd );
 		std::string toString( void );
 
-		int combare( CustomTime& other );
+		int compare( CustomTime& other );
 
 		int currentTime; //<- minutes
 };

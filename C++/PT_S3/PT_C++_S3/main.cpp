@@ -3,18 +3,18 @@
 #include "XMLReader.h"
 #include "Station.h"
 
-#include "PF.h" // <- PathFinding class 4 StationPathFinding
+#include "PF.h" // <- PathFinding class für StationPathFinding
 #include "Timer.h"
 #include "CustomTime.h"
 
 int main ()
 {
-	//set a awesome  name
+	//setze consolenfenster name
 	system( "title PT PR320 - Advanced C++" );
 	cout << "Praxistest C++: Pathfinding Stations geladen aus xml Datei" << endl;
 
 	std::vector<Station*> stations;
-	//prepare variables
+	//variablen vorbereiten
 	PF* pf = new PF();
 
 	Station* prev_station = 0;
@@ -23,7 +23,7 @@ int main ()
 
 	Station* cross_station = 0;
 
-	/* BEGINN READING XML FILE */
+	/* ANFANG LESEN XML DATEI */
 	XMLReader xml_reader( "net.xml" );
 //	XMLReader xml_reader( "unittest_net.xml" );
 //	XMLReader xml_reader( "unittest_net_doubleline.xml" );
@@ -35,26 +35,26 @@ int main ()
 	{
 		readed_element = xml_reader.getNext();
 
-		//read till a <line> starts
+		//lese bis <line> beginnt
 		if( readed_element.typ == XML_ELEMENT_TYP_BEGINN_ELEMENT
 			&& readed_element.name.compare( "line" ) == 0 )
 		{
-			//reset working variables
+			//setze variabeln zurück
 			prev_station = 0;
 			current_station = 0;
 			next_station = 0;
 
 			cross_station = 0;
 
-			//read the line name
+			//lese den line name
 			readed_element = xml_reader.getNext();
 
 			std::string lineName = readed_element.value;
 
-//			cout << "lineName: " << readed_element.value << endl;
+			if( DEBUG_XML ) cout << "lineName: " << readed_element.value << endl;
 			readed_element = xml_reader.getNext();
 			
-/**************************** START reading operation_time ****************************/
+/**************************** START lesen von operation_time ****************************/
 			while( readed_element.typ != XML_ELEMENT_TYP_ATTRIBUT
 				|| readed_element.name.compare( "start" ) != 0 )
 			{
@@ -68,9 +68,9 @@ int main ()
 				readed_element = xml_reader.getNext();
 			}
 			string str_operationTime_end( readed_element.value );
-/**************************** END reading operation_time ****************************/
+/**************************** ENDE lesen von operation_time ****************************/
 
-			//reading each station
+			//lese jede station
 			while( readed_element.typ != XML_ELEMENT_TYP_END_ELEMENT 
 				|| readed_element.name.compare( "stations" ) != 0 )
 			{
@@ -79,7 +79,7 @@ int main ()
 					&& readed_element.typ == XML_ELEMENT_TYP_BEGINN_ELEMENT )
 				{
 					int journey_time = 0;
-					//read untill the string is found
+					//lese solange, bis der string gefunden wurde
 					while( readed_element.typ != XML_ELEMENT_TYP_STRING_ELEMENT )
 					{
 						if( readed_element.name.compare( "journey_time" ) == 0 )
@@ -90,12 +90,12 @@ int main ()
 						readed_element = xml_reader.getNext();
 					}
 
-					//output the string (station name)
-//					cout << readed_element.name << endl;
+					//DEBUG: ausgabe von station name
+					if( DEBUG_XML ) cout << readed_element.name << endl;
 
-					/* BUILD THE MULTI_LINKED_LIST 4 EACH STATION */
+					/* BAU DIE MULTI_LINKED_LIST FÜR JEDE STATION */
 
-					//check, if current_station is our station whe want to instanciate
+					//prüfe, ob die current_station die momentane station ist, die wir instanziieren wollen
 					if( current_station == 0
 						|| current_station->station_name.compare( readed_element.name ) != 0 )
 					{
@@ -105,10 +105,10 @@ int main ()
 					}
 
 
-					//if we have a prev_station, set it as a possible nextStation
+					//wenn es eine frühere Station haben, setzen als möglich nächste Station
 					if( prev_station != 0 ) //FORWARD & BACKWARD
 					{
-						//set from prev_station "Real_Next_Station" from current_station
+						//setzen von prev_station "Real_Next_Station" von current_station
 						prev_station->addPosibleNextStation( current_station );
 						current_station->addPosibleNextStation( prev_station );
 
@@ -116,7 +116,7 @@ int main ()
 					
 					}
 
-					//store current station if it is an new instance
+					//Steichere Station in stations
 					stations.push_back( current_station );
 
 					prev_station = current_station;
@@ -127,10 +127,10 @@ int main ()
 		}
 	}
 
-	/* END READING XML FILE */
+	/* ENDE LESEN VON XML DATEI */
 	if( DEBUG_STATIONS ) cout << stations.size() << " stations loaded." << endl;
 
-	//connect the stations, wich has connections to another LINE
+	//verbinde die Stationen, die eine Verbindung zu einer anderen Linie haben
 	std::vector<Station*>::iterator it = stations.begin();
 	for( it = stations.begin(); it != stations.end(); it++ )
 	{
@@ -139,7 +139,7 @@ int main ()
 		{
 			if( (*it)->station_name.compare( (*it_sub)->station_name ) == 0 )
 			{
-				//same station name found
+				// selben Stationsnamen gefunden
 				(*it)->addConnectionToOtherLine( (*it_sub) );
 				(*it)->typ = STATION_CROSS;
 
@@ -149,38 +149,34 @@ int main ()
 		}
 	}
 
-	/* BEGINN 4 INPUT: START_STATION END_STATION TIME_ARRIVE */
+	/* ANFANG EINFABE: START_STATION, END_STATION, TIME_ARRIVE */
 	std::string startStation_name;
-	int startStation_ID = 0;
 	Station* startStation_ptr = 0;
 
 	std::string endStation_name;
-	int endStation_ID = 0;
 	Station* endStation_ptr = 0;
 
 	CustomTime ct_travelStart;
 
-	while( startStation_ID == 0 && endStation_ID == 0 )
+	while( startStation_ptr == 0 && endStation_ptr == 0 )
 	{
 		//ORGINAL STATIONS
 		#ifdef _DEBUG
-			//on VS set the variables in code 4 better working flow
-
+			// benutze def. werte wenn im Debug Modus
 			startStation_name = "S Hennigsdorf";
-			endStation_name = "S+U Hauptbahnhof";
+			endStation_name = "S+U Tegel";
 
 			// 4 use on unittest.xml:
 //			startStation_name = "START";
 //			endStation_name = "END";
 
-			ct_travelStart = CustomTime( "12:00" ); //<- must hh:mm for debug or unknown behaviour occur
+			ct_travelStart = CustomTime( "03:30" ); //<- must hh:mm for debug or unknown behaviour occur
 
 			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
 			{
 				if( (*it)->station_name.compare( startStation_name ) == 0 )
 				{
 					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
-					startStation_ID = (*it)->GUID;
 					startStation_ptr = (*it);
 					break;
 				}
@@ -190,10 +186,7 @@ int main ()
 			{
 				if( (*it)->station_name.compare( endStation_name ) == 0 )
 				{
-					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
-					int possibleEndGUID = (*it)->GUID;
-//					pf->endStation_GUIDs.push_back( possibleEndGUID );
-					
+					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;				
 					endStation_ptr = (*it);
 				}
 			}
@@ -216,10 +209,9 @@ int main ()
 
 			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
 			{
-				if( (*it)->getStationName().compare( startStation_name ) == 0 )
+				if( (*it)->station_name.compare( startStation_name ) == 0 )
 				{
 					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
-					startStation_ID = (*it)->getGUID();
 					startStation_ptr = (*it);
 					break;
 				}
@@ -233,9 +225,9 @@ int main ()
 		}
 
 		//END Station
-		while( pf->endStation_GUIDs.size() == 0 )
+		while( endStation_ptr == 0 )
 		{
-			if( pf->endStation_GUIDs.size() == 0 )
+			if( endStation_ptr == 0 )
 			{
 				cout << "Input your end Station: ";
 				char carr_endStationName[128] = {0};
@@ -245,17 +237,15 @@ int main ()
 
 			for( std::vector<Station*>::iterator it = stations.begin(); it != stations.end(); it++ )
 			{
-				if( (*it)->getStationName().compare( endStation_name ) == 0 )
+				if( (*it)->station_name.compare( endStation_name ) == 0 )
 				{
 					if( DEBUG_STATIONS ) cout << "found " << (*it)->getFormatedStation() << endl;
-					int possibleEndGUID = (*it)->getGUID();
-					pf->endStation_GUIDs.push_back( possibleEndGUID );
-					
 					endStation_ptr = (*it);
+					break;
 				}
 			}	
 
-			if( pf->endStation_GUIDs.size() == 0 )
+			if( endStation_ptr == 0 )
 			{
 				cout << "EndStation not found !" << endl;
 				cout << "Please reinput the Name." << endl;
@@ -290,18 +280,19 @@ int main ()
 	// set the datas to PF
 	pf->stations = stations;
 
-	// START SEARCH 4 BEST CONNECTION
+	// SUCHE NACH BESTER VERBINDUNG
 	Timer t;
 	std::vector<Station*> route = pf->startSearch( startStation_ptr, endStation_ptr, ct_travelStart );
 	int pf_ms = t.getMSecSinceStart();
 
-
 	cout << endl;
-	cout << "PERFORMANCE: PF needed " << pf_ms << " ms to find target." << endl;
+	if( SHOW_MSEC_NEEDED )cout << "PERFORMANCE: PF needed " << pf_ms << " ms to find target." << endl << endl;
 
-	cout << "Route from: " << startStation_ptr->getFormatedStation() << endl;
-	cout << "to: " << endStation_ptr->getFormatedStation() <<  endl;
-	cout << "------------------------------------------" << endl;
+	cout << "Route from: " << startStation_ptr->getFormatedStation4Route() << endl;
+	cout << "to:         " << endStation_ptr->getFormatedStation4Route() <<  endl;
+	cout << "at:         " << ct_travelStart.toString() << endl;
+	cout << "-------------------------------------------------------------------" << endl;
+	cout << "Linie  Station                                 Dauer" << endl;
 	for( std::vector<Station*>::iterator it = route.begin(); it != route.end(); it++ )
 	{
 		cout << (*it)->getFormatedStation4Route() << endl;
